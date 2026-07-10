@@ -1,68 +1,61 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { createServerClient, type CookieOptions } from "@supabase/ssr";
 
-const PROTECTED = [
-  "/dashboard",
-  "/studio",
-  "/papers",
-  "/marks",
-  "/mocks",
-  "/flashcards",
-  "/focus",
-  "/stats",
-  "/college",
-  "/schedule",
-  "/settings",
-];
+const AUTH_PAGES = ["/login", "/signup", "/forgot-password"];
 
-export async function middleware(req: NextRequest) {
-  let res = NextResponse.next({ request: { headers: req.headers } });
+/**
+ * Fast local check: does a Supabase auth cookie exist?
+ * We deliberately do NOT call supabase.auth.getUser() here — that's a
+ * network round-trip to Supabase on every navigation and made the whole
+ * app feel slow. Real security lives in RLS + server-side checks in API
+ * routes; this gate is purely UX routing. Stale cookies are handled
+ * client-side (supabase-js auto-refreshes or signs out).
+ */
+function hasAuthCookie(req: NextRequest): boolean {
+  return req.cookies
+    .getAll()
+    .some((c) => c.name.startsWith("sb-") && c.name.includes("-auth-token") && c.value);
+}
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name: string) {
-          return req.cookies.get(name)?.value;
-        },
-        set(name: string, value: string, options: CookieOptions) {
-          req.cookies.set({ name, value, ...options });
-          res = NextResponse.next({ request: { headers: req.headers } });
-          res.cookies.set({ name, value, ...options });
-        },
-        remove(name: string, options: CookieOptions) {
-          req.cookies.set({ name, value: "", ...options });
-          res = NextResponse.next({ request: { headers: req.headers } });
-          res.cookies.set({ name, value: "", ...options });
-        },
-      },
-    },
-  );
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
+export function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
-  const isProtected = PROTECTED.some((p) => path.startsWith(p));
+  const authed = hasAuthCookie(req);
 
-  if (isProtected && !user) {
+  if (AUTH_PAGES.includes(path)) {
+    // Don't bounce users away from /reset-password — they need that page
+    // to complete the recovery flow (it's not in AUTH_PAGES for that reason).
+    if (authed) {
+      return NextResponse.redirect(new URL("/dashboard", req.url));
+    }
+    return NextResponse.next();
+  }
+
+  // Everything else in the matcher is a protected app page.
+  if (!authed) {
     const url = req.nextUrl.clone();
     url.pathname = "/login";
     url.searchParams.set("redirect", path);
     return NextResponse.redirect(url);
   }
 
-  // Don't bounce logged-in users away from /reset-password — they need that
-  // page to complete the recovery flow.
-  if ((path === "/login" || path === "/signup" || path === "/forgot-password") && user) {
-    return NextResponse.redirect(new URL("/dashboard", req.url));
-  }
-
-  return res;
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|.*\\..*).*)"],
+  matcher: [
+    "/dashboard/:path*",
+    "/subjects/:path*",
+    "/studio/:path*",
+    "/papers/:path*",
+    "/marks/:path*",
+    "/mocks/:path*",
+    "/flashcards/:path*",
+    "/focus/:path*",
+    "/stats/:path*",
+    "/college/:path*",
+    "/schedule/:path*",
+    "/settings/:path*",
+    "/login",
+    "/signup",
+    "/forgot-password",
+  ],
 };

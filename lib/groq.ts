@@ -78,5 +78,19 @@ export async function groqJson<T = unknown>(
   opts: { temperature?: number; maxTokens?: number } = {},
 ): Promise<T> {
   const text = await groqChat(system, user, { ...opts, json: true });
-  return JSON.parse(text) as T;
+  try {
+    return JSON.parse(text) as T;
+  } catch {
+    // Models occasionally wrap JSON in markdown fences or prose despite
+    // response_format — salvage the first {...} block before giving up.
+    const match = text.match(/\{[\s\S]*\}/);
+    if (match) {
+      try {
+        return JSON.parse(match[0]) as T;
+      } catch {
+        // fall through
+      }
+    }
+    throw new Error("The AI returned an unreadable response — please try again.");
+  }
 }

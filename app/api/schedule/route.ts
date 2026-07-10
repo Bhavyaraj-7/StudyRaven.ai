@@ -3,6 +3,8 @@ import { supabaseServer } from "@/lib/supabase-server";
 import { groqChat } from "@/lib/groq";
 import { sendEmail } from "@/lib/resend";
 
+export const maxDuration = 60;
+
 const SYSTEM = `You are an IGCSE study coach. Build a 4-week study schedule as a Markdown plan, week by week, with daily blocks. Include rest days. Keep it tight and actionable. Use ## for each week.`;
 
 export async function POST(req: Request) {

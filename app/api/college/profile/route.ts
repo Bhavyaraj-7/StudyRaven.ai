@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { supabaseServer } from "@/lib/supabase-server";
 import { groqJson } from "@/lib/groq";
 
+export const maxDuration = 60;
+
 const SYSTEM = `You are a college admissions counselor for Grade 9-10 students applying to top universities. Build a readiness profile as JSON:
 {
   "readiness_score": 0-100,

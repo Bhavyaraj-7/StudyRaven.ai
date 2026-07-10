@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { supabaseServer } from "@/lib/supabase-server";
 import { tavilySearch } from "@/lib/tavily";
 
+export const maxDuration = 60;
+
 // Fallbacks when the student hasn't filled a college profile yet.
 const GENERIC_QUERIES = [
   "international competitions for high school students 2026",

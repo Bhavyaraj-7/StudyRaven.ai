@@ -26,7 +26,7 @@ Access via process.env — NEVER hardcode any key anywhere.
 NEXT_PUBLIC_SUPABASE_URL
 NEXT_PUBLIC_SUPABASE_ANON_KEY
 SUPABASE_SERVICE_ROLE_KEY
-GROQ_API_KEY
+OPENROUTER_API_KEY   ← all AI calls route through OpenRouter (lib/groq.ts)
 TAVILY_API_KEY
 RESEND_API_KEY
 RAZORPAY_KEY_ID

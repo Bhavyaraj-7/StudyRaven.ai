@@ -3,6 +3,8 @@ import { supabaseServer } from "@/lib/supabase-server";
 import { groqJson } from "@/lib/groq";
 import type { DayPlan } from "@/types";
 
+export const maxDuration = 60;
+
 const SYSTEM = `You are an IGCSE study coach. Generate a balanced 7-day study plan as JSON.
 Output JSON shape: { "plan": [ { "day": "Mon", "tasks": [ { "title": string, "subject": string, "minutes": number } ] } ] }
 Exactly 7 days. Exactly 3 tasks per day. Mix subjects. Keep titles concise and actionable.

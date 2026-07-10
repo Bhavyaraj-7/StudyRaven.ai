@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { supabaseServer } from "@/lib/supabase-server";
 import { groqJson } from "@/lib/groq";
 
+export const maxDuration = 60;
+
 const SYSTEM = `You are an IGCSE examiner grading a mock test. Given the questions, mark scheme, and student's answers, score the paper strictly but fairly.
 
 Output JSON:

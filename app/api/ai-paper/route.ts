@@ -3,6 +3,9 @@ import { supabaseServer } from "@/lib/supabase-server";
 import { groqJson } from "@/lib/groq";
 import { checkAndCountGeneration, FREE_DAILY_LIMIT } from "@/lib/subscription";
 
+// AI generation regularly exceeds Vercel's default function timeout.
+export const maxDuration = 60;
+
 const SYSTEM = `You are an IGCSE examiner. Generate an original practice paper as JSON:
 { "questions": [ { "q": 1, "text": string, "marks": number } ],
   "mark_scheme": [ { "q": 1, "answer": string, "marks": number } ] }

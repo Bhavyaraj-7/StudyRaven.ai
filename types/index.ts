@@ -143,3 +143,33 @@ export interface DayPlan {
   day: string;
   tasks: { title: string; subject: string; minutes: number }[];
 }
+
+export type ApplicationStatus = "not_started" | "in_progress" | "submitted";
+
+export interface CollegeApplication {
+  id: string;
+  user_id: string;
+  university_name: string;
+  deadline: string | null;
+  status: ApplicationStatus;
+  essay_done: boolean;
+  recommendations_done: boolean;
+  test_scores_done: boolean;
+  notes: string | null;
+  created_at?: string;
+}
+
+export interface CollegeChatMessage {
+  id: string;
+  user_id: string;
+  role: "user" | "assistant";
+  content: string;
+  created_at?: string;
+}
+
+export interface UniversityMatch {
+  name: string;
+  country: string;
+  fit: "reach" | "target" | "safety";
+  why: string;
+}

@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { supabaseServer } from "@/lib/supabase-server";
 import { groqJson } from "@/lib/groq";
 
+export const maxDuration = 60;
+
 const SYSTEM = `Analyze a student's mock test history and return their weakest topics as JSON:
 { "weakest": [ { "topic": string, "reason": string, "fix": string } ] }
 Pick the 3-5 weakest topics by aggregated performance. Each "fix" is one actionable sentence.`;

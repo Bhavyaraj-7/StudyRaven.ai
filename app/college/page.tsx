@@ -1,11 +1,28 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Sparkles, Loader2, ExternalLink, X, Plus } from "lucide-react";
+import {
+  Sparkles,
+  Loader2,
+  ExternalLink,
+  X,
+  Plus,
+  Gauge,
+  Map,
+  Calculator,
+  MessageCircle,
+  ClipboardList,
+  Telescope,
+} from "lucide-react";
 import AppLayout from "@/components/layout/AppLayout";
 import { supabaseBrowser } from "@/lib/supabase";
 import { useProfile } from "@/hooks/useProfile";
+import { cn } from "@/lib/utils";
 import PricingModal from "@/components/shared/PricingModal";
+import RoadmapTab from "@/components/college/RoadmapTab";
+import GpaTab from "@/components/college/GpaTab";
+import ChatTab from "@/components/college/ChatTab";
+import ApplicationsTab from "@/components/college/ApplicationsTab";
 
 interface CollegeData {
   readiness_score: number;
@@ -25,8 +42,19 @@ interface Opportunity {
   url: string;
 }
 
+type TabId = "readiness" | "roadmap" | "gpa" | "chat" | "applications" | "opportunities";
+
+const TABS: { id: TabId; label: string; icon: typeof Gauge }[] = [
+  { id: "readiness", label: "Readiness", icon: Gauge },
+  { id: "roadmap", label: "Roadmap", icon: Map },
+  { id: "gpa", label: "GPA calculator", icon: Calculator },
+  { id: "chat", label: "Ask StudyRaven", icon: MessageCircle },
+  { id: "applications", label: "Applications", icon: ClipboardList },
+  { id: "opportunities", label: "Opportunities", icon: Telescope },
+];
+
 export default function CollegePage() {
-  const { isPro, loading: profileLoading } = useProfile();
+  const { profile, isPro, loading: profileLoading } = useProfile();
   const [pricingOpen, setPricingOpen] = useState(false);
   const [data, setData] = useState<CollegeData | null>(null);
   const [opps, setOpps] = useState<Opportunity[]>([]);
@@ -34,6 +62,7 @@ export default function CollegePage() {
   const [generating, setGenerating] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [showForm, setShowForm] = useState(false);
+  const [tab, setTab] = useState<TabId>("readiness");
 
   useEffect(() => {
     if (profileLoading) return;
@@ -99,7 +128,9 @@ export default function CollegePage() {
           <Sparkles className="w-6 h-6 mx-auto" />
           <h2 className="text-2xl font-semibold mt-4">College guide is a Pro feature</h2>
           <p className="text-graytext mt-2">
-            Get a personalized readiness score, university matches, and live opportunities pulled from across the web.
+            Readiness score, university roadmap, GPA calculator, an admissions
+            counselor you can chat with, application tracking, and live
+            opportunities from across the web.
           </p>
           <button
             onClick={() => setPricingOpen(true)}
@@ -123,6 +154,71 @@ export default function CollegePage() {
 
   return (
     <AppLayout title="College guide">
+      {/* Tab bar */}
+      <div className="flex gap-1 border-b border-grayline -mx-2 px-2 overflow-x-auto">
+        {TABS.map(({ id, label, icon: Icon }) => (
+          <button
+            key={id}
+            onClick={() => setTab(id)}
+            className={cn(
+              "inline-flex items-center gap-2 px-4 py-2.5 text-sm whitespace-nowrap border-b-2 -mb-px transition",
+              tab === id
+                ? "border-ink text-ink font-medium"
+                : "border-transparent text-graymute hover:text-ink",
+            )}
+          >
+            <Icon className="w-4 h-4" />
+            {label}
+          </button>
+        ))}
+      </div>
+
+      <div className="mt-6">
+        {tab === "readiness" && (
+          <ReadinessTab data={data} onEditProfile={() => setShowForm(true)} />
+        )}
+        {tab === "roadmap" && (
+          <RoadmapTab
+            actionPlan={data.action_plan ?? []}
+            matches={(data.university_matches ?? []).map((u) => ({
+              ...u,
+              fit: (u.fit === "reach" || u.fit === "safety" ? u.fit : "target") as
+                | "reach"
+                | "target"
+                | "safety",
+            }))}
+            currentGrade={profile?.grade ?? null}
+          />
+        )}
+        {tab === "gpa" && <GpaTab />}
+        {tab === "chat" && <ChatTab />}
+        {tab === "applications" && (
+          <ApplicationsTab targetUniversities={data.target_universities ?? []} />
+        )}
+        {tab === "opportunities" && (
+          <OpportunitiesTab
+            opps={opps}
+            refreshing={refreshing}
+            onRefresh={refreshOpportunities}
+          />
+        )}
+      </div>
+    </AppLayout>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Readiness tab — the original college guide content, unchanged      */
+/* ------------------------------------------------------------------ */
+function ReadinessTab({
+  data,
+  onEditProfile,
+}: {
+  data: CollegeData;
+  onEditProfile: () => void;
+}) {
+  return (
+    <div>
       <div className="rounded-2xl border border-grayline bg-paper p-8">
         <div className="text-sm text-graymute">Your readiness</div>
         <div className="flex items-end gap-6 mt-2">
@@ -176,10 +272,31 @@ export default function CollegePage() {
         ))}
       </div>
 
-      <div className="flex items-center justify-between mt-10 mb-3">
+      <button onClick={onEditProfile} className="mt-8 text-sm text-graytext underline">
+        Update my college profile
+      </button>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Opportunities tab — the original opportunities content, unchanged  */
+/* ------------------------------------------------------------------ */
+function OpportunitiesTab({
+  opps,
+  refreshing,
+  onRefresh,
+}: {
+  opps: Opportunity[];
+  refreshing: boolean;
+  onRefresh: () => void;
+}) {
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-3">
         <h2 className="text-xl font-semibold">Opportunities for you</h2>
         <button
-          onClick={refreshOpportunities}
+          onClick={onRefresh}
           disabled={refreshing}
           className="inline-flex items-center gap-2 rounded-lg bg-ink text-paper px-4 py-2 text-sm disabled:opacity-50"
         >
@@ -214,17 +331,13 @@ export default function CollegePage() {
           </a>
         ))}
       </div>
-
-      <button
-        onClick={() => setShowForm(true)}
-        className="mt-8 text-sm text-graytext underline"
-      >
-        Update my college profile
-      </button>
-    </AppLayout>
+    </div>
   );
 }
 
+/* ------------------------------------------------------------------ */
+/* Onboarding form — unchanged                                        */
+/* ------------------------------------------------------------------ */
 interface ProfileForm {
   target_country: string;
   target_universities: string[];

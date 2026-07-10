@@ -8,6 +8,8 @@ import {
   FREE_DAILY_LIMIT,
 } from "@/lib/subscription";
 
+export const maxDuration = 60;
+
 type Kind = "summary" | "study_guide" | "slide_deck" | "flashcards" | "mind_map";
 
 const SOURCE_RULE =
