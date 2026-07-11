@@ -1,35 +1,58 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { createServerClient, type CookieOptions } from "@supabase/ssr";
 
 const AUTH_PAGES = ["/login", "/signup", "/forgot-password"];
 
 /**
- * Fast local check: does a Supabase auth cookie exist?
- * We deliberately do NOT call supabase.auth.getUser() here — that's a
- * network round-trip to Supabase on every navigation and made the whole
- * app feel slow. Real security lives in RLS + server-side checks in API
- * routes; this gate is purely UX routing. Stale cookies are handled
- * client-side (supabase-js auto-refreshes or signs out).
+ * Supabase's Next.js integration requires the session to be refreshed on
+ * every request that touches auth state — getUser() validates the token
+ * and, if it's expired, refreshes it and re-writes the cookie. Skipping
+ * this (as a prior version of this file did, to save the network call)
+ * breaks correctness: server components can't refresh a stale token
+ * themselves, so they bounce to /login while middleware still sees the
+ * old cookie and bounces back to /dashboard — an infinite redirect loop.
+ * The matcher below keeps this call off the public landing page and
+ * static assets so it only runs where it's actually needed.
  */
-function hasAuthCookie(req: NextRequest): boolean {
-  return req.cookies
-    .getAll()
-    .some((c) => c.name.startsWith("sb-") && c.name.includes("-auth-token") && c.value);
-}
+export async function middleware(req: NextRequest) {
+  let res = NextResponse.next({ request: { headers: req.headers } });
 
-export function middleware(req: NextRequest) {
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return req.cookies.get(name)?.value;
+        },
+        set(name: string, value: string, options: CookieOptions) {
+          req.cookies.set({ name, value, ...options });
+          res = NextResponse.next({ request: { headers: req.headers } });
+          res.cookies.set({ name, value, ...options });
+        },
+        remove(name: string, options: CookieOptions) {
+          req.cookies.set({ name, value: "", ...options });
+          res = NextResponse.next({ request: { headers: req.headers } });
+          res.cookies.set({ name, value: "", ...options });
+        },
+      },
+    },
+  );
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   const path = req.nextUrl.pathname;
-  const authed = hasAuthCookie(req);
+  const authed = Boolean(user);
 
   if (AUTH_PAGES.includes(path)) {
-    // Don't bounce users away from /reset-password — they need that page
-    // to complete the recovery flow (it's not in AUTH_PAGES for that reason).
     if (authed) {
       return NextResponse.redirect(new URL("/dashboard", req.url));
     }
-    return NextResponse.next();
+    return res;
   }
 
-  // Everything else in the matcher is a protected app page.
   if (!authed) {
     const url = req.nextUrl.clone();
     url.pathname = "/login";
@@ -37,7 +60,7 @@ export function middleware(req: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  return NextResponse.next();
+  return res;
 }
 
 export const config = {
