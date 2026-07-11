@@ -62,25 +62,27 @@ export default async function DashboardPage({
         <Card
           icon={<Mail className="w-5 h-5" />}
           title="Connect Gmail"
+          badge={profile?.gmail_connected ? undefined : "Beta"}
           sub={
             profile?.gmail_connected
               ? "Connected — deadlines auto-import"
-              : "Auto-import deadlines"
+              : "Auto-import deadlines. New accounts get access within a day of requesting."
           }
           href={profile?.gmail_connected ? undefined : "/api/auth/google?service=gmail"}
-          cta={profile?.gmail_connected ? undefined : "Connect"}
+          cta={profile?.gmail_connected ? undefined : "Request access & connect"}
           done={!!profile?.gmail_connected}
         />
         <Card
           icon={<GraduationCap className="w-5 h-5" />}
           title="Connect Classroom"
+          badge={profile?.classroom_connected ? undefined : "Beta"}
           sub={
             profile?.classroom_connected
               ? "Connected — assignments synced"
-              : "Sync assignments"
+              : "Sync assignments. New accounts get access within a day of requesting."
           }
           href={profile?.classroom_connected ? undefined : "/api/auth/google?service=classroom"}
-          cta={profile?.classroom_connected ? undefined : "Connect"}
+          cta={profile?.classroom_connected ? undefined : "Request access & connect"}
           done={!!profile?.classroom_connected}
         />
         <Card
@@ -158,6 +160,7 @@ function notice(google?: string, imported?: string): string | null {
 function Card({
   icon,
   title,
+  badge,
   sub,
   href,
   cta,
@@ -165,6 +168,7 @@ function Card({
 }: {
   icon: React.ReactNode;
   title: string;
+  badge?: string;
   sub: string;
   href?: string;
   cta?: string;
@@ -176,7 +180,14 @@ function Card({
         <div className="text-graytext">{icon}</div>
         {done && <CheckCircle2 className="w-5 h-5 text-green-600" />}
       </div>
-      <div className="mt-4 font-semibold">{title}</div>
+      <div className="mt-4 font-semibold flex items-center gap-2">
+        {title}
+        {badge && (
+          <span className="text-[10px] uppercase tracking-wide border border-grayline rounded px-1.5 py-0.5 text-graymute font-normal">
+            {badge}
+          </span>
+        )}
+      </div>
       <div className="text-sm text-graymute mt-1">{sub}</div>
       {cta && (
         <div className="mt-3 text-sm font-medium underline">{cta}</div>

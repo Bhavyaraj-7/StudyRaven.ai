@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { supabaseServer } from "@/lib/supabase-server";
+import { supabaseAdmin, supabaseServer } from "@/lib/supabase-server";
 import { buildAuthUrl, googleConfigured, type GoogleService } from "@/lib/google";
 
 export async function GET(req: Request) {
@@ -21,6 +21,26 @@ export async function GET(req: Request) {
     return NextResponse.redirect(
       new URL("/dashboard?google=missing_keys", req.url),
     );
+  }
+
+  // Gmail/Classroom are in Google's "Testing" mode, so only registered test
+  // users get through the consent screen. Log every attempt so the owner can
+  // add the requester to the test-user list and grant beta access. Fail-open:
+  // a missing table must never block the OAuth flow itself.
+  try {
+    await supabaseAdmin()
+      .from("google_access_requests")
+      .upsert(
+        {
+          user_id: user.id,
+          email: user.email ?? null,
+          service,
+          requested_at: new Date().toISOString(),
+        },
+        { onConflict: "user_id,service" },
+      );
+  } catch {
+    // ignore — logging is best-effort
   }
 
   return NextResponse.redirect(buildAuthUrl(service));
