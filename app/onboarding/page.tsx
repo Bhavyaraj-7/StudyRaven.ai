@@ -100,7 +100,7 @@ export default function OnboardingPage() {
 
         {step === 1 && (
           <Step title="Tell us about you" subtitle="So we can personalize everything.">
-            <Input label="Full name" value={name} onChange={setName} placeholder="Aditi Naruka" />
+            <Input label="Full name" value={name} onChange={setName} placeholder="Your full name" />
             <div className="grid grid-cols-2 gap-4">
               <Select
                 label="Grade"

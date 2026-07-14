@@ -1,10 +1,35 @@
 "use client";
 
-import { GraduationCap, Flag, Target, Shield, Rocket } from "lucide-react";
+import { useMemo, useState } from "react";
+import {
+  GraduationCap,
+  Flag,
+  Target,
+  Shield,
+  Rocket,
+  ChevronDown,
+  ExternalLink,
+  CheckCircle2,
+} from "lucide-react";
 import type { ActionPlanItem, UniversityMatch } from "@/types";
+import { supabaseBrowser } from "@/lib/supabase";
 import { cn } from "@/lib/utils";
 
 const STAGES = ["Grade 9", "Grade 10", "Grade 11", "Applications"];
+
+function countTasks(plan: ActionPlanItem[]): { done: number; total: number } {
+  let done = 0;
+  let total = 0;
+  for (const month of plan) {
+    for (const week of month.weeks ?? []) {
+      for (const task of week.tasks ?? []) {
+        total += 1;
+        if (task.done) done += 1;
+      }
+    }
+  }
+  return { done, total };
+}
 
 export default function RoadmapTab({
   actionPlan,
@@ -16,10 +41,46 @@ export default function RoadmapTab({
   currentGrade: number | null;
 }) {
   const stageIndex = currentGrade === 9 ? 0 : currentGrade === 11 ? 2 : 1;
+  const [plan, setPlan] = useState<ActionPlanItem[]>(actionPlan);
 
   const reach = matches.filter((m) => m.fit === "reach");
   const target = matches.filter((m) => m.fit === "target");
   const safety = matches.filter((m) => m.fit === "safety");
+
+  const progress = useMemo(() => countTasks(plan), [plan]);
+  const pct = progress.total
+    ? Math.round((progress.done / progress.total) * 100)
+    : 0;
+
+  async function toggleTask(mi: number, wi: number, ti: number) {
+    const next = plan.map((m, i) =>
+      i !== mi
+        ? m
+        : {
+            ...m,
+            weeks: (m.weeks ?? []).map((w, j) =>
+              j !== wi
+                ? w
+                : {
+                    ...w,
+                    tasks: (w.tasks ?? []).map((t, k) =>
+                      k !== ti ? t : { ...t, done: !t.done },
+                    ),
+                  },
+            ),
+          },
+    );
+    const prev = plan;
+    setPlan(next); // optimistic
+    const sb = supabaseBrowser();
+    const { data: auth } = await sb.auth.getUser();
+    if (!auth.user) return;
+    const { error } = await sb
+      .from("college_profiles")
+      .update({ action_plan: next, updated_at: new Date().toISOString() })
+      .eq("user_id", auth.user.id);
+    if (error) setPlan(prev); // revert on failure
+  }
 
   return (
     <div>
@@ -69,37 +130,55 @@ export default function RoadmapTab({
         </div>
       </div>
 
-      {/* Milestones from the action plan */}
-      <h3 className="text-lg font-semibold mt-8 mb-3">
-        Your next 6 months — milestones
-      </h3>
-      {actionPlan.length === 0 ? (
-        <p className="text-sm text-graymute">
+      {/* Week-by-week action plan */}
+      <div className="flex flex-wrap items-end justify-between gap-3 mt-8 mb-1">
+        <div>
+          <h3 className="text-lg font-semibold">
+            Your next 6 months — week by week
+          </h3>
+          <p className="text-sm text-graymute mt-1">
+            Tick tasks off as you finish them — progress saves automatically.
+          </p>
+        </div>
+        {progress.total > 0 && (
+          <div className="min-w-[180px]">
+            <div className="flex items-baseline justify-between text-xs">
+              <span className="text-graymute">
+                {progress.done}/{progress.total} tasks
+              </span>
+              <span className="font-semibold">{pct}%</span>
+            </div>
+            <div
+              role="progressbar"
+              aria-valuenow={pct}
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-label="Overall plan progress"
+              className="mt-1 h-2 rounded-full bg-graylite overflow-hidden"
+            >
+              <div
+                className="h-full bg-ink rounded-full transition-all duration-300"
+                style={{ width: `${pct}%` }}
+              />
+            </div>
+          </div>
+        )}
+      </div>
+      {plan.length === 0 ? (
+        <p className="text-sm text-graymute mt-3">
           No action plan yet — generate your readiness profile first.
         </p>
       ) : (
-        <div className="overflow-x-auto pb-2">
-          <div className="flex gap-0 min-w-max">
-            {actionPlan.map((p, i) => (
-              <div key={i} className="flex items-start">
-                <div className="w-[220px]">
-                  <div className="flex items-center">
-                    <div className="w-3 h-3 rounded-full bg-ink shrink-0" />
-                    {i < actionPlan.length - 1 && (
-                      <div className="h-0.5 flex-1 bg-grayline" />
-                    )}
-                  </div>
-                  <div className="mt-3 mr-4 rounded-xl border border-grayline p-4 h-full">
-                    <div className="text-xs text-graymute">{p.month}</div>
-                    <div className="font-medium text-sm mt-1">{p.goal}</div>
-                    <div className="text-xs text-graytext mt-1.5 line-clamp-4">
-                      {p.details}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+        <div className="space-y-3 mt-4">
+          {plan.map((p, i) => (
+            <MonthCard
+              key={i}
+              plan={p}
+              defaultOpen={i === 0}
+              index={i}
+              onToggleTask={(wi, ti) => toggleTask(i, wi, ti)}
+            />
+          ))}
         </div>
       )}
 
@@ -129,6 +208,155 @@ export default function RoadmapTab({
             subtitle="Strong likelihood"
             unis={safety}
           />
+        </div>
+      )}
+    </div>
+  );
+}
+
+function MonthCard({
+  plan,
+  defaultOpen,
+  index,
+  onToggleTask,
+}: {
+  plan: ActionPlanItem;
+  defaultOpen: boolean;
+  index: number;
+  onToggleTask: (weekIndex: number, taskIndex: number) => void;
+}) {
+  const [open, setOpen] = useState(defaultOpen);
+  const weeks = plan.weeks ?? [];
+
+  const monthProgress = useMemo(() => {
+    let done = 0;
+    let total = 0;
+    for (const w of weeks) {
+      for (const t of w.tasks ?? []) {
+        total += 1;
+        if (t.done) done += 1;
+      }
+    }
+    return { done, total };
+  }, [weeks]);
+  const monthPct = monthProgress.total
+    ? Math.round((monthProgress.done / monthProgress.total) * 100)
+    : 0;
+
+  return (
+    <div className="rounded-2xl border border-grayline bg-paper overflow-hidden">
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        aria-expanded={open}
+        className="w-full flex items-start gap-4 p-5 text-left hover:bg-graylite/40 transition"
+      >
+        <div className="w-8 h-8 rounded-full bg-ink text-paper flex items-center justify-center text-sm font-semibold shrink-0">
+          {index + 1}
+        </div>
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-graymute">{plan.month}</span>
+            {monthProgress.total > 0 && (
+              <span className="text-[10px] text-graymute rounded-full border border-grayline px-1.5 py-0.5">
+                {monthProgress.done}/{monthProgress.total}
+              </span>
+            )}
+          </div>
+          <div className="font-medium text-sm mt-0.5">{plan.goal}</div>
+          {plan.milestone && (
+            <div className="flex items-center gap-1.5 text-xs text-graytext mt-1.5">
+              <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
+              <span>Milestone: {plan.milestone}</span>
+            </div>
+          )}
+          {monthProgress.total > 0 && (
+            <div className="mt-2 h-1 rounded-full bg-graylite overflow-hidden max-w-[240px]">
+              <div
+                className="h-full bg-ink rounded-full transition-all duration-300"
+                style={{ width: `${monthPct}%` }}
+              />
+            </div>
+          )}
+        </div>
+        <ChevronDown
+          className={cn(
+            "w-4 h-4 text-graymute shrink-0 mt-1 transition-transform",
+            open && "rotate-180",
+          )}
+        />
+      </button>
+
+      {open && (
+        <div className="px-5 pb-5">
+          {plan.details && (
+            <p className="text-sm text-graytext mb-4">{plan.details}</p>
+          )}
+          {weeks.length === 0 ? (
+            <p className="text-xs text-graymute">
+              Regenerate your profile to get the detailed weekly plan for this
+              month.
+            </p>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {weeks.map((w, wi) => (
+                <div
+                  key={wi}
+                  className="rounded-xl border border-grayline bg-graylite/40 p-4"
+                >
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-xs font-semibold uppercase tracking-wide">
+                      {w.week}
+                    </span>
+                    <span className="text-xs text-graymute truncate">
+                      {w.focus}
+                    </span>
+                  </div>
+                  <ul className="mt-2 -mx-1">
+                    {(w.tasks ?? []).map((t, ti) => (
+                      <li key={ti}>
+                        <label className="flex items-start gap-2.5 rounded-lg px-1 py-1.5 cursor-pointer hover:bg-paper/70 transition">
+                          <input
+                            type="checkbox"
+                            checked={Boolean(t.done)}
+                            onChange={() => onToggleTask(wi, ti)}
+                            className="mt-0.5 h-4 w-4 shrink-0 rounded border-grayline accent-ink cursor-pointer"
+                            aria-label={`Mark task done: ${t.task}`}
+                          />
+                          <span className="min-w-0">
+                            <span className="mr-1.5 rounded bg-paper border border-grayline px-1.5 py-0.5 text-[10px] uppercase tracking-wide text-graymute whitespace-nowrap">
+                              {t.days}
+                            </span>
+                            <span
+                              className={cn(
+                                "text-xs",
+                                t.done
+                                  ? "text-graymute line-through"
+                                  : "text-graytext",
+                              )}
+                            >
+                              {t.task}
+                            </span>
+                          </span>
+                        </label>
+                      </li>
+                    ))}
+                  </ul>
+                  {w.resource?.url && (
+                    <a
+                      href={w.resource.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-2 inline-flex items-center gap-1.5 text-xs font-medium underline underline-offset-2 hover:text-graytext"
+                    >
+                      <ExternalLink className="w-3 h-3" />
+                      {w.resource.title}
+                    </a>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
     </div>

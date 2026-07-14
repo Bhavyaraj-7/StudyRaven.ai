@@ -61,10 +61,25 @@ export interface CollegeProfile {
   created_at?: string;
 }
 
+export interface WeekTask {
+  days: string;
+  task: string;
+  done?: boolean;
+}
+
+export interface WeekPlan {
+  week: string;
+  focus: string;
+  tasks: WeekTask[];
+  resource?: { title: string; url: string } | null;
+}
+
 export interface ActionPlanItem {
   month: string;
   goal: string;
   details: string;
+  milestone?: string;
+  weeks?: WeekPlan[];
 }
 
 export interface Competition {
@@ -172,4 +187,44 @@ export interface UniversityMatch {
   country: string;
   fit: "reach" | "target" | "safety";
   why: string;
+}
+
+export type TopicRating = "unrated" | "red" | "amber" | "green";
+
+export interface Topic {
+  id: string;
+  user_id: string;
+  subject_id: string;
+  name: string;
+  rating: TopicRating;
+  sort_order: number;
+}
+
+export interface DrillQuestion {
+  q: string;
+  answer: string;
+  student_answer?: string;
+  correct?: boolean;
+  explanation?: string;
+}
+
+export interface Drill {
+  id: string;
+  user_id: string;
+  drill_date: string;
+  subject: string | null;
+  topic: string | null;
+  questions: DrillQuestion[];
+  score: number | null;
+  total: number | null;
+}
+
+export interface ExaminerFeedbackItem {
+  q: number;
+  marks_awarded: number;
+  marks_available: number;
+  points_hit: string[];
+  points_missed: string[];
+  command_word_note: string;
+  model_answer: string;
 }

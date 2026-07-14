@@ -70,7 +70,7 @@ export default function SignupPage() {
               label="Full name"
               value={name}
               onChange={setName}
-              placeholder="Aditi Naruka"
+              placeholder="Your full name"
               required
             />
             <Field

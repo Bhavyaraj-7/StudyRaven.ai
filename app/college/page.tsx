@@ -13,6 +13,8 @@ import {
   MessageCircle,
   ClipboardList,
   Telescope,
+  PenLine,
+  Award,
 } from "lucide-react";
 import AppLayout from "@/components/layout/AppLayout";
 import { supabaseBrowser } from "@/lib/supabase";
@@ -23,6 +25,8 @@ import RoadmapTab from "@/components/college/RoadmapTab";
 import GpaTab from "@/components/college/GpaTab";
 import ChatTab from "@/components/college/ChatTab";
 import ApplicationsTab from "@/components/college/ApplicationsTab";
+import EssayCoachTab from "@/components/college/EssayCoachTab";
+import ScholarshipsTab from "@/components/college/ScholarshipsTab";
 
 interface CollegeData {
   readiness_score: number;
@@ -42,11 +46,21 @@ interface Opportunity {
   url: string;
 }
 
-type TabId = "readiness" | "roadmap" | "gpa" | "chat" | "applications" | "opportunities";
+type TabId =
+  | "readiness"
+  | "roadmap"
+  | "essay"
+  | "scholarships"
+  | "gpa"
+  | "chat"
+  | "applications"
+  | "opportunities";
 
 const TABS: { id: TabId; label: string; icon: typeof Gauge }[] = [
   { id: "readiness", label: "Readiness", icon: Gauge },
   { id: "roadmap", label: "Roadmap", icon: Map },
+  { id: "essay", label: "Essay coach", icon: PenLine },
+  { id: "scholarships", label: "Scholarships", icon: Award },
   { id: "gpa", label: "GPA calculator", icon: Calculator },
   { id: "chat", label: "Ask StudyRaven", icon: MessageCircle },
   { id: "applications", label: "Applications", icon: ClipboardList },
@@ -190,6 +204,8 @@ export default function CollegePage() {
             currentGrade={profile?.grade ?? null}
           />
         )}
+        {tab === "essay" && <EssayCoachTab />}
+        {tab === "scholarships" && <ScholarshipsTab />}
         {tab === "gpa" && <GpaTab />}
         {tab === "chat" && <ChatTab />}
         {tab === "applications" && (
