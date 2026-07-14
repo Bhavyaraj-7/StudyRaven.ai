@@ -33,6 +33,7 @@ Return JSON:
         {
           "week": "Week 1",
           "focus": string,
+          "outcome": string,
           "tasks": [ { "days": string, "task": string } ],
           "resource": { "title": string, "url": string } | null
         }
@@ -41,16 +42,28 @@ Return JSON:
   ]
 }
 
-Rules:
-- Exactly 6 months. Each month has exactly 4 weeks. Each week has 2-4 tasks.
-- "goal": the month's single concrete objective tied to closing a specific gap.
-- "details": 1-2 sentence summary of the month.
-- "milestone": a measurable outcome to hit by month end (e.g. "First draft of research project submitted", "Registered + first mock test scored 60%+").
+Structure rules:
+- Exactly 6 months. Each month has exactly 4 weeks. Each week has 3-5 tasks.
+- "goal": the month's single concrete objective tied to closing ONE named gap from their list.
+- "details": 1-2 sentences: what this month builds and why it comes at this point in the sequence.
+- "milestone": a measurable, checkable outcome ("Essay submitted to John Locke portal", "Scored 65%+ on second timed mock", "20 volunteer hours logged with photos"). Never "made progress on X".
 - "focus": what this week is about, one line.
-- Each task: "days" is when to do it ("Mon-Wed", "Thu", "Weekend", "Daily 30 min"), "task" is a single specific action a 15-year-old can start immediately. Never vague ("prepare for SAT" is banned — instead "Do SAT practice sections 1-2 on Khan Academy, note every wrong answer").
-- Weave the provided REAL opportunities into the plan: when a week involves one, name it exactly in the task and set "resource" to its title + URL. Use at least 4-6 of the provided opportunities across the 6 months where they genuinely fit.
-- Sequence logically: early months = foundations + registrations, later months = execution, submissions, leadership.
-- Balance across: academics, 1-2 competitions, one community-service/leadership thread, one skill/project thread.`;
+- "outcome": the tangible thing that exists at the end of the week that didn't exist before (a document, a registration confirmation, a score, a published post, a recorded video). Every week must produce something.
+
+Task rules — this is where the plan lives or dies:
+- "days" states BOTH when and how long: "Tue + Thu, 45 min each", "Sat morning, 2 hrs", "Daily, 20 min". Total weekly load must stay realistic for a full-time student: 5-8 hrs/week.
+- "task" is one specific action a 15-year-old can start within 5 minutes of reading it. Name the exact platform, tool, document, person, or search to use.
+- Every task states its deliverable: "...and save it as a one-page outline", "...ending with a 10-entry spreadsheet", "...and send it to your teacher for comments".
+- BANNED words in tasks: "prepare", "work on", "research" (alone), "improve", "continue", "explore", "look into". Replace with the actual first physical action.
+- BAD: "Research summer programs". GOOD: "List 8 summer programs in a sheet with columns: name, dates, cost, deadline, essay needed — start from the two resource links in this plan, 1 hr".
+- Weekend tasks can be bigger (2-3 hrs); weekday tasks max 60 min.
+
+Content rules:
+- Weave the provided REAL opportunities in: when a week involves one, name it exactly in the task and set "resource" to its title + URL. Use at least 4-6 of the provided opportunities where they genuinely fit. Never invent URLs.
+- Sequence with dependencies: registrations and account setups in weeks 1-3; skill-building in months 1-3; drafts in month 3-4; feedback and revision in month 4-5; submissions and public sharing in month 5-6. A task may reference an earlier week's deliverable by name.
+- Run 4 parallel threads across the 6 months, touching each thread at least every 2 weeks: (1) academics tied to their IGCSE subjects, (2) one or two competitions matched to their interests, (3) one community-service/leadership project they OWN (they start it, recruit 2-3 people, document it), (4) one skill/portfolio project (code, writing, research, art — matched to their stated interests).
+- Months 1 and 6 each include one week with a "reflect and log" task: update a brag sheet document listing everything done, with dates and evidence links. Colleges ask for this later; starting it now is a cheat code.
+- Reference the student's ACTUAL interests, target country, and named gaps throughout — a reader should be able to guess this student's profile from the plan alone.`;
 
 function buildQueries(interests: string[], country: string): string[] {
   if (!interests.length) {
@@ -138,7 +151,7 @@ REAL opportunities found on the web:
 ${oppBlock}
 
 Generate the 6-month week-by-week plan now.`,
-      { temperature: 0.5, maxTokens: 6000 },
+      { temperature: 0.5, maxTokens: 7000 },
     );
 
     const action_plan = roadmap.action_plan ?? [];

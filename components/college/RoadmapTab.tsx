@@ -312,6 +312,15 @@ function MonthCard({
                       {w.focus}
                     </span>
                   </div>
+                  {w.outcome && (
+                    <div className="mt-1.5 flex items-start gap-1.5 text-xs text-graytext">
+                      <CheckCircle2 className="w-3.5 h-3.5 shrink-0 mt-0.5 text-graymute" />
+                      <span>
+                        <span className="font-medium">By Sunday:</span>{" "}
+                        {w.outcome}
+                      </span>
+                    </div>
+                  )}
                   <ul className="mt-2 -mx-1">
                     {(w.tasks ?? []).map((t, ti) => (
                       <li key={ti}>

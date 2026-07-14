@@ -70,6 +70,7 @@ export interface WeekTask {
 export interface WeekPlan {
   week: string;
   focus: string;
+  outcome?: string;
   tasks: WeekTask[];
   resource?: { title: string; url: string } | null;
 }
