@@ -7,10 +7,8 @@ import {
   Presentation,
   Layers,
   Network,
-  Headphones,
   Loader2,
   Upload,
-  Sparkles,
 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import AppLayout from "@/components/layout/AppLayout";
@@ -18,7 +16,6 @@ import { supabaseBrowser } from "@/lib/supabase";
 import Flashcards from "@/components/studio/Flashcards";
 import MindMap from "@/components/studio/MindMap";
 import SlideDeck from "@/components/studio/SlideDeck";
-import { useProfile } from "@/hooks/useProfile";
 import { extractPdfText } from "@/lib/pdf";
 
 type Kind = "summary" | "study_guide" | "slide_deck" | "flashcards" | "mind_map";
@@ -37,7 +34,6 @@ interface OutputState {
 }
 
 export default function StudioPage() {
-  const { isPro } = useProfile();
   const [subjects, setSubjects] = useState<{ id: string; name: string }[]>([]);
   const [subject, setSubject] = useState<string>("");
   const [topic, setTopic] = useState("");
@@ -224,15 +220,6 @@ export default function StudioPage() {
               {label}
             </button>
           ))}
-          <button
-            disabled={!isPro}
-            title={isPro ? "Generate audio overview" : "Upgrade to Pro"}
-            className="inline-flex items-center gap-2 rounded-lg bg-ink text-paper px-4 py-2.5 hover:opacity-90 disabled:opacity-40"
-          >
-            <Headphones className="w-4 h-4" />
-            Audio overview
-            {!isPro && <Sparkles className="w-3 h-3" />}
-          </button>
         </div>
         {error && (
           <div className="mt-4 text-sm text-red-600 border border-red-200 bg-red-50 rounded-lg p-3">

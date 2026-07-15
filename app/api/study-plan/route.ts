@@ -29,10 +29,18 @@ export async function POST(req: Request) {
   const body = await req.json().catch(() => ({}));
   const testSchedule = (body?.test_schedule as string) || "";
 
-  const [{ data: profile }, { data: subjects }] = await Promise.all([
-    sb.from("profiles").select("name, grade, curriculum").eq("id", user.id).maybeSingle(),
-    sb.from("subjects").select("name, code, exam_date").eq("user_id", user.id),
-  ]);
+  const [{ data: profile }, { data: subjects }, { data: ratedTopics }] =
+    await Promise.all([
+      sb.from("profiles").select("name, grade, curriculum").eq("id", user.id).maybeSingle(),
+      sb.from("subjects").select("id, name, code, exam_date").eq("user_id", user.id),
+      // Topic ratings drive prioritisation; table may not exist pre-migration.
+      sb
+        .from("topics")
+        .select("name, rating, subject_id")
+        .eq("user_id", user.id)
+        .in("rating", ["red", "amber"])
+        .then((r) => ({ data: r.error ? null : r.data })),
+    ]);
 
   // Ground every task in the real Cambridge syllabus for the student's codes.
   const topicBlock = (subjects ?? [])
@@ -46,11 +54,22 @@ export async function POST(req: Request) {
 
   const today = new Date().toISOString().slice(0, 10);
 
+  // Self-rated weak topics take priority over everything except imminent exams.
+  const subjectById = new Map((subjects ?? []).map((s) => [s.id, s.name]));
+  const weakBlock = (ratedTopics ?? [])
+    .map(
+      (t) =>
+        `${subjectById.get(t.subject_id) ?? "?"}: ${t.name} (${t.rating === "red" ? "shaky" : "needs work"})`,
+    )
+    .slice(0, 20)
+    .join("\n");
+
   const userMsg = `Student profile:
 - Grade ${profile?.grade ?? "10"} ${profile?.curriculum ?? "IGCSE"}
 - Today's date: ${today}
 - Subjects: ${(subjects ?? []).map((s) => `${s.name}${s.code ? ` (${s.code})` : ""}${s.exam_date ? ` exam ${s.exam_date}` : ""}`).join(", ") || "Mathematics, Physics, Chemistry"}
 ${topicBlock ? `\nReal syllabus topics per subject (use these EXACT topic names in tasks):\n${topicBlock}` : ""}
+${weakBlock ? `\nTopics the student SELF-RATED as weak — at least half of all tasks must target these:\n${weakBlock}` : ""}
 ${testSchedule ? `- Test schedule provided by student:\n${testSchedule.slice(0, 4000)}` : "- No test schedule provided — balance the plan across the subjects above."}
 
 Build a 7-day plan starting today.`;

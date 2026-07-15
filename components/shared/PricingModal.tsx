@@ -170,7 +170,6 @@ export default function PricingModal({
             <ul className="mt-6 space-y-2">
               {[
                 "Score predictor on mocks",
-                "Audio overview (podcast style)",
                 "College guidance + live opportunity search",
                 "Weekly college newsletter",
                 "AI-generated practice papers + mark schemes",

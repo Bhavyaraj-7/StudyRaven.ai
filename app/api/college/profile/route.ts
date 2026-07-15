@@ -43,7 +43,7 @@ Return JSON:
 }
 
 Structure rules:
-- Exactly 6 months. Each month has exactly 4 weeks. Each week has 3-5 tasks.
+- The full plan spans 6 months, but generate ONLY the months the user message asks for — no more. Each month has exactly 4 weeks. Each week has 3-5 tasks.
 - "goal": the month's single concrete objective tied to closing ONE named gap from their list.
 - "details": 1-2 sentences: what this month builds and why it comes at this point in the sequence.
 - "milestone": a measurable, checkable outcome ("Essay submitted to John Locke portal", "Scored 65%+ on second timed mock", "20 volunteer hours logged with photos"). Never "made progress on X".
@@ -103,27 +103,32 @@ Interests: ${interests?.join(", ") || "—"}
 Extracurriculars: ${extracurriculars?.join(", ") || "—"}`;
 
   try {
+    // Wall-clock budget: Vercel kills this function at 60s. One 7000-token
+    // generation blows that alone, so everything independent runs in
+    // parallel and the roadmap is generated as two 3-month halves at once.
+
     // Real opportunities feed the roadmap so weeks reference actual programs,
     // not invented ones. Fail-open: a Tavily outage degrades detail, not the
     // whole generation.
-    let opportunities: TavilyResult[] = [];
-    try {
-      const results = await Promise.all(
-        buildQueries(interests ?? [], target_country ?? "").map((q) =>
-          tavilySearch(q, { maxResults: 4 }),
-        ),
-      );
-      const seen = new Set<string>();
-      opportunities = results.flat().filter((r) => {
-        if (seen.has(r.url)) return false;
-        seen.add(r.url);
-        return true;
-      });
-    } catch {
-      // proceed without live opportunities
-    }
+    const opportunitiesPromise: Promise<TavilyResult[]> = (async () => {
+      try {
+        const results = await Promise.all(
+          buildQueries(interests ?? [], target_country ?? "").map((q) =>
+            tavilySearch(q, { maxResults: 4 }),
+          ),
+        );
+        const seen = new Set<string>();
+        return results.flat().filter((r) => {
+          if (seen.has(r.url)) return false;
+          seen.add(r.url);
+          return true;
+        });
+      } catch {
+        return [];
+      }
+    })();
 
-    const readiness = await groqJson<{
+    const readinessPromise = groqJson<{
       readiness_score: number;
       strengths: string[];
       gaps: string[];
@@ -133,6 +138,11 @@ Extracurriculars: ${extracurriculars?.join(", ") || "—"}`;
       maxTokens: 2500,
     });
 
+    const [opportunities, readiness] = await Promise.all([
+      opportunitiesPromise,
+      readinessPromise,
+    ]);
+
     const oppBlock = opportunities.length
       ? opportunities
           .slice(0, 10)
@@ -140,21 +150,39 @@ Extracurriculars: ${extracurriculars?.join(", ") || "—"}`;
           .join("\n")
       : "(none found — build the plan from well-known real programs instead, but do not invent URLs; leave resource null unless certain)";
 
-    const roadmap = await groqJson<{ action_plan: ActionPlanItem[] }>(
-      ROADMAP_SYSTEM,
-      `${studentBlock}
+    const roadmapContext = `${studentBlock}
 
 Their gaps to close:
 ${readiness.gaps.map((g) => `- ${g}`).join("\n")}
 
 REAL opportunities found on the web:
-${oppBlock}
+${oppBlock}`;
 
-Generate the 6-month week-by-week plan now.`,
-      { temperature: 0.5, maxTokens: 7000 },
-    );
+    // Two halves in parallel — each ~3500 tokens finishes comfortably in time.
+    const halfPrompt = (label: string, extra: string) =>
+      groqJson<{ action_plan: ActionPlanItem[] }>(
+        ROADMAP_SYSTEM,
+        `${roadmapContext}
 
-    const action_plan = roadmap.action_plan ?? [];
+Generate ONLY ${label} of the 6-month plan now (still following every rule, exactly 4 weeks per month). ${extra}`,
+        { temperature: 0.5, maxTokens: 3600 },
+      );
+
+    const [firstHalf, secondHalf] = await Promise.all([
+      halfPrompt(
+        "Months 1-3",
+        "Label them Month 1, Month 2, Month 3. These months cover: account setups + registrations, foundations, and skill-building.",
+      ),
+      halfPrompt(
+        "Months 4-6",
+        "Label them Month 4, Month 5, Month 6. These months cover: first drafts, feedback + revision, then submissions, public sharing, and the final brag-sheet update. Assume months 1-3 completed registrations and foundations.",
+      ),
+    ]);
+
+    const action_plan = [
+      ...(firstHalf.action_plan ?? []),
+      ...(secondHalf.action_plan ?? []),
+    ];
 
     // Keep the Opportunities tab in sync with what the roadmap references.
     if (opportunities.length) {

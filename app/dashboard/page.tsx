@@ -3,14 +3,15 @@ import Link from "next/link";
 import {
   Mail,
   GraduationCap,
-  AlarmClock,
   CalendarDays,
   CheckCircle2,
+  ListTodo,
 } from "lucide-react";
 import AppLayout from "@/components/layout/AppLayout";
 import { supabaseServer } from "@/lib/supabase-server";
 import { daysUntil, greeting } from "@/lib/utils";
 import WeekPlan from "@/components/dashboard/WeekPlan";
+import DailyDrill from "@/components/dashboard/DailyDrill";
 
 export default async function DashboardPage({
   searchParams,
@@ -36,8 +37,6 @@ export default async function DashboardPage({
   ]);
 
   const firstName = (profile?.name || "there").split(" ")[0];
-  const upcomingTask = tasks?.[0];
-  const upcomingDays = upcomingTask ? daysUntil(upcomingTask.due_date) : null;
 
   const nextExam = (subjects ?? [])
     .filter((s) => s.exam_date)
@@ -58,52 +57,75 @@ export default async function DashboardPage({
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
-        <Card
-          icon={<Mail className="w-5 h-5" />}
-          title="Connect Gmail"
-          badge={profile?.gmail_connected ? undefined : "Beta"}
-          sub={
-            profile?.gmail_connected
-              ? "Connected — deadlines auto-import"
-              : "Auto-import deadlines. New accounts get access within a day of requesting."
-          }
-          href={profile?.gmail_connected ? undefined : "/api/auth/google?service=gmail"}
-          cta={profile?.gmail_connected ? undefined : "Request access & connect"}
-          done={!!profile?.gmail_connected}
-        />
-        <Card
-          icon={<GraduationCap className="w-5 h-5" />}
-          title="Connect Classroom"
-          badge={profile?.classroom_connected ? undefined : "Beta"}
-          sub={
-            profile?.classroom_connected
-              ? "Connected — assignments synced"
-              : "Sync assignments. New accounts get access within a day of requesting."
-          }
-          href={profile?.classroom_connected ? undefined : "/api/auth/google?service=classroom"}
-          cta={profile?.classroom_connected ? undefined : "Request access & connect"}
-          done={!!profile?.classroom_connected}
-        />
-        <Card
-          icon={<AlarmClock className="w-5 h-5" />}
-          title="Upcoming deadline"
-          sub={
-            upcomingTask
-              ? `${upcomingTask.title} · ${upcomingDays ?? "—"} days`
-              : "Nothing due"
-          }
-        />
-        <Card
-          icon={<CalendarDays className="w-5 h-5" />}
-          title="Next exam"
-          sub={
-            nextExam
-              ? `${nextExam.name} · ${examDays ?? "—"} days`
-              : "Add exam dates in settings"
-          }
-        />
-      </div>
+      {/* Today panel — the first thing a student sees is what to do, not setup chores. */}
+      <section className="mt-8" aria-label="Today">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <div className="rounded-2xl border border-grayline bg-paper p-5 flex flex-col">
+            <div className="flex items-center gap-2 font-semibold">
+              <ListTodo className="w-4 h-4" />
+              Due next
+            </div>
+            {tasks && tasks.length > 0 ? (
+              <ul className="mt-3 space-y-2.5 flex-1">
+                {tasks.map((t) => {
+                  const d = daysUntil(t.due_date);
+                  return (
+                    <li key={t.id} className="flex items-baseline justify-between gap-3 text-sm">
+                      <span className="text-graytext min-w-0 truncate">{t.title}</span>
+                      <span
+                        className={
+                          d !== null && d <= 2
+                            ? "shrink-0 text-xs font-semibold"
+                            : "shrink-0 text-xs text-graymute"
+                        }
+                      >
+                        {d === 0 ? "today" : d === 1 ? "tomorrow" : d !== null ? `${d} days` : "—"}
+                      </span>
+                    </li>
+                  );
+                })}
+              </ul>
+            ) : (
+              <p className="mt-3 text-sm text-graymute flex-1">
+                Nothing due. Add tasks from Schedule, or connect Classroom below.
+              </p>
+            )}
+            <Link
+              href="/schedule"
+              className="mt-3 text-sm font-medium underline underline-offset-2 hover:text-graytext"
+            >
+              View schedule
+            </Link>
+          </div>
+
+          <DailyDrill />
+
+          <div className="rounded-2xl border border-grayline bg-paper p-5 flex flex-col">
+            <div className="flex items-center gap-2 font-semibold">
+              <CalendarDays className="w-4 h-4" />
+              Next exam
+            </div>
+            {nextExam ? (
+              <div className="mt-3 flex-1">
+                <div className="text-4xl font-semibold tabular-nums">{examDays ?? "—"}</div>
+                <div className="text-sm text-graymute mt-1">
+                  days until {nextExam.name}
+                </div>
+              </div>
+            ) : (
+              <p className="mt-3 text-sm text-graymute flex-1">
+                Add exam dates to your subjects to start the countdown.
+              </p>
+            )}
+            <Link
+              href="/subjects"
+              className="mt-3 text-sm font-medium underline underline-offset-2 hover:text-graytext"
+            >
+              {nextExam ? "All subjects" : "Add exam dates"}
+            </Link>
+          </div>
+        </div>
+      </section>
 
       <section className="mt-10">
         <h2 className="text-xl font-semibold mb-3">Your subjects</h2>
@@ -137,6 +159,39 @@ export default async function DashboardPage({
       </section>
 
       <WeekPlan />
+
+      {/* Setup row — demoted below the fold once the real content exists. */}
+      <section className="mt-10" aria-label="Connections">
+        <h2 className="text-xl font-semibold mb-3">Connections</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <Card
+            icon={<Mail className="w-5 h-5" />}
+            title="Connect Gmail"
+            badge={profile?.gmail_connected ? undefined : "Beta"}
+            sub={
+              profile?.gmail_connected
+                ? "Connected — deadlines auto-import"
+                : "Auto-import deadlines. New accounts get access within a day of requesting."
+            }
+            href={profile?.gmail_connected ? undefined : "/api/auth/google?service=gmail"}
+            cta={profile?.gmail_connected ? undefined : "Request access & connect"}
+            done={!!profile?.gmail_connected}
+          />
+          <Card
+            icon={<GraduationCap className="w-5 h-5" />}
+            title="Connect Classroom"
+            badge={profile?.classroom_connected ? undefined : "Beta"}
+            sub={
+              profile?.classroom_connected
+                ? "Connected — assignments synced"
+                : "Sync assignments. New accounts get access within a day of requesting."
+            }
+            href={profile?.classroom_connected ? undefined : "/api/auth/google?service=classroom"}
+            cta={profile?.classroom_connected ? undefined : "Request access & connect"}
+            done={!!profile?.classroom_connected}
+          />
+        </div>
+      </section>
     </AppLayout>
   );
 }

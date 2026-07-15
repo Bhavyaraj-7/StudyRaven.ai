@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Plus, X, Save, Loader2 } from "lucide-react";
 import AppLayout from "@/components/layout/AppLayout";
+import TopicTracker from "@/components/subjects/TopicTracker";
 import { supabaseBrowser } from "@/lib/supabase";
 import { IGCSE_SUBJECTS, codeForSubject } from "@/lib/igcse-subjects";
 
@@ -222,6 +223,14 @@ export default function SubjectsPage() {
             <Plus className="w-4 h-4" /> Add subject
           </button>
         </div>
+      )}
+
+      {!loading && (
+        <TopicTracker
+          subjects={subjects
+            .filter((s): s is Subject & { id: string } => Boolean(s.id))
+            .map((s) => ({ id: s.id, name: s.name, code: s.code }))}
+        />
       )}
     </AppLayout>
   );

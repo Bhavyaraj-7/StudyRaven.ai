@@ -60,6 +60,9 @@ export async function groqChat(
         temperature: opts.temperature ?? 0.6,
         max_tokens: opts.maxTokens ?? 2048,
         response_format: opts.json ? { type: "json_object" } : undefined,
+        // Route to the fastest provider serving this model — long generations
+        // (roadmaps, papers) must finish inside Vercel's 60s function limit.
+        provider: { sort: "throughput" },
         messages,
       }),
     });
