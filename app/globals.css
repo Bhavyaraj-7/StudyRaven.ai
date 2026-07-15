@@ -3,15 +3,49 @@
 @tailwind utilities;
 
 @layer base {
+  /* Design tokens as RGB channels (space-separated) so Tailwind's
+     `/opacity` modifiers work. Light is the default; [data-theme="dark"]
+     swaps the same names. Landing page stays light for logged-out visitors. */
+  :root {
+    --paper: 255 255 255;
+    --ink: 10 10 10;
+    --graylite: 244 244 245;
+    --grayline: 229 229 229;
+    --graytext: 74 74 74;
+    --graymute: 138 138 138;
+    --accent: 37 99 235; /* restrained blue */
+    --gold: 176 137 43; /* restrained gold */
+  }
+  [data-theme="dark"] {
+    --paper: 12 12 14;
+    --ink: 245 245 246;
+    --graylite: 26 26 29;
+    --grayline: 42 42 47;
+    --graytext: 197 197 201;
+    --graymute: 138 138 144;
+    --accent: 96 165 250;
+    --gold: 212 167 44;
+  }
+
   html,
   body {
-    background: #ffffff;
-    color: #0a0a0a;
+    background: rgb(var(--paper));
+    color: rgb(var(--ink));
     font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
     -webkit-font-smoothing: antialiased;
   }
   * {
-    border-color: #e5e5e5;
+    border-color: rgb(var(--grayline));
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }
 

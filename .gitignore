@@ -10,3 +10,7 @@ dist
 build
 Microsoft VS Code/
 .claude/
+
+# stray screenshots in repo root (public/ assets stay tracked)
+/*.PNG
+/*.png

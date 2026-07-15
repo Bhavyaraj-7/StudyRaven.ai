@@ -2,9 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { Sun, Moon } from "lucide-react";
 import AppLayout from "@/components/layout/AppLayout";
 import { supabaseBrowser } from "@/lib/supabase";
 import { useProfile } from "@/hooks/useProfile";
+import { getStoredTheme, setStoredTheme, type Theme } from "@/lib/theme";
+import { cn } from "@/lib/utils";
 
 export default function SettingsPage() {
   const router = useRouter();
@@ -15,6 +18,7 @@ export default function SettingsPage() {
   const [saving, setSaving] = useState(false);
   const [cancelling, setCancelling] = useState(false);
   const [cancelMsg, setCancelMsg] = useState<string | null>(null);
+  const [theme, setTheme] = useState<Theme>("light");
 
   useEffect(() => {
     if (profile) {
@@ -23,6 +27,15 @@ export default function SettingsPage() {
       setGrade(profile.grade ?? 10);
     }
   }, [profile]);
+
+  useEffect(() => {
+    setTheme(getStoredTheme());
+  }, []);
+
+  function pickTheme(t: Theme) {
+    setTheme(t);
+    setStoredTheme(t);
+  }
 
   async function save() {
     setSaving(true);
@@ -100,6 +113,40 @@ export default function SettingsPage() {
         >
           {saving ? "Saving..." : "Save changes"}
         </button>
+      </section>
+
+      <section className="max-w-xl mt-12">
+        <h2 className="text-xl font-semibold">Appearance</h2>
+        <p className="text-sm text-graymute mt-1">
+          Choose how the app looks. Your landing page stays unchanged.
+        </p>
+        <div
+          role="radiogroup"
+          aria-label="Theme"
+          className="mt-3 inline-flex rounded-xl border border-grayline overflow-hidden"
+        >
+          {([
+            { value: "light" as Theme, label: "Light", icon: Sun },
+            { value: "dark" as Theme, label: "Dark", icon: Moon },
+          ]).map(({ value, label, icon: Icon }) => (
+            <button
+              key={value}
+              type="button"
+              role="radio"
+              aria-checked={theme === value}
+              onClick={() => pickTheme(value)}
+              className={cn(
+                "inline-flex items-center gap-2 px-5 py-2.5 text-sm transition min-h-[44px]",
+                theme === value
+                  ? "bg-ink text-paper font-semibold"
+                  : "text-graytext hover:bg-graylite",
+              )}
+            >
+              <Icon className="w-4 h-4" />
+              {label}
+            </button>
+          ))}
+        </div>
       </section>
 
       <section className="max-w-xl mt-12">

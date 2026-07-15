@@ -9,12 +9,17 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        ink: "#0A0A0A",
-        paper: "#FFFFFF",
-        graylite: "#F4F4F5",
-        grayline: "#E5E5E5",
-        graytext: "#4A4A4A",
-        graymute: "#8A8A8A",
+        // Channel-format CSS vars so Tailwind opacity modifiers (bg-ink/40)
+        // keep working, and a single [data-theme] swap flips the whole app.
+        ink: "rgb(var(--ink) / <alpha-value>)",
+        paper: "rgb(var(--paper) / <alpha-value>)",
+        graylite: "rgb(var(--graylite) / <alpha-value>)",
+        grayline: "rgb(var(--grayline) / <alpha-value>)",
+        graytext: "rgb(var(--graytext) / <alpha-value>)",
+        graymute: "rgb(var(--graymute) / <alpha-value>)",
+        // Restrained accents — used sparingly for emphasis, never as fills.
+        accent: "rgb(var(--accent) / <alpha-value>)",
+        gold: "rgb(var(--gold) / <alpha-value>)",
       },
       fontFamily: {
         sans: ["Inter", "-apple-system", "BlinkMacSystemFont", "sans-serif"],
