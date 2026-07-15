@@ -10,7 +10,13 @@ import {
 
 export const maxDuration = 60;
 
-type Kind = "summary" | "study_guide" | "slide_deck" | "flashcards" | "mind_map";
+type Kind =
+  | "summary"
+  | "study_guide"
+  | "slide_deck"
+  | "flashcards"
+  | "mind_map"
+  | "quiz";
 
 const SOURCE_RULE =
   "If SOURCE MATERIAL is provided below, base the output PRIMARILY on that material — extract facts, terminology, examples, and structure from it. Only fall back to general IGCSE knowledge to fill gaps the source does not cover.";
@@ -34,6 +40,10 @@ const PROMPTS: Record<Kind, { sys: string; json: boolean }> = {
   },
   mind_map: {
     sys: `Produce a mind map as JSON: { "root": string, "branches": [ { "label": string, "children": string[] } ] }. 4-6 branches, each with 3-5 children. ${SOURCE_RULE}`,
+    json: true,
+  },
+  quiz: {
+    sys: `Produce an IGCSE-style multiple-choice quiz as JSON: { "questions": [ { "q": string, "options": string[], "answer": number, "explanation": string } ] }. Make 8 questions. Each has exactly 4 options. "answer" is the 0-based index of the correct option. "explanation" is one line on why it's right. Vary difficulty; test real understanding, not trivia. ${SOURCE_RULE}`,
     json: true,
   },
 };
