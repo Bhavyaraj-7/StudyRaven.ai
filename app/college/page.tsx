@@ -30,6 +30,7 @@ import ScholarshipsTab from "@/components/college/ScholarshipsTab";
 
 interface CollegeData {
   readiness_score: number;
+  score_rationale?: string;
   strengths: string[];
   gaps: string[];
   action_plan: { month: string; goal: string; details: string }[];
@@ -238,12 +239,23 @@ function ReadinessTab({
       <div className="rounded-2xl border border-grayline bg-paper p-8">
         <div className="text-sm text-graymute">Your readiness</div>
         <div className="flex items-end gap-6 mt-2">
-          <div className="text-6xl font-semibold">{data.readiness_score}</div>
+          <div className="text-6xl font-semibold tabular-nums">{data.readiness_score}</div>
           <div className="text-graytext text-lg pb-2">/ 100</div>
         </div>
-        <div className="h-2 bg-graylite rounded mt-4">
+        <div
+          className="h-2 bg-graylite rounded mt-4"
+          role="progressbar"
+          aria-valuenow={data.readiness_score}
+          aria-valuemin={0}
+          aria-valuemax={100}
+        >
           <div className="h-full bg-ink rounded" style={{ width: `${data.readiness_score}%` }} />
         </div>
+        {data.score_rationale && (
+          <p className="text-sm text-graytext mt-4 border-l-2 border-grayline pl-3">
+            {data.score_rationale}
+          </p>
+        )}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
@@ -359,6 +371,10 @@ interface ProfileForm {
   target_universities: string[];
   interests: string[];
   extracurriculars: string[];
+  academics: string;
+  community_service: string;
+  awards: string;
+  test_scores: string;
 }
 
 function CollegeProfileForm({
@@ -368,46 +384,157 @@ function CollegeProfileForm({
   onSubmit: (f: ProfileForm) => void;
   loading: boolean;
 }) {
+  const [step, setStep] = useState(1);
   const [country, setCountry] = useState("United States");
   const [unis, setUnis] = useState<string[]>([]);
   const [interests, setInterests] = useState<string[]>([]);
   const [ecs, setEcs] = useState<string[]>([]);
+  const [academics, setAcademics] = useState("");
+  const [service, setService] = useState("");
+  const [awards, setAwards] = useState("");
+  const [testScores, setTestScores] = useState("");
+
+  function submit() {
+    onSubmit({
+      target_country: country,
+      target_universities: unis,
+      interests,
+      extracurriculars: ecs,
+      academics,
+      community_service: service,
+      awards,
+      test_scores: testScores,
+    });
+  }
 
   return (
     <div className="max-w-2xl">
-      <h2 className="text-2xl font-semibold">Tell us your college goals</h2>
-      <p className="text-graytext mt-1">
-        We&apos;ll generate your readiness score, match universities, and surface live opportunities.
-      </p>
-      <div className="mt-8 space-y-5">
-        <label className="block">
-          <span className="text-sm text-graytext">Target country</span>
-          <input
-            value={country}
-            onChange={(e) => setCountry(e.target.value)}
-            className="mt-1 w-full rounded-lg border border-grayline px-4 py-3 outline-none focus:border-ink"
-          />
-        </label>
-        <Chips label="Target universities" items={unis} setItems={setUnis} placeholder="Add a university" />
-        <Chips label="Academic interests" items={interests} setItems={setInterests} placeholder="Add an interest (e.g. AI, biology)" />
-        <Chips label="Extracurriculars" items={ecs} setItems={setEcs} placeholder="Add an EC (e.g. robotics club)" />
-        <button
-          onClick={() =>
-            onSubmit({
-              target_country: country,
-              target_universities: unis,
-              interests,
-              extracurriculars: ecs,
-            })
-          }
-          disabled={loading}
-          className="rounded-lg bg-ink text-paper px-6 py-3 inline-flex items-center gap-2 disabled:opacity-50"
-        >
-          {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
-          Generate my profile
-        </button>
+      <div className="flex items-center gap-3">
+        <h2 className="text-2xl font-semibold">Build your real readiness profile</h2>
+        <span className="text-xs text-graymute rounded-full border border-grayline px-2 py-0.5">
+          Step {step} of 2
+        </span>
       </div>
+      <p className="text-graytext mt-1">
+        The score is only as honest as what you enter. Be specific — vague input
+        gets a low, accurate score, not a flattering one.
+      </p>
+
+      {/* progress */}
+      <div className="mt-4 h-1 rounded-full bg-graylite overflow-hidden max-w-xs">
+        <div
+          className="h-full bg-ink rounded-full transition-all duration-300"
+          style={{ width: step === 1 ? "50%" : "100%" }}
+        />
+      </div>
+
+      {step === 1 && (
+        <div className="mt-8 space-y-5">
+          <div className="text-sm font-semibold text-graytext">Goals</div>
+          <label className="block">
+            <span className="text-sm text-graytext">Target country</span>
+            <input
+              value={country}
+              onChange={(e) => setCountry(e.target.value)}
+              className="mt-1 w-full rounded-lg border border-grayline px-4 py-3 outline-none focus:border-ink"
+            />
+          </label>
+          <Chips label="Target universities" items={unis} setItems={setUnis} placeholder="Add a university" />
+          <Chips label="Academic interests" items={interests} setItems={setInterests} placeholder="Add an interest (e.g. AI, biology)" />
+          <button
+            onClick={() => setStep(2)}
+            className="rounded-lg bg-ink text-paper px-6 py-3 inline-flex items-center gap-2"
+          >
+            Next: your track record →
+          </button>
+        </div>
+      )}
+
+      {step === 2 && (
+        <div className="mt-8 space-y-5">
+          <div className="text-sm font-semibold text-graytext">
+            Your actual track record{" "}
+            <span className="font-normal text-graymute">
+              — this is what gets scored
+            </span>
+          </div>
+          <Field
+            label="Current & predicted grades"
+            hint="Per subject, e.g. 'Maths A*, Physics A, Chemistry B (predicted)'. Empty = academics score 0."
+            value={academics}
+            onChange={setAcademics}
+          />
+          <Chips
+            label="Extracurriculars (include role + hours + result)"
+            items={ecs}
+            setItems={setEcs}
+            placeholder="e.g. Founded coding club, 3 hrs/wk, 30 members"
+          />
+          <Field
+            label="Community service"
+            hint="Hours + what you actually did, e.g. '40 hrs teaching maths at a local shelter'."
+            value={service}
+            onChange={setService}
+          />
+          <Field
+            label="Awards & competitions"
+            hint="Name them + your result + evidence, e.g. 'Silver, National Science Olympiad 2025'."
+            value={awards}
+            onChange={setAwards}
+          />
+          <label className="block">
+            <span className="text-sm text-graytext">Test scores (if any)</span>
+            <input
+              value={testScores}
+              onChange={(e) => setTestScores(e.target.value)}
+              placeholder="SAT 1450, IELTS 7.5 — leave blank if none"
+              className="mt-1 w-full rounded-lg border border-grayline px-4 py-3 outline-none focus:border-ink"
+            />
+          </label>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setStep(1)}
+              className="rounded-lg border border-grayline px-5 py-3 hover:bg-graylite"
+            >
+              ← Back
+            </button>
+            <button
+              onClick={submit}
+              disabled={loading}
+              className="rounded-lg bg-ink text-paper px-6 py-3 inline-flex items-center gap-2 disabled:opacity-50"
+            >
+              {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
+              {loading ? "Scoring honestly..." : "Generate my profile"}
+            </button>
+          </div>
+        </div>
+      )}
     </div>
+  );
+}
+
+function Field({
+  label,
+  hint,
+  value,
+  onChange,
+}: {
+  label: string;
+  hint: string;
+  value: string;
+  onChange: (v: string) => void;
+}) {
+  return (
+    <label className="block">
+      <span className="text-sm text-graytext">{label}</span>
+      <textarea
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        rows={2}
+        className="mt-1 w-full rounded-lg border border-grayline px-4 py-3 outline-none focus:border-ink resize-y"
+      />
+      <span className="text-xs text-graymute mt-1 block">{hint}</span>
+    </label>
   );
 }
 

@@ -1,17 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Play, Pause, RotateCcw, Check, Coffee, Brain } from "lucide-react";
+import { Play, Pause, RotateCcw, Coffee, Brain } from "lucide-react";
 import AppLayout from "@/components/layout/AppLayout";
-import { supabaseBrowser } from "@/lib/supabase";
 
 const FOCUS_MIN = 25;
 const BREAK_MIN = 5;
-
-interface TaskRow {
-  id: string;
-  title: string;
-}
 
 function todayKey() {
   return `focus_sessions_${new Date().toISOString().slice(0, 10)}`;
@@ -22,26 +16,10 @@ export default function FocusPage() {
   const [secondsLeft, setSecondsLeft] = useState(FOCUS_MIN * 60);
   const [running, setRunning] = useState(false);
   const [sessions, setSessions] = useState(0);
-  const [tasks, setTasks] = useState<TaskRow[]>([]);
-  const [taskId, setTaskId] = useState<string>("");
-  const [taskDone, setTaskDone] = useState(false);
 
-  // Load today's session count + pending tasks.
+  // Load today's session count.
   useEffect(() => {
     setSessions(Number(localStorage.getItem(todayKey()) ?? 0));
-    const sb = supabaseBrowser();
-    (async () => {
-      const { data: auth } = await sb.auth.getUser();
-      if (!auth.user) return;
-      const { data } = await sb
-        .from("tasks")
-        .select("id, title")
-        .eq("user_id", auth.user.id)
-        .neq("status", "done")
-        .order("due_date", { ascending: true })
-        .limit(20);
-      setTasks(data ?? []);
-    })();
   }, []);
 
   // Tick — updater stays pure; the transition effect below handles side effects.
@@ -71,20 +49,6 @@ export default function FocusPage() {
     setRunning(false);
     setMode("focus");
     setSecondsLeft(FOCUS_MIN * 60);
-  }
-
-  async function completeTask() {
-    if (!taskId) return;
-    const sb = supabaseBrowser();
-    const { error } = await sb.from("tasks").update({ status: "done" }).eq("id", taskId);
-    if (!error) {
-      setTaskDone(true);
-      setTasks((t) => t.filter((x) => x.id !== taskId));
-      setTimeout(() => {
-        setTaskId("");
-        setTaskDone(false);
-      }, 1500);
-    }
   }
 
   const mm = String(Math.floor(secondsLeft / 60)).padStart(2, "0");
@@ -146,34 +110,6 @@ export default function FocusPage() {
 
         <div className="text-sm text-graymute mt-4">
           {sessions} focus session{sessions === 1 ? "" : "s"} completed today
-        </div>
-
-        <div className="mt-10 text-left">
-          <label className="block">
-            <span className="text-sm text-graytext">Working on</span>
-            <select
-              value={taskId}
-              onChange={(e) => setTaskId(e.target.value)}
-              className="mt-1 w-full rounded-lg border border-grayline px-4 py-3 outline-none focus:border-ink bg-paper"
-            >
-              <option value="">Pick a task (optional)</option>
-              {tasks.map((t) => (
-                <option key={t.id} value={t.id}>
-                  {t.title}
-                </option>
-              ))}
-            </select>
-          </label>
-          {taskId && (
-            <button
-              onClick={completeTask}
-              disabled={taskDone}
-              className="mt-3 inline-flex items-center gap-2 rounded-lg border border-grayline px-4 py-2 text-sm hover:bg-graylite disabled:opacity-60"
-            >
-              <Check className="w-4 h-4" />
-              {taskDone ? "Done ✓" : "Mark task complete"}
-            </button>
-          )}
         </div>
       </div>
     </AppLayout>

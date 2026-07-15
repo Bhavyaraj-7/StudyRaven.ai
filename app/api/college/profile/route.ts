@@ -6,18 +6,33 @@ import type { ActionPlanItem, UniversityMatch } from "@/types";
 
 export const maxDuration = 60;
 
-const READINESS_SYSTEM = `You are a college admissions counselor for Grade 9-10 students applying to top universities. Build a readiness profile as JSON:
+const READINESS_SYSTEM = `You are a hard-nosed admissions counselor for top-30 global universities, assessing a Grade 9-10 student. Your job is to be ACCURATE, not kind. A sugar-coated score is worse than useless — it makes the student complacent. Build a readiness profile as JSON:
 {
   "readiness_score": 0-100,
+  "score_rationale": string,
   "strengths": string[],
   "gaps": string[],
   "university_matches": [ { "name": string, "country": string, "fit": "reach" | "target" | "safety", "why": string } ]
 }
-Rules:
-- 5-7 strengths. Each is ONE string: the strength, then a dash, then 1-2 sentences on exactly why it matters for admissions to their target universities.
-- 5-7 gaps. Each is ONE string: the gap, then a dash, then 1-2 sentences on the specific, concrete way to close it (name the kind of program, test, project, or habit — not "work harder").
-- 6-8 university matches spread across reach/target/safety. "why" must reference the student's actual interests or profile, not generic praise.
-- Be honest but encouraging. Score conservatively — most Grade 9-10 students are 40-70.`;
+
+SCORING RUBRIC — score ONLY on evidence the student actually provided. Absence of evidence is a low score, never a middle one.
+- Start every student at 15 (a Grade 9-10 with no track record yet).
+- Academics: +0 to +30 based on the actual grades/marks they entered. No grades entered = +0, not a guess.
+- Extracurriculars: +0 to +20. Only count ECs with a stated role AND time commitment AND a tangible result/evidence. "Member of a club" with nothing behind it = +0-2. A founded/led initiative with numbers = high.
+- Competitions/awards: +0 to +20, and ONLY if the student named a real competition and their result/evidence. Vague "I like science" = +0.
+- Community service: +0 to +10, scaled by hours and genuine ownership (led vs. attended).
+- Test scores (SAT/IELTS/etc.): +0 to +5 if provided and strong.
+- Narrative/spike: +0 to +10 if a clear, evidenced through-line exists across their interests and activities. Scattered = +0.
+- A student who typed almost nothing MUST land 15-30. Do not inflate. Do not average to 50. If the profile is empty, say so in score_rationale.
+
+- "score_rationale": 1-2 blunt sentences explaining the exact number — what earned points and what scored zero for lack of evidence.
+- 3-6 strengths — ONLY things the student actually evidenced. If they evidenced nothing, return an empty array; never invent "strong communication" or "curious mind" with no basis.
+- 5-8 gaps — specific and evidence-based. Each: the gap, a dash, then the concrete first step (name the exact kind of competition, project, test, or role — not "work harder"). Where the student gave no evidence for something, the gap is "you have no evidence of X yet — here's how to build it".
+
+UNIVERSITY MATCHES — must be internally consistent with selectivity:
+- Reach = HARDER to get into than Target; Target = harder than Safety. Never label a more-selective university "safety" while a less-selective one is "reach". Order must track real admit rates.
+- Base the bands on THIS student's actual strength from the rubric above. A 20/100 student's "target" is not Oxford — be realistic; their reaches are selective, their safeties are genuinely likely.
+- 6-8 matches. "why" cites the student's real profile and the school's actual selectivity, not generic praise.`;
 
 const ROADMAP_SYSTEM = `You are an elite admissions strategist building a personalized 6-month execution plan for a Grade 9-10 student. You are given their profile, their gaps, and a list of REAL opportunities found on the web (competitions, programs, community service, courses) with URLs.
 
@@ -88,7 +103,16 @@ export async function POST(req: Request) {
   if (!user) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
 
   const body = await req.json();
-  const { target_country, target_universities, interests, extracurriculars } = body;
+  const {
+    target_country,
+    target_universities,
+    interests,
+    extracurriculars,
+    academics,
+    community_service,
+    awards,
+    test_scores,
+  } = body;
 
   const { data: profile } = await sb
     .from("profiles")
@@ -97,10 +121,14 @@ export async function POST(req: Request) {
     .maybeSingle();
 
   const studentBlock = `Student: Grade ${profile?.grade ?? 10} ${profile?.curriculum ?? "IGCSE"}
-Target country: ${target_country}
+Target country: ${target_country || "—"}
 Target universities: ${target_universities?.join(", ") || "open"}
-Interests: ${interests?.join(", ") || "—"}
-Extracurriculars: ${extracurriculars?.join(", ") || "—"}`;
+Academic interests: ${interests?.join(", ") || "—"}
+Current/predicted grades & marks: ${academics?.trim() || "(none provided — score academics as 0)"}
+Extracurriculars (role, hours, result): ${extracurriculars?.join(" | ") || "(none provided — score ECs as 0)"}
+Community service: ${community_service?.trim() || "(none provided — score as 0)"}
+Awards & competitions (with evidence): ${awards?.trim() || "(none provided — score as 0)"}
+Test scores: ${test_scores?.trim() || "(none)"}`;
 
   try {
     // Wall-clock budget: Vercel kills this function at 60s. One 7000-token
@@ -130,11 +158,12 @@ Extracurriculars: ${extracurriculars?.join(", ") || "—"}`;
 
     const readinessPromise = groqJson<{
       readiness_score: number;
+      score_rationale: string;
       strengths: string[];
       gaps: string[];
       university_matches: UniversityMatch[];
-    }>(READINESS_SYSTEM, `${studentBlock}\n\nGenerate the readiness profile now.`, {
-      temperature: 0.5,
+    }>(READINESS_SYSTEM, `${studentBlock}\n\nGenerate the readiness profile now. Be strict — reward evidence, penalise its absence.`, {
+      temperature: 0.4,
       maxTokens: 2500,
     });
 
