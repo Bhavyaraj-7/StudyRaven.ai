@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import {
   LayoutDashboard,
   Wand2,
-  FileText,
+  GraduationCap,
   ScrollText,
   TimerReset,
   BarChart3,
@@ -22,7 +22,7 @@ const NAV = [
   { href: "/dashboard", label: "Home", icon: LayoutDashboard },
   { href: "/subjects", label: "Subjects", icon: BookOpen },
   { href: "/studio", label: "Studio", icon: Wand2 },
-  { href: "/papers", label: "Past papers", icon: FileText },
+  { href: "/papers", label: "AI tutor", icon: GraduationCap },
   { href: "/marks", label: "Mark schemes", icon: ScrollText },
   { href: "/mocks", label: "Mock tests", icon: TimerReset },
   { href: "/flashcards", label: "Flashcards", icon: Layers },

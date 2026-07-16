@@ -1,10 +1,10 @@
 import AppLayout from "@/components/layout/AppLayout";
-import PapersPage from "@/components/papers/PapersPage";
+import AiTutorPage from "@/components/papers/AiTutorPage";
 
 export default function Papers() {
   return (
-    <AppLayout title="Past papers">
-      <PapersPage mode="papers" />
+    <AppLayout title="AI tutor">
+      <AiTutorPage />
     </AppLayout>
   );
 }

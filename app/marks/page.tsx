@@ -1,10 +1,10 @@
 import AppLayout from "@/components/layout/AppLayout";
-import PapersPage from "@/components/papers/PapersPage";
+import MarkSchemesPage from "@/components/marks/MarkSchemesPage";
 
 export default function Marks() {
   return (
     <AppLayout title="Mark schemes">
-      <PapersPage mode="marks" />
+      <MarkSchemesPage />
     </AppLayout>
   );
 }

@@ -4,6 +4,8 @@ import AppLayout from "@/components/layout/AppLayout";
 import { supabaseServer } from "@/lib/supabase-server";
 import ScoreChart from "@/components/stats/ScoreChart";
 import WeakestTopics from "@/components/stats/WeakestTopics";
+import WeaknessRadar from "@/components/stats/WeaknessRadar";
+import ErrorJournal from "@/components/stats/ErrorJournal";
 
 export default async function StatsPage() {
   const sb = supabaseServer();
@@ -61,7 +63,12 @@ export default async function StatsPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-6">
         <ScoreChart data={pcts} />
+        <WeaknessRadar data={subjectProgress} />
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4">
         <WeakestTopics />
+        <ErrorJournal />
       </div>
 
       <div className="rounded-xl border border-grayline p-5 mt-4">

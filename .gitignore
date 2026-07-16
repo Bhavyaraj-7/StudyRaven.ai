@@ -14,3 +14,7 @@ Microsoft VS Code/
 # stray screenshots in repo root (public/ assets stay tracked)
 /*.PNG
 /*.png
+
+# never commit env files or their backups
+.env*
+!.env.example

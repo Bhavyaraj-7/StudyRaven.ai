@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Loader2, Play, Timer, CheckCircle2, Upload } from "lucide-react";
 import AppLayout from "@/components/layout/AppLayout";
+import LibraryTab from "@/components/papers/LibraryTab";
 import { supabaseBrowser } from "@/lib/supabase";
 import { extractPdfText } from "@/lib/pdf";
 
@@ -287,6 +288,16 @@ export default function MocksPage() {
             {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Play className="w-4 h-4" />}
             Start 1-hour mock
           </button>
+
+          {/* My library — your own uploaded papers, taken as mocks */}
+          <section className="mt-14 border-t border-grayline pt-8 max-w-3xl">
+            <h2 className="text-lg font-semibold">Your uploaded papers</h2>
+            <p className="text-sm text-graymute mt-1 mb-4">
+              Upload your own past papers to keep them here and sit them as timed
+              mocks whenever you want.
+            </p>
+            <LibraryTab mode="papers" />
+          </section>
         </div>
       )}
 
