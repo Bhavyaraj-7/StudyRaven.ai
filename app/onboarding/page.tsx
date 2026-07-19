@@ -79,6 +79,9 @@ export default function OnboardingPage() {
       });
     }
 
+    // Fire-and-forget — must never block the redirect the student is waiting on.
+    fetch("/api/welcome-email", { method: "POST" }).catch(() => {});
+
     router.push("/studio");
     router.refresh();
   }

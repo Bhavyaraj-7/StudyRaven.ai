@@ -1,4 +1,5 @@
 import { Resend } from "resend";
+import { supabaseAdmin } from "@/lib/supabase-server";
 
 export const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -39,4 +40,27 @@ export async function sendEmail(args: {
     subject: args.subject,
     html: emailShell(args.title, args.body),
   });
+}
+
+/**
+ * For lifecycle/marketing sends (welcome, mock results, upgrade nudges,
+ * payment recovery) — anything the student didn't just click a button to
+ * trigger. Checks the unsubscribe flag first so opting out in Settings
+ * actually works. Transactional sends the user directly requested (e.g.
+ * "email me this schedule") should call sendEmail() directly instead.
+ */
+export async function sendLifecycleEmail(
+  userId: string,
+  args: { subject: string; title: string; body: string },
+) {
+  const admin = supabaseAdmin();
+  const { data: profile } = await admin
+    .from("profiles")
+    .select("email, unsubscribed")
+    .eq("id", userId)
+    .maybeSingle();
+
+  if (!profile?.email || profile.unsubscribed) return { skipped: true };
+
+  return sendEmail({ to: profile.email, ...args });
 }

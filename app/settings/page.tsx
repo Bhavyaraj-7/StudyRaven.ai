@@ -19,12 +19,15 @@ export default function SettingsPage() {
   const [cancelling, setCancelling] = useState(false);
   const [cancelMsg, setCancelMsg] = useState<string | null>(null);
   const [theme, setTheme] = useState<Theme>("light");
+  const [unsubscribed, setUnsubscribed] = useState(false);
+  const [emailSaving, setEmailSaving] = useState(false);
 
   useEffect(() => {
     if (profile) {
       setName(profile.name ?? "");
       setCountry(profile.country ?? "");
       setGrade(profile.grade ?? 10);
+      setUnsubscribed(Boolean(profile.unsubscribed));
     }
   }, [profile]);
 
@@ -49,6 +52,17 @@ export default function SettingsPage() {
   async function signOut() {
     await supabaseBrowser().auth.signOut();
     router.push("/");
+  }
+
+  async function toggleEmails(next: boolean) {
+    setEmailSaving(true);
+    setUnsubscribed(next);
+    const sb = supabaseBrowser();
+    const { data: auth } = await sb.auth.getUser();
+    if (auth.user) {
+      await sb.from("profiles").update({ unsubscribed: next }).eq("id", auth.user.id);
+    }
+    setEmailSaving(false);
   }
 
   async function cancelPlan() {
@@ -147,6 +161,34 @@ export default function SettingsPage() {
             </button>
           ))}
         </div>
+      </section>
+
+      <section className="max-w-xl mt-12">
+        <h2 className="text-xl font-semibold">Notifications</h2>
+        <p className="text-sm text-graymute mt-1">
+          Deadline reminders, mock results, and study tips by email.
+        </p>
+        <label className="mt-3 flex items-center justify-between rounded-xl border border-grayline p-4 cursor-pointer min-h-[44px]">
+          <span className="text-sm">Email me updates and reminders</span>
+          <button
+            type="button"
+            role="switch"
+            aria-checked={!unsubscribed}
+            disabled={emailSaving}
+            onClick={() => toggleEmails(!unsubscribed)}
+            className={cn(
+              "relative w-11 h-6 rounded-full transition shrink-0",
+              !unsubscribed ? "bg-ink" : "bg-graylite border border-grayline",
+            )}
+          >
+            <span
+              className={cn(
+                "absolute top-0.5 w-5 h-5 rounded-full bg-paper transition-transform",
+                !unsubscribed ? "translate-x-[22px]" : "translate-x-0.5",
+              )}
+            />
+          </button>
+        </label>
       </section>
 
       <section className="max-w-xl mt-12">

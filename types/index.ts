@@ -13,6 +13,7 @@ export interface Profile {
   country: string | null;
   gmail_connected?: boolean;
   classroom_connected?: boolean;
+  unsubscribed?: boolean;
   created_at?: string;
 }
 

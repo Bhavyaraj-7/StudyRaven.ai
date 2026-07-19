@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { supabaseServer } from "@/lib/supabase-server";
 import { groqJson } from "@/lib/groq";
+import { sendLifecycleEmail } from "@/lib/resend";
 
 export const maxDuration = 60;
 
@@ -91,6 +92,20 @@ Grade now.`;
       );
       if (mErr) console.error("error journal insert failed:", mErr.message);
     }
+
+    // Results email — fire-and-forget, must never block the response the
+    // student is waiting on for their grade.
+    const journalUrl = `${process.env.NEXT_PUBLIC_APP_URL}/stats`;
+    sendLifecycleEmail(user.id, {
+      subject: `${subject ?? "Your mock"}: ${result.score}/${result.max_score} — predicted ${result.predicted_grade}`,
+      title: "Your mock is graded",
+      body: `
+        <p><strong>${subject ?? "Mock test"}</strong></p>
+        <p style="font-size:32px;font-weight:600;margin:12px 0">${result.score}<span style="color:#8A8A8A;font-size:18px">/${result.max_score}</span> &nbsp;·&nbsp; Predicted ${result.predicted_grade}</p>
+        <p>${result.feedback}</p>
+        ${result.mistakes?.length ? `<p style="margin-top:16px"><a href="${journalUrl}" style="color:#0A0A0A;text-decoration:underline">Review the ${result.mistakes.length} marks you dropped →</a></p>` : ""}
+      `,
+    }).catch((e) => console.error("mock results email failed:", e));
 
     // Mark the attempt completed so the abandoned-mock reminder skips it.
     if (attempt_id) {
