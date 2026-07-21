@@ -14,7 +14,7 @@ interface Msg {
 const SUGGESTIONS = [
   "What should I focus on this year to get into my target universities?",
   "How important are extracurriculars for US admissions?",
-  "What IGCSE grades do top UK universities expect?",
+  "What grades do top UK universities expect?",
   "Build me a plan to strengthen my weakest area.",
 ];
 

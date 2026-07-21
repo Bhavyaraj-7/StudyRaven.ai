@@ -4,7 +4,7 @@ import { groqText } from "../_shared/groq.ts";
 import { emailShell, sendResend } from "../_shared/email.ts";
 
 const APP_URL = Deno.env.get("APP_URL") ?? "https://studyraven.ai";
-const SYSTEM = `You are an IGCSE study coach writing a brief HTML email body (under 150 words) about an upcoming exam. Be calm, encouraging, give one specific tip for the time remaining. Output only HTML body content.`;
+const SYSTEM = `You are a study coach writing a brief HTML email body (under 150 words) about an upcoming exam. Be calm, encouraging, give one specific tip for the time remaining. Output only HTML body content.`;
 
 Deno.serve(async () => {
   const sb = createClient(

@@ -53,7 +53,7 @@ export default function Landing() {
               animationDelay: "100ms",
             }}
           >
-            Built for IGCSE.
+            Built for students.
             <br />
             Engineered for results.
           </h1>
@@ -191,7 +191,7 @@ export default function Landing() {
                 margin: "20px 0 18px",
               }}
             >
-              Your IGCSE grades open doors. We help you choose which one.
+              Your grades open doors. We help you choose which one.
             </h2>
             <p className="text-graytext text-[17px] leading-relaxed mb-8">
               A weekly newsletter on competitions, summer programs, books,
@@ -255,7 +255,7 @@ export default function Landing() {
             <PriceCard
               name="Free"
               price="₹0"
-              sub="forever, for IGCSE students"
+              sub="forever, for students"
               features={[
                 "AI study planner",
                 "Past papers + mark schemes",
@@ -301,7 +301,7 @@ export default function Landing() {
           Stop hoping. Start scoring.
         </h2>
         <p className="text-graytext text-[18px] mt-5 max-w-[520px] mx-auto leading-relaxed">
-          Join thousands of IGCSE students using StudyRaven.ai to study smarter,
+          Join thousands of students using StudyRaven.ai to study smarter,
           not harder.
         </p>
         <div className="mt-8">
@@ -407,7 +407,7 @@ export default function Landing() {
         </div>
         <div className="max-w-[1180px] mx-auto mt-10 pt-6 border-t border-[#1f1f1f] flex items-center justify-between text-[12.5px] text-graymute font-mono">
           <span>Built by students, for students. © 2026 StudyRaven.ai</span>
-          <span>Made for IGCSE</span>
+          <span>Made for students</span>
         </div>
       </footer>
     </main>
@@ -469,7 +469,7 @@ const STATS = [
   { display: "12k+", label: "Past papers and mark schemes indexed" },
   { display: "5", label: "AI outputs from a single topic" },
   { display: "<60s", label: "From prompt to graded mock" },
-  { display: "₹0", label: "To start — free forever for IGCSE" },
+  { display: "₹0", label: "To start — free forever" },
 ];
 
 const NEWSLETTER_ITEMS = [

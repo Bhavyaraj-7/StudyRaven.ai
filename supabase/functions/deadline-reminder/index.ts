@@ -6,7 +6,7 @@ import { emailShell, sendResend } from "../_shared/email.ts";
 
 const APP_URL = Deno.env.get("APP_URL") ?? "https://studyraven.ai";
 
-const SYSTEM = `You are a friendly study coach writing to one IGCSE student. Write a short HTML email body (under 120 words) reminding them about a deadline. Tone: warm, motivating, second person. Output only HTML body content (no <html> tags). Use <p> tags.`;
+const SYSTEM = `You are a friendly study coach writing to one student. Write a short HTML email body (under 120 words) reminding them about a deadline. Tone: warm, motivating, second person. Output only HTML body content (no <html> tags). Use <p> tags.`;
 
 Deno.serve(async () => {
   const sb = createClient(

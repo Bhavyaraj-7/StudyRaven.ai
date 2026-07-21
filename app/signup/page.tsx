@@ -43,7 +43,7 @@ export default function SignupPage() {
           StudyRaven<span className="text-graymute">.ai</span>
         </Link>
         <div>
-          <h2 className="text-h2">Crack IGCSE with AI.</h2>
+          <h2 className="text-h2">Crack your exams with AI.</h2>
           <p className="mt-4 text-graymute max-w-md">
             Practice papers, mock grading, college guidance — all in one place.
           </p>
@@ -53,7 +53,7 @@ export default function SignupPage() {
       <section className="flex items-center justify-center p-8">
         <div className="w-full max-w-sm">
           <h1 className="text-3xl font-semibold">Create your account</h1>
-          <p className="mt-2 text-graytext">Free forever. Built for IGCSE.</p>
+          <p className="mt-2 text-graytext">Free forever. Built for students.</p>
 
           <div className="mt-8">
             <GoogleButton next="/onboarding" />

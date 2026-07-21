@@ -37,7 +37,7 @@ export async function POST() {
       subject: "Welcome to StudyRaven — here's what's free vs Pro",
       title: `Hey ${firstName}, you're in`,
       body: `
-        <p>StudyRaven is built to actually get you through IGCSE — an AI tutor grounded in your own papers, mock exams marked against the real scheme, and a college guide when you're ready for that.</p>
+        <p>StudyRaven is built to actually get you through your exams — an AI tutor grounded in your own papers, mock exams marked against the real scheme, and a college guide when you're ready for that.</p>
         <p style="margin-top:16px"><strong>Free, right now:</strong> study planner, mock tests, 5 AI generations a day, deadline reminders.</p>
         <p><strong>Pro (₹299/mo or ₹2,499/yr):</strong> unlimited generations, the full AI tutor with chat + your own paper library, college guidance, and score prediction.</p>
         <p style="margin-top:20px"><a href="${appUrl}/dashboard" style="display:inline-block;background:#0A0A0A;color:#fff;padding:10px 20px;border-radius:8px;text-decoration:none">Go to your dashboard</a></p>

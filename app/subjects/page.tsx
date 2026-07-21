@@ -148,7 +148,7 @@ export default function SubjectsPage() {
         <div>
           <h1 className="text-h2">Your subjects</h1>
           <p className="mt-2 text-graytext">
-            Add, edit, or remove the IGCSE subjects you&apos;re studying.
+            Add, edit, or remove the subjects you&apos;re studying.
           </p>
         </div>
         <button

@@ -38,7 +38,7 @@ export default function AiTutorPage() {
       <div>
         <h1 className="text-2xl font-semibold">AI tutor</h1>
         <p className="text-graytext mt-1 max-w-xl">
-          Your own IGCSE tutor — ask doubts, upload your papers, and practise
+          Your own AI tutor — ask doubts, upload your papers, and practise
           against real mark schemes.
         </p>
         <div className="mt-8 rounded-2xl border border-grayline bg-graylite/50 p-10 text-center max-w-2xl">

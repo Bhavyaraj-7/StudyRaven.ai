@@ -4,13 +4,13 @@ import NavProgress from "@/components/layout/NavProgress";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "StudyRaven.ai — Built for IGCSE. Engineered for results.",
+  title: "StudyRaven.ai — Built for students. Engineered for results.",
   description:
-    "Your AI study partner for IGCSE Grade 9–10. Personalized plans, smart reminders, mock grading, and college guidance — all in one place.",
+    "Your AI study partner for IGCSE and IB, Grades 8–12. Personalized plans, smart reminders, mock grading, and college guidance — all in one place.",
   metadataBase: new URL("https://studyraven.ai"),
   openGraph: {
     title: "StudyRaven.ai",
-    description: "Built for IGCSE. Engineered for results.",
+    description: "Built for students. Engineered for results.",
     type: "website",
   },
 };

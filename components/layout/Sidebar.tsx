@@ -82,7 +82,7 @@ export default function Sidebar() {
         })}
       </nav>
       <div className="px-3 pb-6 text-xs text-graymute px-6">
-        v0.1 · made for IGCSE
+        v0.1 · made for students
       </div>
     </aside>
   );

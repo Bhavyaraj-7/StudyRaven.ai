@@ -7,7 +7,7 @@ import { emailShell, sendResend } from "../_shared/email.ts";
 
 const APP_URL = Deno.env.get("APP_URL") ?? "https://studyraven.ai";
 
-const SYSTEM = `You are an IGCSE study coach writing a weekly progress digest for a Grade 9-10 student. Write an HTML email body (under 250 words) with these sections:
+const SYSTEM = `You are a study coach writing a weekly progress digest for a student. Write an HTML email body (under 250 words) with these sections:
 1. Progress this week — mocks taken, tasks completed, scores.
 2. One focus for next week — a single specific, actionable suggestion.
 ${"{{PRO_SECTION}}"}

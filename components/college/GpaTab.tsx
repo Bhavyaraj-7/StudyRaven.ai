@@ -258,7 +258,7 @@ export default function GpaTab() {
         <p className="text-xs text-graymute">
           Conversion is approximate (A* = 4.0, A = 3.7, B = 3.0, C = 2.0 ·
           9 = 4.0, 8 = 3.9, 7 = 3.7, 6 = 3.0, 5 = 2.5, 4 = 2.0). Different
-          universities convert IGCSE grades differently — always check theirs.
+          universities convert grades differently — always check theirs.
         </p>
       </div>
     </div>

@@ -213,7 +213,7 @@ export default function AiPracticePanel() {
                 <p className="text-sm text-graytext mt-1">
                   No mark scheme in your library for {subject} yet. Add one under{" "}
                   <strong>My library</strong> and practice will be marked against
-                  it instead of generic IGCSE marking.
+                  it instead of generic marking.
                 </p>
               )}
               {reading && (
