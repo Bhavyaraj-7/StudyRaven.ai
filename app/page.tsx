@@ -311,6 +311,57 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* ============== ABOUT ============== */}
+      <section
+        id="about"
+        className="bg-paper py-[104px] px-7 border-t border-grayline"
+      >
+        <div className="max-w-[1080px] mx-auto">
+          <div className="text-center max-w-[660px] mx-auto">
+            <div className="font-mono text-[12px] tracking-[0.18em] text-graymute mb-4 reveal">
+              WHO WE ARE
+            </div>
+            <h2
+              className="reveal"
+              style={{
+                fontSize: "clamp(30px, 4.4vw, 46px)",
+                fontWeight: 600,
+                letterSpacing: "-0.03em",
+                lineHeight: 1.1,
+                margin: "0 0 18px",
+              }}
+            >
+              Built by four 14-year-olds who lived the pain.
+            </h2>
+            <p
+              className="text-graytext text-[17px] leading-relaxed reveal"
+              style={{ animationDelay: "120ms" }}
+            >
+              We&apos;re IGCSE students ourselves — buried in past papers, missed
+              deadlines, and mark schemes that never actually explained anything.
+              Nothing out there was built for students like us, so we built it:
+              StudyRaven.ai, the study partner we wished we&apos;d had.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-14">
+            {TEAM.map((m, i) => (
+              <div
+                key={m.name}
+                className="about-float rounded-[18px] border border-grayline bg-paper p-6 text-center shadow-[0_10px_40px_rgba(10,10,10,0.05)] hover:border-ink hover:shadow-[0_20px_50px_rgba(10,10,10,0.12)] transition-colors"
+                style={{ animationDelay: `${i * 0.5}s` }}
+              >
+                <div className="w-14 h-14 mx-auto rounded-full bg-ink text-paper inline-flex items-center justify-center font-mono text-[17px] font-semibold">
+                  {m.initials}
+                </div>
+                <div className="font-semibold text-[16px] mt-4">{m.name}</div>
+                <div className="text-graymute text-[13px] mt-1">{m.role}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ============== FOOTER ============== */}
       <footer className="bg-ink text-paper py-14 px-7">
         <div className="max-w-[1180px] mx-auto grid grid-cols-2 md:grid-cols-4 gap-10">
@@ -350,7 +401,7 @@ export default function Landing() {
             items={[
               { label: "Privacy", href: "#" },
               { label: "Terms", href: "#" },
-              { label: "Contact", href: "mailto:hi@studyraven.ai" },
+              { label: "Contact", href: "mailto:bsingh10@jpischool.com" },
             ]}
           />
         </div>
@@ -390,6 +441,13 @@ const FEATURES = [
     desc: "Competitions, summer programs, university matches, and a weekly newsletter — starting from Grade 9.",
     pro: true,
   },
+];
+
+const TEAM = [
+  { name: "Bhavyaraj Singh", role: "CEO", initials: "BS" },
+  { name: "Viraj Gupta", role: "Marketing", initials: "VG" },
+  { name: "Avyaan Dhoka", role: "Technology", initials: "AD" },
+  { name: "Prabhat Khatri", role: "Finance", initials: "PK" },
 ];
 
 const STEPS = [

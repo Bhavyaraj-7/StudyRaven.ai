@@ -1,4 +1,4 @@
-export type Curriculum = "IGCSE";
+export type Curriculum = "IGCSE" | "IB";
 export type PlanTier = "free" | "pro";
 export type BillingCycle = "monthly" | "yearly";
 export type TaskStatus = "pending" | "in_progress" | "done";

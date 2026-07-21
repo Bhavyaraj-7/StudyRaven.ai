@@ -6,6 +6,7 @@ import AppLayout from "@/components/layout/AppLayout";
 import TopicTracker from "@/components/subjects/TopicTracker";
 import { supabaseBrowser } from "@/lib/supabase";
 import { IGCSE_SUBJECTS, codeForSubject } from "@/lib/igcse-subjects";
+import { IB_SUBJECTS, codeForIbSubject } from "@/lib/ib-subjects";
 
 type Subject = {
   id?: string;
@@ -22,6 +23,12 @@ export default function SubjectsPage() {
   const [saving, setSaving] = useState(false);
   const [savedAt, setSavedAt] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
+  const [curriculum, setCurriculum] = useState<"IGCSE" | "IB">("IGCSE");
+
+  // Subject picker follows the student's curriculum; IB has no numeric codes.
+  const isIb = curriculum === "IB";
+  const subjectList = isIb ? IB_SUBJECTS : IGCSE_SUBJECTS;
+  const codeFor = isIb ? codeForIbSubject : codeForSubject;
 
   useEffect(() => {
     const sb = supabaseBrowser();
@@ -32,6 +39,12 @@ export default function SubjectsPage() {
         return;
       }
       setUserId(auth.user.id);
+      const { data: profile } = await sb
+        .from("profiles")
+        .select("curriculum")
+        .eq("id", auth.user.id)
+        .maybeSingle();
+      if (profile?.curriculum === "IB") setCurriculum("IB");
       const { data } = await sb
         .from("subjects")
         .select("id, name, code, exam_date")
@@ -182,14 +195,14 @@ export default function SubjectsPage() {
                   onChange={(e) =>
                     updateSubject(i, {
                       name: e.target.value,
-                      code: codeForSubject(e.target.value) || s.code,
+                      code: codeFor(e.target.value) || s.code,
                     })
                   }
                   className="col-span-5 rounded-md px-3 py-2 outline-none focus:bg-graylite bg-paper"
                 >
                   <option value="">Select subject…</option>
-                  {IGCSE_SUBJECTS.map((subj) => (
-                    <option key={subj.code} value={subj.name}>
+                  {subjectList.map((subj) => (
+                    <option key={`${subj.code}-${subj.name}`} value={subj.name}>
                       {subj.name}
                     </option>
                   ))}

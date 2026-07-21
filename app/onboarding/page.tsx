@@ -4,12 +4,15 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabaseBrowser } from "@/lib/supabase";
 import { IGCSE_SUBJECTS, codeForSubject } from "@/lib/igcse-subjects";
+import { IB_SUBJECTS, codeForIbSubject } from "@/lib/ib-subjects";
 import { ChevronRight, Plus, X } from "lucide-react";
 
 type SubjectDraft = { name: string; code: string; exam_date: string };
 
-const IGCSE_BOARDS = ["Cambridge (CIE)", "Edexcel (Pearson)"] as const;
-type Board = (typeof IGCSE_BOARDS)[number];
+// IB Diploma is a single global programme (no Cambridge/Edexcel-style board);
+// picking it sets curriculum to "IB" and swaps the subject list.
+const BOARDS = ["Cambridge (CIE)", "Edexcel (Pearson)", "IB Diploma"] as const;
+type Board = (typeof BOARDS)[number];
 
 export default function OnboardingPage() {
   const router = useRouter();
@@ -21,8 +24,12 @@ export default function OnboardingPage() {
   const [grade, setGrade] = useState<number>(10);
   const [country, setCountry] = useState("");
 
-  // Step 2 — IGCSE exam board (curriculum is locked to IGCSE)
+  // Step 2 — exam board / curriculum
   const [board, setBoard] = useState<Board>("Cambridge (CIE)");
+  const isIb = board === "IB Diploma";
+  const curriculum: "IGCSE" | "IB" = isIb ? "IB" : "IGCSE";
+  const subjectList = isIb ? IB_SUBJECTS : IGCSE_SUBJECTS;
+  const codeFor = isIb ? codeForIbSubject : codeForSubject;
 
   // Step 3 — subjects
   const [subjects, setSubjects] = useState<SubjectDraft[]>([
@@ -55,7 +62,7 @@ export default function OnboardingPage() {
 
     await sb
       .from("profiles")
-      .update({ name, grade, curriculum: "IGCSE", country })
+      .update({ name, grade, curriculum, country })
       .eq("id", uid);
 
     const valid = subjects.filter((s) => s.name.trim());
@@ -109,24 +116,20 @@ export default function OnboardingPage() {
                 label="Grade"
                 value={String(grade)}
                 onChange={(v) => setGrade(Number(v))}
-                options={["9", "10"]}
+                options={["8", "9", "10", "11", "12"]}
               />
               <Input label="Country" value={country} onChange={setCountry} placeholder="India" />
             </div>
-            <p className="text-xs text-graymute">
-              StudyRaven.ai is built only for IGCSE Grade 9–10. Other curricula
-              aren&apos;t supported yet.
-            </p>
           </Step>
         )}
 
         {step === 2 && (
           <Step
-            title="Which IGCSE board are you on?"
-            subtitle="We'll match papers, mark schemes, and grade boundaries to your board."
+            title="Which curriculum are you on?"
+            subtitle="We'll match subjects, papers, and mark schemes to your programme."
           >
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {IGCSE_BOARDS.map((b) => (
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {BOARDS.map((b) => (
                 <button
                   key={b}
                   onClick={() => setBoard(b)}
@@ -139,8 +142,10 @@ export default function OnboardingPage() {
                   <div className="font-medium">{b}</div>
                   <div className="text-sm opacity-70 mt-1">
                     {b === "Cambridge (CIE)"
-                      ? "0580, 0625, 0620, 0455…"
-                      : "4MA1, 4PH1, 4CH1…"}
+                      ? "IGCSE · 0580, 0625, 0620…"
+                      : b === "Edexcel (Pearson)"
+                        ? "IGCSE · 4MA1, 4PH1, 4CH1…"
+                        : "IB Diploma · HL & SL, six groups"}
                   </div>
                 </button>
               ))}
@@ -161,14 +166,14 @@ export default function OnboardingPage() {
                     onChange={(e) =>
                       updateSubject(i, {
                         name: e.target.value,
-                        code: codeForSubject(e.target.value),
+                        code: codeFor(e.target.value),
                       })
                     }
                     className="col-span-5 rounded-lg border border-grayline px-3 py-2 outline-none focus:border-ink bg-paper"
                   >
                     <option value="">Select subject…</option>
-                    {IGCSE_SUBJECTS.map((subj) => (
-                      <option key={subj.code} value={subj.name}>
+                    {subjectList.map((subj) => (
+                      <option key={`${subj.code}-${subj.name}`} value={subj.name}>
                         {subj.name}
                       </option>
                     ))}

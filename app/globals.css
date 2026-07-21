@@ -93,6 +93,26 @@
     animation: reveal-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
 
+  /* About team cards — gentle continuous float so the section reads as alive
+     the moment it scrolls into view. Disabled under reduced-motion. */
+  @keyframes about-float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-7px);
+    }
+  }
+  .about-float {
+    animation: about-float 4.5s ease-in-out infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .about-float {
+      animation: none;
+    }
+  }
+
   /* Ticker number */
   @keyframes count-pulse {
     0%,
