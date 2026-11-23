@@ -23,34 +23,30 @@ export default function Landing() {
       <header className="relative min-h-[600px] md:min-h-[720px] flex items-center justify-center text-center overflow-hidden bg-paper">
         <div className="relative max-w-[900px] px-7 pt-32 pb-24">
           <h1
-            className="reveal text-balance"
+            className="text-balance"
             style={{
               fontSize: "clamp(42px, 7.2vw, 80px)",
               lineHeight: 1.02,
               fontWeight: 600,
               letterSpacing: "-0.035em",
               margin: "0 0 22px",
-              animationDelay: "100ms",
             }}
           >
             Study plans and marked mock tests for IGCSE and IB.
           </h1>
           <p
-            className="reveal text-pretty max-w-[600px] mx-auto"
+            className="text-pretty max-w-[600px] mx-auto text-graytext"
             style={{
               fontSize: "clamp(16px, 2vw, 19px)",
               lineHeight: 1.6,
-              color: "#4A4A4A",
               margin: "0 auto 38px",
-              animationDelay: "200ms",
             }}
           >
             Get a 7-day plan built around your exam dates, take AI-marked mocks,
             and see exactly where you dropped marks and which topics to fix.
           </p>
           <div
-            className="reveal flex items-center justify-center gap-3 flex-wrap"
-            style={{ animationDelay: "300ms" }}
+            className="flex items-center justify-center gap-3 flex-wrap"
           >
             <MagneticButton href="/signup" variant="primary">
               Start free
@@ -86,7 +82,7 @@ export default function Landing() {
       </section>
 
       {/* ============== HOW IT WORKS (DARK) ============== */}
-      <section id="how" className="bg-ink text-paper py-[104px] px-7">
+      <section id="how" className="bg-inverse text-on-inverse py-[104px] px-7">
         <div className="max-w-[1180px] mx-auto">
           <h2
             style={{
@@ -104,12 +100,12 @@ export default function Landing() {
             {STEPS.map((s) => (
               <div
                 key={s.title}
-                className="p-8 rounded-[18px] border border-[#1f1f1f] bg-[#0e0e0e]"
+                className="p-8 rounded-[18px] border border-on-inverse/10 bg-on-inverse/5"
               >
                 <div className="font-semibold text-[21px] tracking-tight mb-2.5">
                   {s.title}
                 </div>
-                <p className="text-graymute text-[15px] leading-relaxed">
+                <p className="text-on-inverse/70 text-[15px] leading-relaxed">
                   {s.body}
                 </p>
               </div>
@@ -296,17 +292,17 @@ export default function Landing() {
       </section>
 
       {/* ============== FOOTER ============== */}
-      <footer className="bg-ink text-paper py-14 px-7">
+      <footer className="bg-inverse text-on-inverse py-14 px-7">
         <div className="max-w-[1180px] mx-auto grid grid-cols-2 md:grid-cols-4 gap-10">
           <div className="col-span-2 md:col-span-1">
             <Link
               href="/"
               className="flex items-center gap-2 font-semibold text-[19px]"
             >
-              <span className="w-[26px] h-[26px] rounded-[7px] bg-paper text-ink inline-flex items-center justify-center font-mono text-[14px]">
+              <span className="w-[26px] h-[26px] rounded-[7px] bg-on-inverse text-inverse inline-flex items-center justify-center font-mono text-[14px]">
                 S
               </span>
-              StudyRaven<span className="text-graymute">.ai</span>
+              StudyRaven<span className="text-on-inverse/70">.ai</span>
             </Link>
           </div>
           <FooterCol
@@ -334,7 +330,7 @@ export default function Landing() {
             ]}
           />
         </div>
-        <div className="max-w-[1180px] mx-auto mt-10 pt-6 border-t border-[#1f1f1f] text-[12.5px] text-graymute space-y-3">
+        <div className="max-w-[1180px] mx-auto mt-10 pt-6 border-t border-on-inverse/10 text-[12.5px] text-on-inverse/70 space-y-3">
           <p className="max-w-[760px] leading-relaxed">{TRADEMARK_NOTE}</p>
           <p className="font-mono">
             Built by students, for students. © 2026 StudyRaven.ai
@@ -458,7 +454,7 @@ function PriceCard({
   return (
     <div
       className={`relative p-9 rounded-[20px] border ${
-        dark ? "bg-ink text-paper border-ink" : "bg-paper border-grayline"
+        dark ? "bg-inverse text-on-inverse border-inverse" : "bg-paper border-grayline"
       }`}
     >
       {badge && (
@@ -472,7 +468,7 @@ function PriceCard({
       </div>
       <div
         className={`text-[14px] mb-7 ${
-          dark ? "text-graymute" : "text-graymute"
+          dark ? "text-on-inverse/70" : "text-graymute"
         }`}
       >
         {sub}
@@ -482,7 +478,7 @@ function PriceCard({
           <div
             key={f}
             className={`flex gap-3 text-[14.5px] ${
-              dark ? "text-paper/80" : "text-graytext"
+              dark ? "text-on-inverse/80" : "text-graytext"
             }`}
           >
             <Check className="w-4 h-4 mt-0.5 shrink-0" />
@@ -494,7 +490,7 @@ function PriceCard({
         href={href}
         className={`inline-flex w-full justify-center items-center gap-2 rounded-[12px] px-5 py-3 text-[15px] font-medium transition ${
           dark
-            ? "bg-paper text-ink hover:-translate-y-px"
+            ? "bg-on-inverse text-inverse hover:-translate-y-px"
             : "bg-ink text-paper hover:-translate-y-px"
         }`}
       >
@@ -513,11 +509,11 @@ function FooterCol({
 }) {
   return (
     <div>
-      <div className="text-[13px] font-medium text-paper mb-4">{title}</div>
+      <div className="text-[13px] font-medium text-on-inverse mb-4">{title}</div>
       <ul className="space-y-2.5 text-[14px]">
         {items.map((it) => (
           <li key={it.label}>
-            <a href={it.href} className="text-paper/80 hover:text-paper transition">
+            <a href={it.href} className="text-on-inverse/80 hover:text-on-inverse transition">
               {it.label}
             </a>
           </li>

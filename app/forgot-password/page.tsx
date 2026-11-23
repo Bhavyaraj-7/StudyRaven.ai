@@ -30,23 +30,23 @@ export default function ForgotPasswordPage() {
 
   return (
     <main className="min-h-screen grid grid-cols-1 md:grid-cols-2">
-      <section className="hidden md:flex flex-col justify-between bg-ink text-paper p-12">
+      <section className="hidden md:flex flex-col justify-between bg-inverse text-on-inverse p-12">
         <Link
           href="/"
           className="flex items-center gap-2 font-semibold text-[19px]"
         >
-          <span className="w-[26px] h-[26px] rounded-[7px] bg-paper text-ink inline-flex items-center justify-center font-mono text-[14px]">
+          <span className="w-[26px] h-[26px] rounded-[7px] bg-on-inverse text-inverse inline-flex items-center justify-center font-mono text-[14px]">
             S
           </span>
-          StudyRaven<span className="text-graymute">.ai</span>
+          StudyRaven<span className="text-on-inverse/70">.ai</span>
         </Link>
         <div>
           <h2 className="text-h2">Forgot your password?</h2>
-          <p className="mt-4 text-graymute max-w-md">
+          <p className="mt-4 text-on-inverse/70 max-w-md">
             We&apos;ll email you a link to set a new one.
           </p>
         </div>
-        <div className="text-graymute text-sm">© StudyRaven.ai</div>
+        <div className="text-on-inverse/70 text-sm">© StudyRaven.ai</div>
       </section>
       <section className="flex items-center justify-center p-8">
         <div className="w-full max-w-sm">
@@ -64,7 +64,7 @@ export default function ForgotPasswordPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="mt-1 w-full rounded-lg border border-grayline px-4 py-3 outline-none focus:border-ink"
+                    className="mt-1 w-full rounded-lg border border-grayline bg-paper px-4 py-3 outline-none focus:border-ink"
                   />
                 </label>
                 {error && (
