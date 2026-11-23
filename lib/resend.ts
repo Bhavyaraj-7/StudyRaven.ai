@@ -7,6 +7,16 @@ export const resend = new Resend(process.env.RESEND_API_KEY);
 // address so sends don't silently fail. Set RESEND_FROM_EMAIL once verified.
 const FROM = process.env.RESEND_FROM_EMAIL || "StudyRaven.ai <onboarding@resend.dev>";
 
+/** Escapes text before it goes into an HTML email (subjects and AI output are untrusted). */
+export function escapeHtml(text: string): string {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 export function emailShell(title: string, body: string) {
   return `<!doctype html>
 <html><body style="margin:0;padding:0;background:#F4F4F5;font-family:Inter,-apple-system,sans-serif;color:#0A0A0A">
