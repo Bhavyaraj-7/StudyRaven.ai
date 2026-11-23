@@ -18,8 +18,8 @@
     --control-line: 128 128 122;
     --accent: 31 79 216; /* Raven blue: every action */
     --on-accent: 255 255 255;
-    --examiner: 200 16 46; /* graded work only */
-    --examiner-stroke: 230 57 70; /* strokes >= 2px, text >= 24px */
+    --examiner: 194 38 26; /* red pen, graded work only (true red, never pink) */
+    --examiner-stroke: 224 64 46; /* strokes >= 2px, text >= 24px */
     --danger: 180 83 9; /* form/system errors, always with icon + words */
     --gold: 176 137 43; /* Pro badge and medal shapes only, never text */
     --on-area: 11 11 12; /* text on an area's bright fill, both themes */
@@ -39,9 +39,9 @@
     --area-essays-deep: 109 40 217;
     --area-essays-bright: 139 92 246;
     --area-essays-tint: 243 238 255;
-    --area-pitch-deep: 190 24 93;
-    --area-pitch-bright: 236 72 153;
-    --area-pitch-tint: 253 235 244;
+    --area-pitch-deep: 15 118 110; /* teal: no pink anywhere (founder, 23 Nov 2026) */
+    --area-pitch-bright: 20 184 166;
+    --area-pitch-tint: 230 247 245;
     --area-streak-deep: 161 98 7;
     --area-streak-bright: 250 204 21;
     --area-streak-tint: 254 249 225;
@@ -88,8 +88,8 @@
     --control-line: 112 113 119;
     --accent: 142 168 255;
     --on-accent: 11 11 12;
-    --examiner: 255 107 107;
-    --examiner-stroke: 255 107 107;
+    --examiner: 240 75 60;
+    --examiner-stroke: 240 75 60;
     --danger: 251 146 60;
     --gold: 212 175 85;
     --inverse: 24 25 29; /* a raised night surface, not a light block */
@@ -102,8 +102,8 @@
     --area-profile-tint: 16 37 27;
     --area-essays-deep: 183 155 255;
     --area-essays-tint: 29 24 45;
-    --area-pitch-deep: 244 122 180;
-    --area-pitch-tint: 41 22 34;
+    --area-pitch-deep: 45 212 191;
+    --area-pitch-tint: 15 35 36;
     --area-streak-deep: 253 224 71;
     --area-streak-tint: 42 38 18;
     --area-parents-deep: 125 211 252;
