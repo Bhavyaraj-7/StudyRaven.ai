@@ -25,13 +25,15 @@ New flags: `FLAG_ACCURACY_PAGE`, `FLAG_SNAP_MARK`, `FLAG_MOCK_SERIES`, `FLAG_FAM
 5. **1a.5 Ink Crew:** 7 characters with all poses, `/dev/crew`.
 6. **1a.6 Motion reel.**
 
-## ⚖️ Where the three hats disagree (founder decides)
-- **Design lead:** follow §13 as written. The whole 1a design system and the Crew come first, because every later screen is built from them.
-- **CEO:** revenue is about ₹40K lifetime and v3 says trust (accuracy) is the binding constraint. Full 1a plus 1b–1e is several weeks of work before R0 starts. Alternative order:
-  1. 1a.1–1a.3 (foundations, guardrails, components; every later screen needs them)
-  2. R0 accuracy tooling, built while you run the §10A.8 test
-  3. the rest of 1a (brand, Crew, motion), then 1b, and so on
-- **Engineer:** either order works technically, because R0's tools only need 1a.1–1a.3.
+## Build order: founder decision (23 Nov 2026), **revenue-first**
+1. 1a.1 Foundations → 1a.2 Guardrails → 1a.3 Components
+2. **R0 marking accuracy tools**, built while you run the 7-day test below
+3. 1a.4 Brand + icons → 1a.5 Ink Crew → 1a.6 Motion reel
+4. 1b → 1c → 1d → 1e → R1, then 2a–5
+
+(The design lead preferred §13's order. The CEO view won: trust and revenue are the binding constraints, and R0 only needs 1a.1–1a.3.)
+
+**Predicted grades (founder decision):** no longer advertised in marketing. They stay in the app until R0 gates them per subject.
 
 ## The 7-day test (§10A.8): you do this now, mostly without code
 1. The team writes **one original Physics (0625-style) mock paper** plus its marking points, and a teacher checks both. Don't use past-paper content.
@@ -42,17 +44,12 @@ New flags: `FLAG_ACCURACY_PAGE`, `FLAG_SNAP_MARK`, `FLAG_MOCK_SERIES`, `FLAG_FAM
 What Claude can do for this test: a script that runs the existing marking on typed transcripts, and a comparison sheet. Claude does not write the paper or invent any results.
 
 ## Decisions waiting on you
-1. Build order: §13 as written, or the CEO alternative above.
-2. Predicted grades. v3 says none should go out before R0 measures accuracy, but today's app shows one on every mock. Choose one:
-   - stop advertising them now and gate them in R0, or
-   - hide them in the app now too, or
-   - keep them as they are.
-3. Remotion licence (team of 4). The welcome film ships as WAAPI first either way.
-4. From 0b:
+1. Remotion licence (team of 4). The welcome film ships as WAAPI first either way.
+2. From 0b:
    - the legal operator for the Terms and Privacy pages
    - SMTP
    - Vercel region and plan
    - Supabase plan
    - OpenRouter privacy setting
    - a test account
-5. For R0/R1, later: teacher reviewers, consent forms, the first 50 scripts, the vision provider and its cost, and Mock Season pricing.
+3. For R0/R1, later: teacher reviewers, consent forms, the first 50 scripts, the vision provider and its cost, and Mock Season pricing.
