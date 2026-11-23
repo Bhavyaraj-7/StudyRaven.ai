@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { supabaseBrowser } from "@/lib/supabase";
 import GoogleButton from "@/components/auth/GoogleButton";
+import { safeRedirectPath } from "@/lib/safe-redirect";
 
 export default function LoginPage() {
   return (
@@ -17,7 +18,7 @@ export default function LoginPage() {
 function LoginInner() {
   const router = useRouter();
   const params = useSearchParams();
-  const redirect = params.get("redirect") || "/dashboard";
+  const redirect = safeRedirectPath(params.get("redirect"));
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

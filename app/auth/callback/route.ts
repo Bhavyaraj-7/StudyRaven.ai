@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import { safeRedirectPath } from "@/lib/safe-redirect";
 
 export async function GET(req: Request) {
   const url = new URL(req.url);
   const code = url.searchParams.get("code");
-  const next = url.searchParams.get("next") ?? "/dashboard";
+  const next = safeRedirectPath(url.searchParams.get("next"));
 
   if (!code) {
     return NextResponse.redirect(new URL("/login?error=missing_code", req.url));
