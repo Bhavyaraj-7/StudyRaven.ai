@@ -38,7 +38,7 @@ Most StudyRaven users are under 18. Under India's Digital Personal Data Protecti
 |---|---|---|
 | Supabase | Database, login and file storage | Japan (Tokyo) |
 | Vercel | Hosts the website and runs our server code | United States |
-| OpenRouter and the AI model providers it routes to (for example Groq) | Generate study material, marking and feedback from the text each request needs — your topic, uploaded text, answers or essay draft, and sometimes your first name to personalise an email | United States and other countries |
+| OpenRouter and the AI model providers it routes to (for example Groq) | Generate study material, marking and feedback from the text each request needs: your topic, uploaded text, answers or essay draft, and sometimes your first name to personalise an email | United States and other countries |
 | Tavily | Web search for the college guide, using queries built from your interests and target country | United States |
 | Resend | Sends our emails | United States |
 | Razorpay | Processes payments | India |

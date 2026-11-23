@@ -6,18 +6,15 @@ import {
   Timer,
   Wand2,
   FileText,
-  ArrowRight,
   Check,
 } from "lucide-react";
 import StickyNav from "@/components/landing/StickyNav";
-import CursorHalo from "@/components/landing/CursorHalo";
 import MagneticButton from "@/components/landing/MagneticButton";
 import { TRADEMARK_NOTE } from "@/lib/site";
 
 export default function Landing() {
   return (
     <main className="bg-paper text-ink overflow-x-hidden">
-      <CursorHalo />
       <StickyNav />
 
       {/* ============== HERO ============== */}
@@ -26,7 +23,7 @@ export default function Landing() {
       <header className="relative min-h-[600px] md:min-h-[720px] flex items-center justify-center text-center overflow-hidden bg-paper">
         <div className="relative max-w-[900px] px-7 pt-32 pb-24">
           <h1
-            className="reveal"
+            className="reveal text-balance"
             style={{
               fontSize: "clamp(42px, 7.2vw, 80px)",
               lineHeight: 1.02,
@@ -36,12 +33,10 @@ export default function Landing() {
               animationDelay: "100ms",
             }}
           >
-            Built for students.
-            <br />
-            Engineered for results.
+            Study plans and marked mock tests for IGCSE and IB.
           </h1>
           <p
-            className="reveal max-w-[600px] mx-auto"
+            className="reveal text-pretty max-w-[600px] mx-auto"
             style={{
               fontSize: "clamp(16px, 2vw, 19px)",
               lineHeight: 1.6,
@@ -50,8 +45,8 @@ export default function Landing() {
               animationDelay: "200ms",
             }}
           >
-            Your AI study partner. Study plans, AI-marked mock tests with a
-            predicted grade, and a college guide — all in one place.
+            Get a 7-day plan built around your exam dates, take AI-marked mocks
+            with a predicted grade, and see exactly where you dropped marks.
           </p>
           <div
             className="reveal flex items-center justify-center gap-3 flex-wrap"
@@ -70,9 +65,6 @@ export default function Landing() {
       {/* ============== FEATURES ============== */}
       <section id="features" className="bg-paper py-[104px] px-7">
         <div className="max-w-[1180px] mx-auto">
-          <div className="font-mono text-[12.5px] text-graymute tracking-wider mb-3.5">
-            WHAT STUDYRAVEN.AI DOES
-          </div>
           <h2
             style={{
               fontSize: "clamp(30px, 4.4vw, 46px)",
@@ -83,7 +75,7 @@ export default function Landing() {
               margin: "0 0 56px",
             }}
           >
-            Everything you need to study smart. Nothing you don&apos;t.
+            What StudyRaven does
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-[18px]">
             {FEATURES.map((f) => (
@@ -96,9 +88,6 @@ export default function Landing() {
       {/* ============== HOW IT WORKS (DARK) ============== */}
       <section id="how" className="bg-ink text-paper py-[104px] px-7">
         <div className="max-w-[1180px] mx-auto">
-          <div className="font-mono text-[12.5px] text-graymute tracking-wider mb-3.5">
-            HOW IT WORKS
-          </div>
           <h2
             style={{
               fontSize: "clamp(30px, 4.4vw, 46px)",
@@ -109,17 +98,14 @@ export default function Landing() {
               margin: "0 0 56px",
             }}
           >
-            From scattered notes to a clear plan in three steps.
+            How it works
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {STEPS.map((s, i) => (
+            {STEPS.map((s) => (
               <div
                 key={s.title}
                 className="p-8 rounded-[18px] border border-[#1f1f1f] bg-[#0e0e0e]"
               >
-                <div className="font-mono text-[14px] text-graymute mb-6">
-                  0{i + 1}
-                </div>
                 <div className="font-semibold text-[21px] tracking-tight mb-2.5">
                   {s.title}
                 </div>
@@ -148,7 +134,7 @@ export default function Landing() {
                 margin: "20px 0 18px",
               }}
             >
-              Your grades open doors. We help you choose which one.
+              A college guide that starts in Grade 9
             </h2>
             <p className="text-graytext text-[17px] leading-relaxed mb-8">
               Pro includes a college guide built around your profile: a
@@ -171,11 +157,11 @@ export default function Landing() {
             <div className="flex flex-col gap-2.5">
               {COLLEGE_TABS.map((n) => (
                 <div
-                  key={n.kicker}
+                  key={n.label}
                   className="p-4 rounded-[12px] bg-graylite"
                 >
-                  <div className="font-mono text-[10px] text-graymute tracking-wider mb-1.5">
-                    {n.kicker}
+                  <div className="text-[12.5px] font-medium text-graytext mb-1">
+                    {n.label}
                   </div>
                   <div className="text-[14.5px] font-medium leading-snug">
                     {n.title}
@@ -200,7 +186,7 @@ export default function Landing() {
               margin: "0 0 12px",
             }}
           >
-            Start free. Upgrade when you&apos;re ready to win.
+            Start free. Upgrade when you need more.
           </h2>
           <p className="text-center text-graytext text-[17px] mb-12">
             No credit card to start. Cancel Pro anytime.
@@ -250,7 +236,7 @@ export default function Landing() {
             lineHeight: 1.05,
           }}
         >
-          Stop hoping. Start scoring.
+          See exactly where your marks go.
         </h2>
         <p className="text-graytext text-[18px] mt-5 max-w-[520px] mx-auto leading-relaxed">
           Free to start. Add your subjects and take your first mock today.
@@ -269,9 +255,6 @@ export default function Landing() {
       >
         <div className="max-w-[1080px] mx-auto">
           <div className="text-center max-w-[660px] mx-auto">
-            <div className="font-mono text-[12px] tracking-[0.18em] text-graymute mb-4 reveal">
-              WHO WE ARE
-            </div>
             <h2
               className="reveal"
               style={{
@@ -288,7 +271,7 @@ export default function Landing() {
               className="text-graytext text-[17px] leading-relaxed reveal"
               style={{ animationDelay: "120ms" }}
             >
-              We&apos;re IGCSE students ourselves — buried in past papers, missed
+              We&apos;re IGCSE students ourselves, buried in past papers, missed
               deadlines, and mark schemes that never actually explained anything.
               Nothing out there was built for students like us, so we built it:
               StudyRaven.ai, the study partner we wished we&apos;d had.
@@ -296,11 +279,10 @@ export default function Landing() {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-14">
-            {TEAM.map((m, i) => (
+            {TEAM.map((m) => (
               <div
                 key={m.name}
-                className="about-float rounded-[18px] border border-grayline bg-paper p-6 text-center shadow-[0_10px_40px_rgba(10,10,10,0.05)] hover:border-ink hover:shadow-[0_20px_50px_rgba(10,10,10,0.12)] transition-colors"
-                style={{ animationDelay: `${i * 0.5}s` }}
+                className="rounded-[18px] border border-grayline bg-paper p-6 text-center shadow-[0_10px_40px_rgba(10,10,10,0.05)] hover:border-ink hover:shadow-[0_20px_50px_rgba(10,10,10,0.12)] transition-colors"
               >
                 <div className="w-14 h-14 mx-auto rounded-full bg-ink text-paper inline-flex items-center justify-center font-mono text-[17px] font-semibold">
                   {m.initials}
@@ -387,7 +369,7 @@ const FEATURES = [
   {
     icon: <GraduationCap className="w-5 h-5" />,
     title: "College guide",
-    desc: "A readiness score, roadmap, scholarships, application tracker and essay feedback — starting from Grade 9.",
+    desc: "A readiness score, roadmap, scholarships, application tracker and essay feedback, from Grade 9.",
     pro: true,
   },
 ];
@@ -415,10 +397,10 @@ const STEPS = [
 ];
 
 const COLLEGE_TABS = [
-  { kicker: "READINESS", title: "Where your profile stands today, and the gaps to close" },
-  { kicker: "ROADMAP", title: "A step-by-step plan from your grade to applications" },
-  { kicker: "SCHOLARSHIPS", title: "A curated list, plus live search matched to your interests" },
-  { kicker: "ESSAYS", title: "Feedback on your drafts — every word stays yours" },
+  { label: "Readiness", title: "Where your profile stands today, and the gaps to close" },
+  { label: "Roadmap", title: "A step-by-step plan from your grade to applications" },
+  { label: "Scholarships", title: "A curated list, plus live search matched to your interests" },
+  { label: "Essays", title: "Feedback on your drafts. Every word stays yours." },
 ];
 
 // ---- Components ----
@@ -516,7 +498,7 @@ function PriceCard({
             : "bg-ink text-paper hover:-translate-y-px"
         }`}
       >
-        {cta} <ArrowRight className="w-4 h-4" />
+        {cta}
       </Link>
     </div>
   );
@@ -531,9 +513,7 @@ function FooterCol({
 }) {
   return (
     <div>
-      <div className="font-mono text-[11.5px] text-graymute tracking-wider mb-4">
-        {title.toUpperCase()}
-      </div>
+      <div className="text-[13px] font-medium text-paper mb-4">{title}</div>
       <ul className="space-y-2.5 text-[14px]">
         {items.map((it) => (
           <li key={it.label}>

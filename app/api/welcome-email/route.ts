@@ -37,7 +37,7 @@ export async function POST() {
       subject: "Welcome to StudyRaven — here's what's free vs Pro",
       title: `Hey ${firstName}, you're in`,
       body: `
-        <p>StudyRaven is built to actually get you through your exams — an AI tutor grounded in your own papers, mock exams marked point by point against each paper's mark scheme, and a college guide when you're ready for that.</p>
+        <p>StudyRaven is built to actually get you through your exams: an AI tutor grounded in your own papers, mock exams marked point by point against each paper's mark scheme, and a college guide when you're ready for that.</p>
         <p style="margin-top:16px"><strong>Free, right now:</strong> study planner, mock tests with a predicted grade, 5 AI generations a day, deadline tracker.</p>
         <p><strong>Pro (₹299/mo or ₹2,499/yr):</strong> unlimited generations, the full AI tutor with chat + your own paper library, and the college guide.</p>
         <p style="margin-top:20px"><a href="${appUrl}/dashboard" style="display:inline-block;background:#0A0A0A;color:#fff;padding:10px 20px;border-radius:8px;text-decoration:none">Go to your dashboard</a></p>

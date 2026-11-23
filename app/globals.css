@@ -78,53 +78,6 @@
     animation: reveal-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
 
-  /* About team cards — gentle continuous float so the section reads as alive
-     the moment it scrolls into view. Disabled under reduced-motion. */
-  @keyframes about-float {
-    0%,
-    100% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(-7px);
-    }
-  }
-  .about-float {
-    animation: about-float 4.5s ease-in-out infinite;
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .about-float {
-      animation: none;
-    }
-  }
-
-  /* Ticker number */
-  @keyframes count-pulse {
-    0%,
-    100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.6;
-    }
-  }
-  .ticker-dot {
-    animation: count-pulse 1.6s ease-in-out infinite;
-  }
-
-  /* Marquee for reviews */
-  @keyframes marquee {
-    from {
-      transform: translateX(0);
-    }
-    to {
-      transform: translateX(-50%);
-    }
-  }
-  .marquee {
-    animation: marquee 40s linear infinite;
-  }
-
   /* Magnetic CTA helper */
   .magnet {
     transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),

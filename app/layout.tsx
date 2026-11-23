@@ -5,10 +5,10 @@ import { SITE } from "@/lib/site";
 import "./globals.css";
 
 const DESCRIPTION =
-  "Your AI study partner for IGCSE and IB, Grades 8–12. Study plans, AI-marked mock tests with a predicted grade, and a college guide — all in one place.";
+  "Study plans and AI-marked mock tests with a predicted grade for IGCSE and IB students in Grades 8–12, plus a college guide.";
 
 export const metadata: Metadata = {
-  title: "StudyRaven.ai — Built for students. Engineered for results.",
+  title: "StudyRaven: study plans and marked mocks for IGCSE and IB",
   description: DESCRIPTION,
   metadataBase: new URL(SITE.url),
   openGraph: {
