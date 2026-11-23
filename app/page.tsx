@@ -50,8 +50,8 @@ export default function Landing() {
               animationDelay: "200ms",
             }}
           >
-            Your AI study partner. Personalized plans, smart reminders, mock
-            grading, and college guidance — all in one place.
+            Your AI study partner. Study plans, AI-marked mock tests with a
+            predicted grade, and a college guide — all in one place.
           </p>
           <div
             className="reveal flex items-center justify-center gap-3 flex-wrap"

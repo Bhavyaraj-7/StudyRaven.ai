@@ -21,3 +21,4 @@ Microsoft VS Code/
 
 # rebuild baseline screenshots (local only)
 rebuild/baseline/
+rebuild/after-*/
