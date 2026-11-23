@@ -131,6 +131,27 @@
       box-shadow 0.2s ease;
   }
 
+  /* Legal pages (content/legal/*.md) */
+  .legal h1 {
+    @apply text-3xl font-semibold text-ink mb-2 tracking-tight;
+  }
+  .legal h2 {
+    @apply text-ink mt-8;
+  }
+  .legal a {
+    @apply underline text-ink;
+  }
+  .legal table {
+    @apply block w-full overflow-x-auto text-[14px] my-4 border-collapse;
+  }
+  .legal th,
+  .legal td {
+    @apply border border-grayline px-3 py-2 text-left align-top;
+  }
+  .legal th {
+    @apply bg-graylite text-ink font-semibold;
+  }
+
   /* Prose tweaks for studio outputs */
   .prose h2 {
     @apply text-xl font-semibold mt-6 mb-3;
