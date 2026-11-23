@@ -1,0 +1,19 @@
+{
+  "style": {
+    "app/forgot-password/page.tsx::off-scale-radius": 1,
+    "app/globals.css::gradient": 1,
+    "app/login/page.tsx::off-scale-radius": 1,
+    "app/mocks/page.tsx::off-scale-spacing": 1,
+    "app/onboarding/page.tsx::off-scale-radius": 1,
+    "app/page.tsx::off-scale-radius": 10,
+    "app/page.tsx::off-scale-spacing": 7,
+    "app/reset-password/page.tsx::off-scale-radius": 1,
+    "components/landing/StickyNav.tsx::off-scale-radius": 1,
+    "components/shared/PricingModal.tsx::hex-colour": 1,
+    "components/stats/ScoreChart.tsx::hex-colour": 6,
+    "components/stats/WeaknessRadar.tsx::hex-colour": 7,
+    "components/studio/MindMap.tsx::hex-colour": 7,
+    "components/studio/SlideDeck.tsx::hex-colour": 18
+  },
+  "copy": {}
+}
