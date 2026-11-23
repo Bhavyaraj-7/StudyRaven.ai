@@ -5,7 +5,7 @@ import { SITE } from "@/lib/site";
 import "./globals.css";
 
 const DESCRIPTION =
-  "Study plans and AI-marked mock tests with a predicted grade for IGCSE and IB students in Grades 8–12, plus a college guide.";
+  "Study plans and AI-marked mock tests for IGCSE and IB students in Grades 8–12, plus a college guide.";
 
 export const metadata: Metadata = {
   title: "StudyRaven: study plans and marked mocks for IGCSE and IB",

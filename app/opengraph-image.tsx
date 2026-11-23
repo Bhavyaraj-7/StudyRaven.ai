@@ -44,7 +44,7 @@ export default function OpengraphImage() {
             Your AI study partner for IGCSE and IB.
           </div>
           <div style={{ fontSize: 32, color: "#3D3D40" }}>
-            Mock tests with a predicted grade, study plans and a college guide. Grades 8–12.
+            AI-marked mock tests, study plans and a college guide. Grades 8–12.
           </div>
         </div>
         <div style={{ fontSize: 26, color: "#6B6B70" }}>studyravenai.com</div>

@@ -45,8 +45,8 @@ export default function Landing() {
               animationDelay: "200ms",
             }}
           >
-            Get a 7-day plan built around your exam dates, take AI-marked mocks
-            with a predicted grade, and see exactly where you dropped marks.
+            Get a 7-day plan built around your exam dates, take AI-marked mocks,
+            and see exactly where you dropped marks and which topics to fix.
           </p>
           <div
             className="reveal flex items-center justify-center gap-3 flex-wrap"
@@ -198,7 +198,7 @@ export default function Landing() {
               sub="forever, for students"
               features={[
                 "AI study planner",
-                "Mock tests with a predicted grade",
+                "AI-marked mock tests",
                 "Mark scheme guides for your subjects",
                 "5 AI generations a day",
                 "Deadline and exam tracker",
@@ -357,7 +357,7 @@ const FEATURES = [
   {
     icon: <Timer className="w-5 h-5" />,
     title: "Mock tests, AI-marked",
-    desc: "Take timed mocks on AI-written practice papers. Each paper comes with its own mark scheme, and you get a score, a predicted grade and topic-by-topic feedback.",
+    desc: "Take timed mocks on AI-written practice papers. Each paper comes with its own mark scheme, and you get a score and topic-by-topic feedback.",
     pro: false,
   },
   {
