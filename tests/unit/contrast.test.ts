@@ -81,3 +81,27 @@ describe("light theme, white text on area deep fills", () => {
     expect(contrast(WHITE, light[`area-${a}-deep`])).toBeGreaterThanOrEqual(TEXT);
   });
 });
+
+// Founder rule (23 Nov 2026): no pink anywhere in the palette.
+function hsl([r, g, b]: [number, number, number]) {
+  const [R, G, B] = [r / 255, g / 255, b / 255];
+  const max = Math.max(R, G, B);
+  const min = Math.min(R, G, B);
+  const l = (max + min) / 2;
+  const d = max - min;
+  if (d === 0) return { h: 0, s: 0, l };
+  const s = d / (1 - Math.abs(2 * l - 1));
+  const h = max === R ? ((G - B) / d) % 6 : max === G ? (B - R) / d + 2 : (R - G) / d + 4;
+  return { h: (h * 60 + 360) % 360, s, l };
+}
+
+describe.each([
+  ["light", light],
+  ["dark", dark],
+] as const)("no pink tokens (%s)", (_name, palette) => {
+  it.each(Object.keys(palette))("--%s", (name) => {
+    const { h, s, l } = hsl(palette[name]);
+    const pink = s > 0.25 && l > 0.15 && l < 0.97 && (h >= 290 || h < 2);
+    expect(pink, `--${name} is pink (hue ${Math.round(h)}°)`).toBe(false);
+  });
+});
