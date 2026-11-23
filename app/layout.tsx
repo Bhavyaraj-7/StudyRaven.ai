@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter, Bricolage_Grotesque } from "next/font/google";
 import { Suspense } from "react";
 import NavProgress from "@/components/layout/NavProgress";
+import GridOverlay from "@/components/dev/GridOverlay";
 import { SITE } from "@/lib/site";
 import { THEME_SCRIPT } from "@/lib/theme";
 import "./globals.css";
@@ -63,6 +64,7 @@ export default function RootLayout({
           <NavProgress />
         </Suspense>
         {children}
+        <GridOverlay />
       </body>
     </html>
   );
