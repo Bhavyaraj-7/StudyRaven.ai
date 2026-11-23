@@ -15,7 +15,7 @@ const PALETTE = [
   { bg: "#FEF3E7", accent: "#B45309", stripe: "#F59E0B" }, // amber
   { bg: "#EDF7F1", accent: "#047857", stripe: "#10B981" }, // emerald
   { bg: "#F0EFFA", accent: "#4338CA", stripe: "#6366F1" }, // indigo
-  { bg: "#FCEEF1", accent: "#BE185D", stripe: "#EC4899" }, // rose
+  { bg: "#E6F7F5", accent: "#0F766E", stripe: "#14B8A6" }, // teal (no pink)
   { bg: "#E9F5FA", accent: "#0369A1", stripe: "#0EA5E9" }, // sky
   { bg: "#F5F0EA", accent: "#78350F", stripe: "#A16207" }, // ochre
 ];
