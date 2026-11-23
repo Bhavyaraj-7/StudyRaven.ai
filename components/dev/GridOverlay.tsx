@@ -22,7 +22,7 @@ export default function GridOverlay() {
         {COLUMNS.map((i) => (
           <div
             key={i}
-            className={`bg-examiner/10 ${i >= 4 ? "hidden md:block" : ""} ${i >= 8 ? "md:hidden lg:block" : ""}`}
+            className={`bg-accent/10 ${i >= 4 ? "hidden md:block" : ""} ${i >= 8 ? "md:hidden lg:block" : ""}`}
           />
         ))}
       </div>

@@ -2,7 +2,8 @@
 // - hard-coded hex colours in components (use tokens),
 // - gradients / gradient text outside the three allowed places,
 // - arbitrary Tailwind spacing/radius values off the 4px scale,
-// - more than one icon library.
+// - more than one icon library,
+// - pink: Tailwind pink/rose/fuchsia classes or pink hex (founder rule).
 // Run: node --experimental-strip-types scripts/guardrails/lint-style.mts
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
@@ -53,6 +54,17 @@ for (const file of files) {
     for (const m of src.matchAll(/\bbg-gradient-to-\w+|\bbg-clip-text\b|\b(linear|radial|conic)-gradient\(/g)) {
       push(m.index!, "gradient", `${m[0]} (gradients only where §5.2 allows)`);
     }
+  }
+
+  for (const m of src.matchAll(/(?<![\w-])[a-z:-]*-(pink|rose|fuchsia)-\d{2,3}\b/g)) {
+    push(m.index!, "pink", `${m[0]} (no pink anywhere: founder rule, 23 Nov 2026)`);
+  }
+  for (const m of src.matchAll(/#[0-9a-fA-F]{6}\b/g)) {
+    const [r, g, b] = [1, 3, 5].map((i) => parseInt(m[0].slice(i, i + 2), 16) / 255);
+    const max = Math.max(r, g, b), min = Math.min(r, g, b), d = max - min, l = (max + min) / 2;
+    if (d === 0 || l < 0.15 || l > 0.97 || d / (1 - Math.abs(2 * l - 1)) <= 0.25) continue;
+    const h = ((max === r ? ((g - b) / d) % 6 : max === g ? (b - r) / d + 2 : (r - g) / d + 4) * 60 + 360) % 360;
+    if (h >= 290 || h < 2) push(m.index!, "pink", `${m[0]} is pink (hue ${Math.round(h)}°)`);
   }
 
   if (file.endsWith(".tsx")) {
