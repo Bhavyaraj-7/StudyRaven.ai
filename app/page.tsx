@@ -6,44 +6,24 @@ import {
   Timer,
   Wand2,
   FileText,
-  ArrowRight,
   Check,
 } from "lucide-react";
 import StickyNav from "@/components/landing/StickyNav";
-import CursorHalo from "@/components/landing/CursorHalo";
 import MagneticButton from "@/components/landing/MagneticButton";
+import { TRADEMARK_NOTE } from "@/lib/site";
 
 export default function Landing() {
   return (
     <main className="bg-paper text-ink overflow-x-hidden">
-      <CursorHalo />
       <StickyNav />
 
       {/* ============== HERO ============== */}
-      <header className="relative min-h-[820px] flex items-center justify-center text-center overflow-hidden">
-        {/* Video bg — plays as-is, full frame, no masking on the right corner. */}
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="hero-video absolute inset-0 w-full h-full object-cover z-0"
-        >
-          <source src="/landing-bg.mp4" type="video/mp4" />
-        </video>
-
-        {/* Light wash for text legibility — top only, leaves the rest of the animation visible. */}
-        <div
-          className="absolute inset-0 z-[2] pointer-events-none"
-          style={{
-            background:
-              "linear-gradient(180deg, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.25) 40%, rgba(255,255,255,0.4) 100%)",
-          }}
-        />
-
-        <div className="relative z-[5] max-w-[900px] px-7 pt-32 pb-24">
+      {/* Plain background until the Phase 1c hero ships (the old AI video
+          carried a third-party watermark). */}
+      <header className="relative min-h-[600px] md:min-h-[720px] flex items-center justify-center text-center overflow-hidden bg-paper">
+        <div className="relative max-w-[900px] px-7 pt-32 pb-24">
           <h1
-            className="reveal"
+            className="reveal text-balance"
             style={{
               fontSize: "clamp(42px, 7.2vw, 80px)",
               lineHeight: 1.02,
@@ -53,12 +33,10 @@ export default function Landing() {
               animationDelay: "100ms",
             }}
           >
-            Built for students.
-            <br />
-            Engineered for results.
+            Study plans and marked mock tests for IGCSE and IB.
           </h1>
           <p
-            className="reveal max-w-[600px] mx-auto"
+            className="reveal text-pretty max-w-[600px] mx-auto"
             style={{
               fontSize: "clamp(16px, 2vw, 19px)",
               lineHeight: 1.6,
@@ -67,18 +45,18 @@ export default function Landing() {
               animationDelay: "200ms",
             }}
           >
-            Your AI study partner. Personalized plans, smart reminders, mock
-            grading, and college guidance — all in one place.
+            Get a 7-day plan built around your exam dates, take AI-marked mocks,
+            and see exactly where you dropped marks and which topics to fix.
           </p>
           <div
             className="reveal flex items-center justify-center gap-3 flex-wrap"
             style={{ animationDelay: "300ms" }}
           >
             <MagneticButton href="/signup" variant="primary">
-              Start your journey <ArrowRight className="w-4 h-4" />
+              Start free
             </MagneticButton>
             <MagneticButton href="/login" variant="ghost">
-              I have an account
+              Log in
             </MagneticButton>
           </div>
         </div>
@@ -87,9 +65,6 @@ export default function Landing() {
       {/* ============== FEATURES ============== */}
       <section id="features" className="bg-paper py-[104px] px-7">
         <div className="max-w-[1180px] mx-auto">
-          <div className="font-mono text-[12.5px] text-graymute tracking-wider mb-3.5">
-            WHAT STUDYRAVEN.AI DOES
-          </div>
           <h2
             style={{
               fontSize: "clamp(30px, 4.4vw, 46px)",
@@ -100,7 +75,7 @@ export default function Landing() {
               margin: "0 0 56px",
             }}
           >
-            Everything you need to study smart. Nothing you don&apos;t.
+            What StudyRaven does
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-[18px]">
             {FEATURES.map((f) => (
@@ -113,9 +88,6 @@ export default function Landing() {
       {/* ============== HOW IT WORKS (DARK) ============== */}
       <section id="how" className="bg-ink text-paper py-[104px] px-7">
         <div className="max-w-[1180px] mx-auto">
-          <div className="font-mono text-[12.5px] text-graymute tracking-wider mb-3.5">
-            HOW IT WORKS
-          </div>
           <h2
             style={{
               fontSize: "clamp(30px, 4.4vw, 46px)",
@@ -126,17 +98,14 @@ export default function Landing() {
               margin: "0 0 56px",
             }}
           >
-            From scattered notes to a clear plan in three steps.
+            How it works
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {STEPS.map((s, i) => (
+            {STEPS.map((s) => (
               <div
                 key={s.title}
                 className="p-8 rounded-[18px] border border-[#1f1f1f] bg-[#0e0e0e]"
               >
-                <div className="font-mono text-[14px] text-graymute mb-6">
-                  0{i + 1}
-                </div>
                 <div className="font-semibold text-[21px] tracking-tight mb-2.5">
                   {s.title}
                 </div>
@@ -146,32 +115,6 @@ export default function Landing() {
               </div>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* ============== STATS (DARK) ============== */}
-      <section className="bg-ink text-paper py-[104px] px-7 border-t border-[#1f1f1f]">
-        <div className="max-w-[1180px] mx-auto grid grid-cols-2 md:grid-cols-4 gap-5">
-          {STATS.map((s) => (
-            <div
-              key={s.label}
-              className="border-l border-[#1f1f1f] pl-6"
-            >
-              <div
-                className="font-mono font-semibold"
-                style={{
-                  fontSize: "clamp(34px, 5vw, 54px)",
-                  letterSpacing: "-0.03em",
-                  lineHeight: 1,
-                }}
-              >
-                {s.display}
-              </div>
-              <div className="text-graymute text-[14px] mt-3 leading-snug">
-                {s.label}
-              </div>
-            </div>
-          ))}
         </div>
       </section>
 
@@ -191,37 +134,34 @@ export default function Landing() {
                 margin: "20px 0 18px",
               }}
             >
-              Your grades open doors. We help you choose which one.
+              A college guide that starts in Grade 9
             </h2>
             <p className="text-graytext text-[17px] leading-relaxed mb-8">
-              A weekly newsletter on competitions, summer programs, books,
-              podcasts, and country-specific portfolio guidance — written by
-              students who got in.
+              Pro includes a college guide built around your profile: a
+              readiness score, a step-by-step roadmap, scholarships, an
+              application tracker and feedback on your essay drafts.
             </p>
             <Link
               href="/signup"
               className="inline-flex items-center gap-2 bg-ink text-paper rounded-[12px] px-6 py-3.5 text-[15px] font-medium hover:-translate-y-px hover:shadow-[0_8px_24px_rgba(0,0,0,0.2)] transition"
             >
-              Experience college guidance <ArrowRight className="w-4 h-4" />
+              See the college guide
             </Link>
           </div>
           <div className="border border-grayline rounded-[18px] p-6 bg-paper shadow-[0_20px_60px_rgba(10,10,10,0.07)]">
-            <div className="flex items-center justify-between mb-5 pb-4 border-b border-grayline">
+            <div className="mb-5 pb-4 border-b border-grayline">
               <span className="font-semibold text-[15px]">
-                The StudyRaven.ai Edge
-              </span>
-              <span className="font-mono text-[11px] text-graymute">
-                issue #18
+                Inside the college guide
               </span>
             </div>
             <div className="flex flex-col gap-2.5">
-              {NEWSLETTER_ITEMS.map((n) => (
+              {COLLEGE_TABS.map((n) => (
                 <div
-                  key={n.kicker}
+                  key={n.label}
                   className="p-4 rounded-[12px] bg-graylite"
                 >
-                  <div className="font-mono text-[10px] text-graymute tracking-wider mb-1.5">
-                    {n.kicker}
+                  <div className="text-[12.5px] font-medium text-graytext mb-1">
+                    {n.label}
                   </div>
                   <div className="text-[14.5px] font-medium leading-snug">
                     {n.title}
@@ -246,7 +186,7 @@ export default function Landing() {
               margin: "0 0 12px",
             }}
           >
-            Start free. Upgrade when you&apos;re ready to win.
+            Start free. Upgrade when you need more.
           </h2>
           <p className="text-center text-graytext text-[17px] mb-12">
             No credit card to start. Cancel Pro anytime.
@@ -258,10 +198,10 @@ export default function Landing() {
               sub="forever, for students"
               features={[
                 "AI study planner",
-                "Past papers + mark schemes",
-                "Basic mock tests",
-                "Deadline reminders",
-                "Gmail + Classroom sync",
+                "AI-marked mock tests",
+                "Mark scheme guides for your subjects",
+                "5 AI generations a day",
+                "Deadline and exam tracker",
               ]}
               cta="Start free"
               href="/signup"
@@ -273,11 +213,9 @@ export default function Landing() {
               sub="per month · cancel anytime"
               features={[
                 "Everything in Free",
-                "Score predictor on mocks",
-                "Audio overview (podcast)",
-                "College guidance + weekly newsletter",
-                "AI-generated practice papers",
-                "Unlimited generations",
+                "Unlimited AI generations",
+                "AI tutor",
+                "College guide",
               ]}
               cta="Go Pro"
               href="/signup"
@@ -298,15 +236,14 @@ export default function Landing() {
             lineHeight: 1.05,
           }}
         >
-          Stop hoping. Start scoring.
+          See exactly where your marks go.
         </h2>
         <p className="text-graytext text-[18px] mt-5 max-w-[520px] mx-auto leading-relaxed">
-          Join thousands of students using StudyRaven.ai to study smarter,
-          not harder.
+          Free to start. Add your subjects and take your first mock today.
         </p>
         <div className="mt-8">
           <MagneticButton href="/signup" variant="primary">
-            Start your journey <ArrowRight className="w-4 h-4" />
+            Start free
           </MagneticButton>
         </div>
       </section>
@@ -318,9 +255,6 @@ export default function Landing() {
       >
         <div className="max-w-[1080px] mx-auto">
           <div className="text-center max-w-[660px] mx-auto">
-            <div className="font-mono text-[12px] tracking-[0.18em] text-graymute mb-4 reveal">
-              WHO WE ARE
-            </div>
             <h2
               className="reveal"
               style={{
@@ -337,7 +271,7 @@ export default function Landing() {
               className="text-graytext text-[17px] leading-relaxed reveal"
               style={{ animationDelay: "120ms" }}
             >
-              We&apos;re IGCSE students ourselves — buried in past papers, missed
+              We&apos;re IGCSE students ourselves, buried in past papers, missed
               deadlines, and mark schemes that never actually explained anything.
               Nothing out there was built for students like us, so we built it:
               StudyRaven.ai, the study partner we wished we&apos;d had.
@@ -345,11 +279,10 @@ export default function Landing() {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-14">
-            {TEAM.map((m, i) => (
+            {TEAM.map((m) => (
               <div
                 key={m.name}
-                className="about-float rounded-[18px] border border-grayline bg-paper p-6 text-center shadow-[0_10px_40px_rgba(10,10,10,0.05)] hover:border-ink hover:shadow-[0_20px_50px_rgba(10,10,10,0.12)] transition-colors"
-                style={{ animationDelay: `${i * 0.5}s` }}
+                className="rounded-[18px] border border-grayline bg-paper p-6 text-center shadow-[0_10px_40px_rgba(10,10,10,0.05)] hover:border-ink hover:shadow-[0_20px_50px_rgba(10,10,10,0.12)] transition-colors"
               >
                 <div className="w-14 h-14 mx-auto rounded-full bg-ink text-paper inline-flex items-center justify-center font-mono text-[17px] font-semibold">
                   {m.initials}
@@ -375,10 +308,6 @@ export default function Landing() {
               </span>
               StudyRaven<span className="text-graymute">.ai</span>
             </Link>
-            <div className="mt-4 inline-flex items-center gap-2 text-[12px] text-graymute">
-              <span className="w-1.5 h-1.5 rounded-full bg-green-500 ticker-dot" />
-              All systems normal
-            </div>
           </div>
           <FooterCol
             title="Product"
@@ -389,25 +318,27 @@ export default function Landing() {
             ]}
           />
           <FooterCol
-            title="Resources"
+            title="Account"
             items={[
-              { label: "Past papers", href: "/papers" },
-              { label: "Mark schemes", href: "/marks" },
-              { label: "Mock tests", href: "/mocks" },
+              { label: "Log in", href: "/login" },
+              { label: "Start free", href: "/signup" },
             ]}
           />
           <FooterCol
             title="Legal"
             items={[
-              { label: "Privacy", href: "#" },
-              { label: "Terms", href: "#" },
-              { label: "Contact", href: "mailto:bsingh10@jpischool.com" },
+              { label: "Privacy", href: "/privacy" },
+              { label: "Terms", href: "/terms" },
+              { label: "Refunds", href: "/refunds" },
+              { label: "Contact", href: "/contact" },
             ]}
           />
         </div>
-        <div className="max-w-[1180px] mx-auto mt-10 pt-6 border-t border-[#1f1f1f] flex items-center justify-between text-[12.5px] text-graymute font-mono">
-          <span>Built by students, for students. © 2026 StudyRaven.ai</span>
-          <span>Made for students</span>
+        <div className="max-w-[1180px] mx-auto mt-10 pt-6 border-t border-[#1f1f1f] text-[12.5px] text-graymute space-y-3">
+          <p className="max-w-[760px] leading-relaxed">{TRADEMARK_NOTE}</p>
+          <p className="font-mono">
+            Built by students, for students. © 2026 StudyRaven.ai
+          </p>
         </div>
       </footer>
     </main>
@@ -420,25 +351,25 @@ const FEATURES = [
   {
     icon: <Wand2 className="w-5 h-5" />,
     title: "StudyRaven Studio",
-    desc: "Turn any topic or PDF into a slide deck, summary, study guide, flashcards, or mind map in seconds.",
+    desc: "Turn any topic or PDF into a summary, study guide, slide deck, flashcards, mind map or quiz.",
     pro: false,
   },
   {
     icon: <Timer className="w-5 h-5" />,
-    title: "Mock tests, AI-graded",
-    desc: "Take timed mocks. Get a score, predicted grade, and topic-by-topic feedback graded against real mark schemes.",
+    title: "Mock tests, AI-marked",
+    desc: "Take timed mocks on AI-written practice papers. Each paper comes with its own mark scheme, and you get a score and topic-by-topic feedback.",
     pro: false,
   },
   {
     icon: <Calendar className="w-5 h-5" />,
-    title: "Smart deadline tracker",
-    desc: "Auto reminders by email. Connect Gmail and Classroom to sync every due date so nothing slips.",
+    title: "Deadline tracker",
+    desc: "Keep every deadline and exam date in one place, with a countdown to your next exam.",
     pro: false,
   },
   {
     icon: <GraduationCap className="w-5 h-5" />,
-    title: "College guidance",
-    desc: "Competitions, summer programs, university matches, and a weekly newsletter — starting from Grade 9.",
+    title: "College guide",
+    desc: "A readiness score, roadmap, scholarships, application tracker and essay feedback, from Grade 9.",
     pro: true,
   },
 ];
@@ -453,38 +384,23 @@ const TEAM = [
 const STEPS = [
   {
     title: "Tell StudyRaven.ai about you",
-    body: "Add your subjects, exam dates, and current grades. It takes about two minutes.",
+    body: "Add your curriculum, subjects, exam dates and target grades.",
   },
   {
     title: "Get your study plan",
-    body: "A personalized roadmap with daily tasks, study guides, and the right past papers.",
+    body: "A 7-day plan with three tasks a day, weighted towards your nearest exams.",
   },
   {
-    title: "Never miss a deadline",
-    body: "Auto reminders by email. Connect Gmail and Classroom to sync every due date.",
+    title: "Practise and track",
+    body: "Take mocks, see where you dropped marks, and keep every deadline in one place.",
   },
 ];
 
-const STATS = [
-  { display: "12k+", label: "Past papers and mark schemes indexed" },
-  { display: "5", label: "AI outputs from a single topic" },
-  { display: "<60s", label: "From prompt to graded mock" },
-  { display: "₹0", label: "To start — free forever" },
-];
-
-const NEWSLETTER_ITEMS = [
-  {
-    kicker: "COMPETITIONS",
-    title: "3 competitions closing this month for Grade 9 students",
-  },
-  {
-    kicker: "PORTFOLIO",
-    title: "What Stanford wants in a Grade 10 portfolio",
-  },
-  {
-    kicker: "FREE COURSE",
-    title: "The free MIT course that will set you apart",
-  },
+const COLLEGE_TABS = [
+  { label: "Readiness", title: "Where your profile stands today, and the gaps to close" },
+  { label: "Roadmap", title: "A step-by-step plan from your grade to applications" },
+  { label: "Scholarships", title: "A curated list, plus live search matched to your interests" },
+  { label: "Essays", title: "Feedback on your drafts. Every word stays yours." },
 ];
 
 // ---- Components ----
@@ -582,7 +498,7 @@ function PriceCard({
             : "bg-ink text-paper hover:-translate-y-px"
         }`}
       >
-        {cta} <ArrowRight className="w-4 h-4" />
+        {cta}
       </Link>
     </div>
   );
@@ -597,9 +513,7 @@ function FooterCol({
 }) {
   return (
     <div>
-      <div className="font-mono text-[11.5px] text-graymute tracking-wider mb-4">
-        {title.toUpperCase()}
-      </div>
+      <div className="text-[13px] font-medium text-paper mb-4">{title}</div>
       <ul className="space-y-2.5 text-[14px]">
         {items.map((it) => (
           <li key={it.label}>

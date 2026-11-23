@@ -1,18 +1,24 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import NavProgress from "@/components/layout/NavProgress";
+import { SITE } from "@/lib/site";
 import "./globals.css";
 
+const DESCRIPTION =
+  "Study plans and AI-marked mock tests for IGCSE and IB students in Grades 8–12, plus a college guide.";
+
 export const metadata: Metadata = {
-  title: "StudyRaven.ai — Built for students. Engineered for results.",
-  description:
-    "Your AI study partner for IGCSE and IB, Grades 8–12. Personalized plans, smart reminders, mock grading, and college guidance — all in one place.",
-  metadataBase: new URL("https://studyraven.ai"),
+  title: "StudyRaven: study plans and marked mocks for IGCSE and IB",
+  description: DESCRIPTION,
+  metadataBase: new URL(SITE.url),
   openGraph: {
     title: "StudyRaven.ai",
-    description: "Built for students. Engineered for results.",
+    description: DESCRIPTION,
     type: "website",
+    siteName: "StudyRaven",
+    locale: "en_IN",
   },
+  twitter: { card: "summary_large_image" },
 };
 
 export default function RootLayout({

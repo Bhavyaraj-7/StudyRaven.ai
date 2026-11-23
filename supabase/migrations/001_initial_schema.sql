@@ -206,7 +206,7 @@ declare
   t text;
   tables text[] := array[
     'subjects','tasks','mock_tests','college_profiles','competitions',
-    'subscriptions','user_papers','ai_papers','flashcards','notes'
+    'user_papers','ai_papers','flashcards','notes'
   ];
 begin
   foreach t in array tables loop
@@ -220,6 +220,16 @@ begin
     execute format('create policy "own_delete" on public.%I for delete using  (auth.uid() = user_id)', t);
   end loop;
 end $$;
+
+-- subscriptions: users may READ their own row only. Every write goes through
+-- server routes using the service role (checkout, verify, cancel, webhook).
+-- Never add user insert/update/delete here — that lets anyone grant
+-- themselves Pro. See 20261123_lock_subscriptions.sql.
+drop policy if exists "own_select" on public.subscriptions;
+drop policy if exists "own_insert" on public.subscriptions;
+drop policy if exists "own_update" on public.subscriptions;
+drop policy if exists "own_delete" on public.subscriptions;
+create policy "own_select" on public.subscriptions for select using (auth.uid() = user_id);
 
 -- profiles uses `id` instead of `user_id`
 drop policy if exists "own_select_profile" on public.profiles;

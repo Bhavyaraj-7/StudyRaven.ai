@@ -18,3 +18,7 @@ Microsoft VS Code/
 # never commit env files or their backups
 .env*
 !.env.example
+
+# rebuild baseline screenshots (local only)
+rebuild/baseline/
+rebuild/after-*/

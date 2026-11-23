@@ -1,16 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { Loader2, PenLine, Quote, ArrowRight } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Loader2, PenLine, Quote, HelpCircle } from "lucide-react";
 
 interface EssayFeedback {
-  overall_score: number;
-  scores: { hook: number; structure: number; specificity: number; voice: number };
+  overall_score: number | null;
+  scores: Record<"hook" | "structure" | "specificity" | "voice", number | null>;
   verdict: string;
   strengths: string[];
   improvements: string[];
-  rewrites: { original: string; suggestion: string; why: string }[];
+  weak_spots: { quote: string; question: string }[];
 }
 
 const SCORE_LABELS: { key: keyof EssayFeedback["scores"]; label: string }[] = [
@@ -106,6 +105,10 @@ export default function EssayCoachTab() {
               {error}
             </p>
           )}
+          <p className="mt-4 text-xs text-graytext">
+            StudyRaven gives feedback; every word of your essay is yours. Many
+            universities treat AI-written essays as misrepresentation.
+          </p>
         </div>
       </div>
 
@@ -113,8 +116,8 @@ export default function EssayCoachTab() {
       <div>
         {!feedback ? (
           <div className="rounded-2xl border border-dashed border-grayline p-10 text-center text-sm text-graymute h-full flex items-center justify-center">
-            Feedback appears here — scores, strengths, fixes, and sentence-level
-            rewrites.
+            Feedback appears here — scores, strengths, what to fix, and the
+            sentences worth reworking.
           </div>
         ) : (
           <div className="space-y-4">
@@ -123,7 +126,7 @@ export default function EssayCoachTab() {
               <div className="flex items-center justify-between">
                 <span className="font-semibold text-sm">Overall</span>
                 <span className="text-2xl font-semibold">
-                  {feedback.overall_score}
+                  {feedback.overall_score ?? "—"}
                   <span className="text-sm text-graymute font-normal">/100</span>
                 </span>
               </div>
@@ -167,24 +170,24 @@ export default function EssayCoachTab() {
               </div>
             </div>
 
-            {/* Rewrites */}
-            {(feedback.rewrites?.length ?? 0) > 0 && (
+            {/* Weak spots: the student rewrites these themselves */}
+            {(feedback.weak_spots?.length ?? 0) > 0 && (
               <div className="rounded-2xl border border-grayline bg-paper p-5">
-                <div className="font-semibold text-sm">Sentence rewrites</div>
+                <div className="font-semibold text-sm">Sentences to rework</div>
+                <p className="text-xs text-graymute mt-1">
+                  Answer the question, then rewrite the sentence in your own words.
+                </p>
                 <div className="mt-3 space-y-4">
-                  {feedback.rewrites.map((r, i) => (
+                  {feedback.weak_spots.map((w, i) => (
                     <div key={i} className="rounded-xl bg-graylite/50 p-4">
-                      <div className="flex gap-2 text-xs text-graymute">
-                        <Quote className="w-3.5 h-3.5 shrink-0 mt-0.5" />
-                        <span className="line-through">{r.original}</span>
+                      <div className="flex gap-2 text-xs text-graytext">
+                        <Quote className="w-3.5 h-3.5 shrink-0 mt-0.5" aria-hidden />
+                        <span>{w.quote}</span>
                       </div>
                       <div className="flex gap-2 text-xs text-ink mt-2">
-                        <ArrowRight className="w-3.5 h-3.5 shrink-0 mt-0.5" />
-                        <span className="font-medium">{r.suggestion}</span>
+                        <HelpCircle className="w-3.5 h-3.5 shrink-0 mt-0.5" aria-hidden />
+                        <span className="font-medium">{w.question}</span>
                       </div>
-                      <p className={cn("text-[11px] text-graymute mt-2 pl-5")}>
-                        {r.why}
-                      </p>
                     </div>
                   ))}
                 </div>

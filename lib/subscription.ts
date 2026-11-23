@@ -83,7 +83,7 @@ async function fireLimitEmailOnce(userId: string): Promise<void> {
     title: "You're on a roll",
     body: `
       <p>You've used all ${FREE_DAILY_LIMIT} free generations for today — nice work staying consistent.</p>
-      <p>StudyRaven Pro removes the daily cap completely, plus unlocks the AI tutor, college guidance, and score prediction. ₹299/month or ₹2,499/year.</p>
+      <p>StudyRaven Pro removes the daily cap completely, plus unlocks the AI tutor and the college guide. ₹299/month or ₹2,499/year.</p>
       <p style="margin-top:20px"><a href="${process.env.NEXT_PUBLIC_APP_URL}/settings" style="display:inline-block;background:#0A0A0A;color:#fff;padding:10px 20px;border-radius:8px;text-decoration:none">Upgrade to Pro</a></p>
     `,
   });
