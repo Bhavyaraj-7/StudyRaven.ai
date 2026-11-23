@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { supabaseServer } from "@/lib/supabase-server";
+import { isProUser } from "@/lib/subscription";
 import { tavilySearch } from "@/lib/tavily";
 
 export const maxDuration = 60;
@@ -33,6 +34,12 @@ export async function POST() {
   const sb = supabaseServer();
   const { data: { user } } = await sb.auth.getUser();
   if (!user) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+  if (!(await isProUser(user.id))) {
+    return NextResponse.json(
+      { error: "The college guide is a Pro feature.", pro_required: true },
+      { status: 403 },
+    );
+  }
 
   try {
     const { data: profile } = await sb

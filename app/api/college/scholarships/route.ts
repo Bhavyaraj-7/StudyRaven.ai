@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { supabaseServer } from "@/lib/supabase-server";
+import { isProUser } from "@/lib/subscription";
 import { groqJson } from "@/lib/groq";
 import {
   CATEGORY_LABELS,
@@ -96,6 +97,12 @@ Rules:
 export async function POST() {
   const ctx = await studentContext();
   if (!ctx) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+  if (!(await isProUser(ctx.user.id))) {
+    return NextResponse.json(
+      { error: "The college guide is a Pro feature.", pro_required: true },
+      { status: 403 },
+    );
+  }
 
   try {
     const queries = [
