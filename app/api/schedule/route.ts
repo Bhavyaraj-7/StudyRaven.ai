@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { consumeQuota, quotaResponse } from "@/lib/rate-limit";
 import { aiErrorResponse } from "@/lib/ai/errors";
 import { supabaseServer } from "@/lib/supabase-server";
 import { groqChat } from "@/lib/groq";
@@ -12,6 +13,8 @@ export async function POST(req: Request) {
   const sb = supabaseServer();
   const { data: { user } } = await sb.auth.getUser();
   if (!user) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+  const quota = await consumeQuota(user.id, "planner");
+  if (!quota.ok) return quotaResponse(quota);
 
   const { kind, content } = await req.json();
 

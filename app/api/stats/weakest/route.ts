@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { consumeQuota, quotaResponse } from "@/lib/rate-limit";
 import { aiErrorResponse } from "@/lib/ai/errors";
 import { supabaseServer } from "@/lib/supabase-server";
 import { groqJson } from "@/lib/groq";
@@ -13,6 +14,8 @@ export async function GET() {
   const sb = supabaseServer();
   const { data: { user } } = await sb.auth.getUser();
   if (!user) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+  const quota = await consumeQuota(user.id, "insight");
+  if (!quota.ok) return quotaResponse(quota);
 
   const { data: mocks } = await sb
     .from("mock_tests")
