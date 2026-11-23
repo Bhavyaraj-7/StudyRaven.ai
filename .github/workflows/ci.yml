@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NEXT_TELEMETRY_DISABLED: 1
+  # Placeholders: public pages build and render without real secrets.
+  NEXT_PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: placeholder
+  SUPABASE_SERVICE_ROLE_KEY: placeholder
+  RESEND_API_KEY: re_placeholder
+  NEXT_PUBLIC_APP_URL: http://localhost:3100
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Copy lint (no AI-ish copy, §5.7)
+        run: npm run lint:copy
+      - name: Style lint (tokens, scale, one icon set)
+        run: npm run lint:style
+      - name: Type check
+        run: npx tsc --noEmit -p .
+      - name: Unit tests
+        run: npm test
+      - name: Build
+        run: npm run build
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Browser tests
+        run: npx playwright test --grep-invert @visual
+      # Advisory until a CI run confirms the committed baselines match
+      # GitHub's runners (they were made in another Linux image). Then
+      # remove continue-on-error to make it blocking.
+      - name: Visual regression
+        continue-on-error: true
+        run: npx playwright test --grep @visual
+      - name: Upload screenshot diffs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-results
+          path: test-results/
+          if-no-files-found: ignore
+          retention-days: 7
