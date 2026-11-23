@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { aiErrorResponse } from "@/lib/ai/errors";
 import { supabaseServer } from "@/lib/supabase-server";
 import { isProUser } from "@/lib/subscription";
 import { groqJson } from "@/lib/groq";
@@ -67,7 +68,7 @@ export async function POST(req: Request) {
     );
     return NextResponse.json(sanitizeFeedback(result, essay));
   } catch (e) {
-    return NextResponse.json({ error: (e as Error).message }, { status: 500 });
+    return aiErrorResponse(e);
   }
 }
 

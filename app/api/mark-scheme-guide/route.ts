@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { aiErrorResponse } from "@/lib/ai/errors";
 import { supabaseServer } from "@/lib/supabase-server";
 import { groqChat } from "@/lib/groq";
 
@@ -36,6 +37,6 @@ Be concrete and specific to ${subject}. Keep under 700 words.`;
     );
     return NextResponse.json({ markdown });
   } catch (e) {
-    return NextResponse.json({ error: (e as Error).message }, { status: 500 });
+    return aiErrorResponse(e);
   }
 }

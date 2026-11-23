@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { aiErrorResponse } from "@/lib/ai/errors";
 import { supabaseServer } from "@/lib/supabase-server";
 import { groqChat, groqJson } from "@/lib/groq";
 import {
@@ -89,7 +90,7 @@ Generate now.`;
     const text = await groqChat(cfg.sys, user_prompt, { maxTokens: 2500 });
     return NextResponse.json({ kind, data: { markdown: text }, remaining: quota.remaining });
   } catch (e) {
-    return NextResponse.json({ error: (e as Error).message }, { status: 500 });
+    return aiErrorResponse(e);
   }
 }
 

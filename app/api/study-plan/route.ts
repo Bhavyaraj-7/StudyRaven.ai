@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { aiErrorResponse } from "@/lib/ai/errors";
 import { supabaseServer } from "@/lib/supabase-server";
 import { groqJson } from "@/lib/groq";
 import { topicsForCode } from "@/lib/igcse-topics";
@@ -81,6 +82,6 @@ Build a 7-day plan starting today.`;
     });
     return NextResponse.json(json);
   } catch (e) {
-    return NextResponse.json({ error: (e as Error).message }, { status: 500 });
+    return aiErrorResponse(e);
   }
 }
