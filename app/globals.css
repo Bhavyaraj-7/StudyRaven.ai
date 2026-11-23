@@ -62,21 +62,6 @@
     background-size: 200% 100%;
   }
 
-  /* Hero video drift — slow cinematic motion */
-  @keyframes hero-drift {
-    0%,
-    100% {
-      transform: scale(1.08) translate(0, 0);
-    }
-    50% {
-      transform: scale(1.12) translate(-1.2%, -0.8%);
-    }
-  }
-  .hero-video {
-    animation: hero-drift 36s ease-in-out infinite;
-    will-change: transform;
-  }
-
   /* Reveal-on-load utility */
   @keyframes reveal-up {
     from {

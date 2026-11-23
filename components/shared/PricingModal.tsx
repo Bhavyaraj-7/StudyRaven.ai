@@ -169,11 +169,9 @@ export default function PricingModal({
 
             <ul className="mt-6 space-y-2">
               {[
-                "Score predictor on mocks",
-                "College guidance + live opportunity search",
-                "Weekly college newsletter",
-                "AI-generated practice papers + mark schemes",
-                "Unlimited generations",
+                "Unlimited AI generations",
+                "AI tutor",
+                "College guide with live opportunity search",
               ].map((f) => (
                 <li key={f} className="flex items-center gap-2 text-sm">
                   <Check className="w-4 h-4" /> {f}
