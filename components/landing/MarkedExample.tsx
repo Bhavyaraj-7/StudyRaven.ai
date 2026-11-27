@@ -14,7 +14,7 @@ const TICK_GAP = 220;
 
 /**
  * One marked exam question: ticks on earned points, graphite notes with a
- * blue Fix it on missed ones, the total circled in examiner red. With
+ * blue Fix it on missed ones, the total circled in the examiner's blue pen. With
  * play, the ticks draw in order, then the score pops and gets circled;
  * without it (or under reduced motion) it shows the finished marking.
  */

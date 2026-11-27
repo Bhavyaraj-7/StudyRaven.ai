@@ -12,7 +12,7 @@ const EXAMPLES = examples as Example[];
  * marked state, so it means something without JavaScript. After loading,
  * unless the visitor prefers reduced motion or saves data, the ticks draw
  * in, the score pops and the total gets circled. Switching subject replays.
- * Red ink is allowed here: it's a demo of graded work.
+ * The examiner's pen is blue (white/black/blue rule, 27 Nov 2026).
  */
 export default function HeroPaper() {
   const [subject, setSubject] = useState(EXAMPLES[0].subject);

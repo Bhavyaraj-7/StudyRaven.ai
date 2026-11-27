@@ -71,7 +71,7 @@ export default function Landing() {
                   <span className="grid h-12 w-12 place-items-center rounded-input bg-area-tint text-area-deep">
                     <f.icon className="h-6 w-6" strokeWidth={1.75} aria-hidden />
                   </span>
-                  {f.pro && <span className="rounded-pill bg-gold px-2.5 py-0.5 text-xs font-semibold text-on-area">Pro</span>}
+                  {f.pro && <span className="rounded-pill bg-accent px-2.5 py-0.5 text-xs font-semibold text-on-accent">Pro</span>}
                 </div>
                 <h3 className="mt-5 text-title font-semibold">{f.title}</h3>
                 <p className="mt-2 text-graytext">{f.desc}</p>
@@ -106,7 +106,7 @@ export default function Landing() {
       {/* ---------- College guide ---------- */}
       <section id="college" className="mx-auto grid max-w-[1200px] grid-cols-1 items-center gap-12 px-5 py-16 md:py-24 lg:grid-cols-2">
         <Reveal>
-          <span className="rounded-pill bg-gold px-2.5 py-0.5 text-xs font-semibold text-on-area">Pro</span>
+          <span className="rounded-pill bg-accent px-2.5 py-0.5 text-xs font-semibold text-on-accent">Pro</span>
           <h2 className="mt-4 text-h3 font-semibold md:text-h2">A college guide that starts in Grade 9</h2>
           <p className="mt-4 max-w-[52ch] text-lg text-graytext">
             Pro includes a college guide built around your profile: a readiness score, a step-by-step roadmap,
@@ -322,7 +322,7 @@ function PriceCard({
       }`}
     >
       {badge && (
-        <span className="absolute -top-3 right-6 rounded-pill bg-gold px-3 py-1 text-xs font-semibold text-on-area shadow-card">
+        <span className="absolute -top-3 right-6 rounded-pill bg-accent px-3 py-1 text-xs font-semibold text-on-accent shadow-card">
           {badge}
         </span>
       )}
