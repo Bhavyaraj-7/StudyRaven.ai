@@ -3,7 +3,7 @@
 // - gradients / gradient text outside the three allowed places,
 // - arbitrary Tailwind spacing/radius values off the 4px scale,
 // - more than one icon library,
-// - pink: Tailwind pink/rose/fuchsia classes or pink hex (founder rule).
+// - off-palette: any colour but white, black and blue (founder rule).
 // Run: node --experimental-strip-types scripts/guardrails/lint-style.mts
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
@@ -15,6 +15,8 @@ const HEX_ALLOWED = [
   "components/auth/GoogleButton.tsx", // Google's logo colours are required as-is
   "app/layout.tsx", // <meta name="theme-color"> needs literal colours
 ];
+// Brand assets that must keep their own colours.
+const PALETTE_EXEMPT = ["components/auth/GoogleButton.tsx"]; // Google's logo colours
 // §5.2: gradients only in the landing hero mesh, the welcome film and
 // achievement cards. Add those files here when they exist.
 const GRADIENT_ALLOWED: string[] = [
@@ -56,15 +58,18 @@ for (const file of files) {
     }
   }
 
-  for (const m of src.matchAll(/(?<![\w-])[a-z:-]*-(pink|rose|fuchsia)-\d{2,3}\b/g)) {
-    push(m.index!, "pink", `${m[0]} (no pink anywhere: founder rule, 23 Nov 2026)`);
-  }
-  for (const m of src.matchAll(/#[0-9a-fA-F]{6}\b/g)) {
-    const [r, g, b] = [1, 3, 5].map((i) => parseInt(m[0].slice(i, i + 2), 16) / 255);
-    const max = Math.max(r, g, b), min = Math.min(r, g, b), d = max - min, l = (max + min) / 2;
-    if (d === 0 || l < 0.15 || l > 0.97 || d / (1 - Math.abs(2 * l - 1)) <= 0.25) continue;
-    const h = ((max === r ? ((g - b) / d) % 6 : max === g ? (b - r) / d + 2 : (r - g) / d + 4) * 60 + 360) % 360;
-    if (h >= 290 || h < 2) push(m.index!, "pink", `${m[0]} is pink (hue ${Math.round(h)}°)`);
+  // Founder rule (27 Nov 2026): white, black and blue only.
+  if (!PALETTE_EXEMPT.includes(file)) {
+    for (const m of src.matchAll(/(?<![\w-])[a-z:-]*-(red|orange|amber|yellow|lime|green|emerald|teal|cyan|violet|purple|fuchsia|pink|rose|indigo)-\d{2,3}\b/g)) {
+      push(m.index!, "off-palette", `${m[0]} (white, black and blue only)`);
+    }
+    for (const m of src.matchAll(/#[0-9a-fA-F]{6}\b/g)) {
+      const [r, g, b] = [1, 3, 5].map((i) => parseInt(m[0].slice(i, i + 2), 16) / 255);
+      const max = Math.max(r, g, b), min = Math.min(r, g, b), d = max - min, l = (max + min) / 2;
+      if (d === 0 || l < 0.08 || l > 0.97 || d / (1 - Math.abs(2 * l - 1)) <= 0.15) continue; // neutral
+      const h = ((max === r ? ((g - b) / d) % 6 : max === g ? (b - r) / d + 2 : (r - g) / d + 4) * 60 + 360) % 360;
+      if (h < 195 || h > 235) push(m.index!, "off-palette", `${m[0]} is not blue (hue ${Math.round(h)}°)`);
+    }
   }
 
   if (file.endsWith(".tsx")) {
