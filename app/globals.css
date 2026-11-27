@@ -18,33 +18,35 @@
     --control-line: 128 128 122;
     --accent: 31 79 216; /* Raven blue: every action */
     --on-accent: 255 255 255;
-    --examiner: 194 38 26; /* red pen, graded work only (true red, never pink) */
-    --examiner-stroke: 224 64 46; /* strokes >= 2px, text >= 24px */
-    --danger: 180 83 9; /* form/system errors, always with icon + words */
-    --gold: 176 137 43; /* Pro badge and medal shapes only, never text */
+    --examiner: 30 64 175; /* blue pen: graded work only (white/black/blue rule) */
+    --examiner-stroke: 37 99 235; /* strokes >= 2px, text >= 24px */
+    --danger: 30 58 138; /* errors: deep navy, always with icon + words */
+    --gold: 37 99 235; /* Pro badge and medal shapes (blue under the colour rule) */
     --on-area: 11 11 12; /* text on an area's bright fill, both themes */
     --inverse: 11 11 12; /* contrast blocks (footer, feature band) */
     --on-inverse: 252 252 250;
 
-    /* Area colours: deep (text/icons), bright (fills), tint (backgrounds) */
+    /* Area colours: deep (text/icons), bright (fills), tint (backgrounds).
+       Founder rule (27 Nov 2026): white, black and blue only, so the seven
+       areas share three blue families (royal, navy, sky). */
     --area-study-deep: 31 79 216;
     --area-study-bright: 79 125 255;
     --area-study-tint: 238 242 255;
-    --area-compete-deep: 194 65 12;
-    --area-compete-bright: 255 122 26;
-    --area-compete-tint: 255 241 230;
-    --area-profile-deep: 21 128 61;
-    --area-profile-bright: 34 197 94;
-    --area-profile-tint: 233 249 239;
-    --area-essays-deep: 109 40 217;
-    --area-essays-bright: 139 92 246;
-    --area-essays-tint: 243 238 255;
-    --area-pitch-deep: 15 118 110; /* teal: no pink anywhere (founder, 23 Nov 2026) */
-    --area-pitch-bright: 20 184 166;
-    --area-pitch-tint: 230 247 245;
-    --area-streak-deep: 161 98 7;
-    --area-streak-bright: 250 204 21;
-    --area-streak-tint: 254 249 225;
+    --area-compete-deep: 30 64 175;
+    --area-compete-bright: 96 165 250;
+    --area-compete-tint: 239 246 255;
+    --area-profile-deep: 3 105 161;
+    --area-profile-bright: 56 189 248;
+    --area-profile-tint: 230 246 254;
+    --area-essays-deep: 30 64 175;
+    --area-essays-bright: 96 165 250;
+    --area-essays-tint: 239 246 255;
+    --area-pitch-deep: 31 79 216;
+    --area-pitch-bright: 79 125 255;
+    --area-pitch-tint: 238 242 255;
+    --area-streak-deep: 3 105 161;
+    --area-streak-bright: 56 189 248;
+    --area-streak-tint: 230 246 254;
     --area-parents-deep: 3 105 161;
     --area-parents-bright: 56 189 248;
     --area-parents-tint: 230 246 254;
@@ -88,24 +90,24 @@
     --control-line: 112 113 119;
     --accent: 142 168 255;
     --on-accent: 11 11 12;
-    --examiner: 240 75 60;
-    --examiner-stroke: 240 75 60;
-    --danger: 251 146 60;
-    --gold: 212 175 85;
+    --examiner: 147 197 253;
+    --examiner-stroke: 147 197 253;
+    --danger: 191 219 254;
+    --gold: 147 197 253;
     --inverse: 24 25 29; /* a raised night surface, not a light block */
     --on-inverse: 237 237 232;
     --area-study-deep: 142 168 255;
     --area-study-tint: 22 28 46;
-    --area-compete-deep: 255 154 82;
-    --area-compete-tint: 43 28 19;
-    --area-profile-deep: 74 222 128;
-    --area-profile-tint: 16 37 27;
-    --area-essays-deep: 183 155 255;
-    --area-essays-tint: 29 24 45;
-    --area-pitch-deep: 45 212 191;
-    --area-pitch-tint: 15 35 36;
-    --area-streak-deep: 253 224 71;
-    --area-streak-tint: 42 38 18;
+    --area-compete-deep: 147 197 253;
+    --area-compete-tint: 24 33 46;
+    --area-profile-deep: 125 211 252;
+    --area-profile-tint: 19 36 46;
+    --area-essays-deep: 147 197 253;
+    --area-essays-tint: 24 33 46;
+    --area-pitch-deep: 142 168 255;
+    --area-pitch-tint: 22 28 46;
+    --area-streak-deep: 125 211 252;
+    --area-streak-tint: 19 36 46;
     --area-parents-deep: 125 211 252;
     --area-parents-tint: 19 36 46;
     /* Dark mode uses surface steps, not shadows (§5.4). */

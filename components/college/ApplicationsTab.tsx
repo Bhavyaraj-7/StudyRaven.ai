@@ -87,7 +87,7 @@ export default function ApplicationsTab({
   return (
     <div>
       {error && (
-        <div className="mb-4 text-sm text-red-600 border border-red-200 bg-red-50 rounded-lg p-3">
+        <div className="mb-4 text-sm text-danger border border-danger/30 bg-danger/5 rounded-lg p-3">
           {error}
         </div>
       )}
