@@ -276,7 +276,7 @@ export default function MocksPage() {
             </label>
           </label>
           {error && (
-            <div className="mt-4 text-sm text-red-600 border border-red-200 bg-red-50 rounded-lg p-3 max-w-2xl">
+            <div className="mt-4 text-sm text-danger border border-danger/30 bg-danger/5 rounded-lg p-3 max-w-2xl">
               {error}
             </div>
           )}

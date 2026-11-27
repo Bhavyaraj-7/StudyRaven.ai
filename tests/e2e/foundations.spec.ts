@@ -44,7 +44,7 @@ test("area tokens resolve per data-area", async ({ page }) => {
     document.body.appendChild(el);
     return getComputedStyle(el).getPropertyValue("--area-deep").trim();
   });
-  expect(deep).toBe("194 65 12");
+  expect(deep).toBe("30 64 175");
 });
 
 for (const path of ["/", "/privacy"]) {

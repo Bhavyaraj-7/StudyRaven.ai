@@ -138,7 +138,7 @@ export default function DailyDrill() {
             5 quick questions on your weakest topic. Keep the flame alive.
           </p>
           {error && (
-            <p role="alert" className="mt-2 text-sm text-red-600">
+            <p role="alert" className="mt-2 text-sm text-danger">
               {error}
             </p>
           )}
@@ -185,7 +185,7 @@ export default function DailyDrill() {
             ))}
           </ol>
           {error && (
-            <p role="alert" className="mt-2 text-sm text-red-600">
+            <p role="alert" className="mt-2 text-sm text-danger">
               {error}
             </p>
           )}
