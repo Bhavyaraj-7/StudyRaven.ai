@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import SpectrumRibbon from "@/components/ui/SpectrumRibbon";
 
 const LINKS = [
   { label: "Features", href: "#features" },
@@ -55,6 +56,9 @@ export default function StickyNav() {
             : "py-3.5 bg-transparent",
         )}
       >
+        <div className="absolute inset-x-0 top-0">
+          <SpectrumRibbon className="h-1" />
+        </div>
         <div
           className={cn(
             "mx-auto px-4 sm:px-6 flex items-center justify-between gap-3 transition-all duration-300",
@@ -91,7 +95,7 @@ export default function StickyNav() {
             </Link>
             <Link
               href="/signup"
-              className="inline-flex items-center min-h-[44px] whitespace-nowrap bg-ink text-paper rounded-full px-4 text-[14px] font-medium shadow-[0_1px_2px_rgba(0,0,0,0.18)] hover:shadow-[0_6px_18px_rgba(0,0,0,0.18)] transition"
+              className="inline-flex items-center min-h-[44px] whitespace-nowrap bg-accent text-on-accent rounded-pill px-4 text-[14px] font-semibold shadow-card hover:bg-accent/90 press"
             >
               Start free
             </Link>

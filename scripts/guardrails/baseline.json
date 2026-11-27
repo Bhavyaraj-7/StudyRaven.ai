@@ -5,8 +5,6 @@
     "app/login/page.tsx::off-scale-radius": 1,
     "app/mocks/page.tsx::off-scale-spacing": 1,
     "app/onboarding/page.tsx::off-scale-radius": 1,
-    "app/page.tsx::off-scale-radius": 10,
-    "app/page.tsx::off-scale-spacing": 7,
     "app/reset-password/page.tsx::off-scale-radius": 1,
     "components/landing/StickyNav.tsx::off-scale-radius": 1,
     "components/shared/PricingModal.tsx::hex-colour": 1,
