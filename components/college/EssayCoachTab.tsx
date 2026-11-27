@@ -70,7 +70,7 @@ export default function EssayCoachTab() {
             className="mt-1.5 w-full rounded-lg border border-grayline bg-paper px-3 py-2.5 text-sm placeholder:text-graymute focus:outline-none focus:ring-2 focus:ring-ink/20"
           />
           <label className="block mt-4 text-xs font-medium" htmlFor="essay-draft">
-            Draft <span className="text-red-600" aria-hidden>*</span>
+            Draft <span className="text-danger" aria-hidden>*</span>
           </label>
           <textarea
             id="essay-draft"
@@ -101,7 +101,7 @@ export default function EssayCoachTab() {
             </button>
           </div>
           {error && (
-            <p role="alert" className="mt-3 text-xs text-red-600">
+            <p role="alert" className="mt-3 text-xs text-danger">
               {error}
             </p>
           )}
