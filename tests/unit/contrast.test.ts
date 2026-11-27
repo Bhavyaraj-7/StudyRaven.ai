@@ -105,3 +105,17 @@ describe.each([
     expect(pink, `--${name} is pink (hue ${Math.round(h)}°)`).toBe(false);
   });
 });
+
+// Founder rule (27 Nov 2026): white, black and blue only. Neutrals pass;
+// any token with real colour must be a blue (hue 195-235°).
+describe.each([
+  ["light", light],
+  ["dark", dark],
+] as const)("white, black and blue only (%s)", (_name, palette) => {
+  it.each(Object.keys(palette))("--%s", (name) => {
+    const { h, s, l } = hsl(palette[name]);
+    const chromatic = s > 0.15 && l > 0.08 && l < 0.97;
+    if (chromatic) expect(h, `--${name} is not blue (hue ${Math.round(h)}°)`).toBeGreaterThanOrEqual(195);
+    if (chromatic) expect(h, `--${name} is not blue (hue ${Math.round(h)}°)`).toBeLessThanOrEqual(235);
+  });
+});

@@ -114,7 +114,7 @@ function SubjectGuide({ subject }: { subject: Subject }) {
       {open && (
         <div className="px-5 pb-5">
           {error && (
-            <p role="alert" className="text-sm text-red-600">
+            <p role="alert" className="text-sm text-danger">
               {error}
             </p>
           )}
