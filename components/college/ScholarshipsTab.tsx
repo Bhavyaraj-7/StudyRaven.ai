@@ -94,7 +94,7 @@ export default function ScholarshipsTab() {
       </div>
 
       {curatedError && (
-        <p role="alert" className="mt-4 text-sm text-red-600">
+        <p role="alert" className="mt-4 text-sm text-danger">
           {curatedError}
         </p>
       )}
@@ -203,7 +203,7 @@ export default function ScholarshipsTab() {
           </div>
 
           {liveError && (
-            <p role="alert" className="mt-4 text-sm text-red-600">
+            <p role="alert" className="mt-4 text-sm text-danger">
               {liveError}
             </p>
           )}
