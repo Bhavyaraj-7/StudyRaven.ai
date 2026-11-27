@@ -19,6 +19,8 @@ const HEX_ALLOWED = [
 // achievement cards. Add those files here when they exist.
 const GRADIENT_ALLOWED: string[] = [
   "components/dev/GridOverlay.tsx", // review tool: draws the 4px baseline
+  "components/landing/HeroMesh.tsx", // §5.2: the landing hero's area-tint mesh
+  "components/landing/HeroPaper.tsx", // ruled exam-paper lines on the hero demo
 ];
 
 const SPACING_PX = new Set([0, 1, 2, 4, 8, 12, 16, 24, 32, 48, 64, 96]);

@@ -1,0 +1,50 @@
+[
+  {
+    "subject": "Physics",
+    "question": "A car of mass 1200 kg speeds up from rest to 15 m/s in 6.0 s. Calculate the resultant force on the car.",
+    "marks": 4,
+    "answer": "a = 15 ÷ 6 = 2.5, then F = ma = 1200 × 2.5 = 3000",
+    "points": [
+      { "label": "Uses a = (v − u) ÷ t", "earned": true },
+      { "label": "Acceleration = 2.5 m/s²", "earned": true },
+      { "label": "Uses F = ma", "earned": true },
+      { "label": "Force = 3000 N, with the unit", "earned": false, "note": "Missed: give the unit (N)" }
+    ]
+  },
+  {
+    "subject": "Chemistry",
+    "question": "Explain why magnesium chloride has a high melting point.",
+    "marks": 4,
+    "answer": "It has a giant ionic lattice with strong electrostatic forces between oppositely charged ions.",
+    "points": [
+      { "label": "Giant ionic lattice", "earned": true },
+      { "label": "Strong electrostatic attraction", "earned": true },
+      { "label": "Between oppositely charged ions", "earned": true },
+      { "label": "Lots of energy needed to overcome it", "earned": false, "note": "Missed: say a lot of energy is needed to overcome the attraction" }
+    ]
+  },
+  {
+    "subject": "Economics",
+    "question": "Explain two reasons why a government might put a tax on cigarettes.",
+    "marks": 4,
+    "answer": "To reduce smoking, because the tax raises the price so people buy fewer cigarettes. It also raises revenue for the government.",
+    "points": [
+      { "label": "Reason 1: reduce consumption of a harmful good", "earned": true },
+      { "label": "Explained: higher price, lower quantity demanded", "earned": true },
+      { "label": "Reason 2: raise tax revenue", "earned": true },
+      { "label": "Explained: demand is price inelastic, so revenue rises", "earned": false, "note": "Missed: explain why revenue rises (inelastic demand)" }
+    ]
+  },
+  {
+    "subject": "Business",
+    "question": "Explain one advantage and one disadvantage of being a sole trader.",
+    "marks": 4,
+    "answer": "The owner keeps all the profit, so they are motivated to work hard. A disadvantage is unlimited liability.",
+    "points": [
+      { "label": "Advantage: keeps all the profit", "earned": true },
+      { "label": "Developed: more motivation to work hard", "earned": true },
+      { "label": "Disadvantage: unlimited liability", "earned": true },
+      { "label": "Developed: personal belongings can be sold to pay debts", "earned": false, "note": "Missed: develop the disadvantage" }
+    ]
+  }
+]
