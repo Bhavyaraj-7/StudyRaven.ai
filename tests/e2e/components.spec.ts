@@ -51,3 +51,27 @@ test("an error message is announced as an alert", async ({ page }) => {
   await expect(alert).toBeVisible();
   expect(await alert.evaluate((el) => getComputedStyle(el).animationName)).toBe("shake");
 });
+
+test("the welcome film plays in a dialog and Esc closes it at once", async ({ page }) => {
+  await page.goto("/dev/components");
+  await page.getByRole("button", { name: "Play welcome film" }).click();
+  const dialog = page.getByRole("dialog", { name: "Welcome to StudyRaven, Aarav" });
+  await expect(dialog).toBeVisible();
+  await expect(dialog.getByRole("button", { name: "Skip" })).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(dialog).toHaveCount(0);
+});
+
+test("reduced motion gets the still welcome card and never downloads Remotion", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  const scripts: string[] = [];
+  page.on("response", async (r) => {
+    if (r.request().resourceType() === "script") scripts.push(await r.text().catch(() => ""));
+  });
+  await page.goto("/dev/components");
+  await page.getByRole("button", { name: "Show still version" }).click();
+  const dialog = page.getByRole("dialog", { name: "Welcome to StudyRaven, Aarav" });
+  await expect(dialog.getByText("Take your first mock when you're ready.")).toBeVisible();
+  await expect(dialog.getByRole("list", { name: "Your subjects" }).getByRole("listitem")).toHaveCount(4);
+  expect(scripts.some((s) => s.includes("acknowledgeRemotionLicense"))).toBe(false);
+});
