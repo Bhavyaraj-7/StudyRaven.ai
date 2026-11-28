@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { aiErrorResponse } from "@/lib/ai/errors";
 import { supabaseServer } from "@/lib/supabase-server";
 import { isProUser } from "@/lib/subscription";
 import { groqJson } from "@/lib/groq";
@@ -251,6 +252,6 @@ Generate ONLY ${label} of the 6-month plan now (still following every rule, exac
 
     return NextResponse.json({ ...readiness, action_plan });
   } catch (e) {
-    return NextResponse.json({ error: (e as Error).message }, { status: 500 });
+    return aiErrorResponse(e);
   }
 }

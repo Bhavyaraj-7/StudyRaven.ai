@@ -2,11 +2,11 @@ import { NextResponse } from "next/server";
 import { supabaseServer } from "@/lib/supabase-server";
 import { isProUser } from "@/lib/subscription";
 import { tavilySearch } from "@/lib/tavily";
-import { MODEL } from "@/lib/groq";
+import { chatStream, type ChatMessage } from "@/lib/ai/client";
+import { aiErrorResponse } from "@/lib/ai/errors";
 
 export const maxDuration = 60;
 
-const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
 
 // Questions about live facts (deadlines, requirements, fees) get a Tavily
 // search injected as context so the model answers from real sources.
@@ -35,6 +35,9 @@ export async function POST(req: Request) {
   const { message } = (await req.json()) as ChatBody;
   if (!message?.trim()) {
     return NextResponse.json({ error: "Empty message." }, { status: 400 });
+  }
+  if (message.length > 2_000) {
+    return NextResponse.json({ error: "Keep your question under 2,000 characters." }, { status: 400 });
   }
 
   // Pull the student's context: college profile, subjects, recent chat turns.
@@ -88,33 +91,18 @@ Give specific, honest, actionable advice tailored to this student. Never invent 
     content: message.trim(),
   });
 
-  const messages = [
+  const messages: ChatMessage[] = [
     { role: "system", content: system },
-    ...(history ?? []).reverse(),
+    ...((history ?? []) as ChatMessage[]).reverse(),
     { role: "user", content: message.trim() },
   ];
 
-  const upstream = await fetch(OPENROUTER_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
-    },
-    body: JSON.stringify({
-      model: MODEL,
-      temperature: 0.5,
-      max_tokens: 1200,
-      stream: true,
-      messages,
-    }),
-  });
-
-  if (!upstream.ok || !upstream.body) {
-    const detail = await upstream.text().catch(() => "");
-    return NextResponse.json(
-      { error: `AI service error (${upstream.status}). ${detail.slice(0, 200)}` },
-      { status: 502 },
-    );
+  // Retries and model fallback happen before the first byte is streamed.
+  let upstream: ReadableStream<Uint8Array>;
+  try {
+    upstream = (await chatStream(messages, { task: "chat", temperature: 0.5, maxTokens: 1200 })).body;
+  } catch (e) {
+    return aiErrorResponse(e);
   }
 
   // Re-stream OpenRouter's SSE as plain text chunks, collecting the full
@@ -126,7 +114,7 @@ Give specific, honest, actionable advice tailored to this student. Never invent 
 
   const stream = new ReadableStream<Uint8Array>({
     async start(controller) {
-      const reader = upstream.body!.getReader();
+      const reader = upstream.getReader();
       try {
         while (true) {
           const { done, value } = await reader.read();

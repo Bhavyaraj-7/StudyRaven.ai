@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { aiErrorResponse } from "@/lib/ai/errors";
 import { supabaseServer } from "@/lib/supabase-server";
 import { groqChat } from "@/lib/groq";
 import { sendEmail } from "@/lib/resend";
@@ -62,7 +63,7 @@ Subjects: ${(subjects ?? []).map((s) => `${s.name}${s.exam_date ? ` exam ${s.exa
       });
       return NextResponse.json({ sent: true });
     } catch (e) {
-      return NextResponse.json({ error: (e as Error).message }, { status: 500 });
+      return aiErrorResponse(e);
     }
   }
 
