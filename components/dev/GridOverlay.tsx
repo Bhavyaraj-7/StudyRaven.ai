@@ -6,8 +6,8 @@ const COLUMNS = Array.from({ length: 12 }, (_, i) => i);
 
 /**
  * Review aid (master prompt §5.7 B4): add ?grid=1 to any URL to see the
- * column grid (4 / 8 / 12 columns, 20px mobile margins, 1200px max) and the
- * 4px baseline. Renders nothing otherwise.
+ * column grid (4 / 8 / 12 columns, 20px mobile margins, 1200px max).
+ * Renders nothing otherwise. (No baseline lines: they needed a gradient.)
  */
 export default function GridOverlay() {
   const [on, setOn] = useState(false);
@@ -26,13 +26,6 @@ export default function GridOverlay() {
           />
         ))}
       </div>
-      <div
-        className="absolute inset-0"
-        style={{
-          backgroundImage:
-            "repeating-linear-gradient(to bottom, rgb(var(--accent) / 0.12) 0 1px, transparent 1px 4px)",
-        }}
-      />
     </div>
   );
 }

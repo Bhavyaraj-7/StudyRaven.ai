@@ -1,6 +1,6 @@
 // Style lint (master prompt §5.7 D, §5.2, §5.4). Fails on:
 // - hard-coded hex colours in components (use tokens),
-// - gradients / gradient text outside the three allowed places,
+// - any gradient or gradient text (founder rule: none at all),
 // - arbitrary Tailwind spacing/radius values off the 4px scale,
 // - more than one icon library,
 // - off-palette: any colour but white, black and blue (founder rule).
@@ -17,13 +17,8 @@ const HEX_ALLOWED = [
 ];
 // Brand assets that must keep their own colours.
 const PALETTE_EXEMPT = ["components/auth/GoogleButton.tsx"]; // Google's logo colours
-// §5.2: gradients only in the landing hero mesh, the welcome film and
-// achievement cards. Add those files here when they exist.
-const GRADIENT_ALLOWED: string[] = [
-  "components/dev/GridOverlay.tsx", // review tool: draws the 4px baseline
-  "components/landing/HeroMesh.tsx", // §5.2: the landing hero's area-tint mesh
-  "components/landing/MarkedExample.tsx", // ruled exam-paper lines on the marked example
-];
+// Founder rule (28 Nov 2026): no gradients anywhere, no exceptions.
+const GRADIENT_ALLOWED: string[] = [];
 
 const SPACING_PX = new Set([0, 1, 2, 4, 8, 12, 16, 24, 32, 48, 64, 96]);
 const RADIUS_PX = new Set([2, 10, 16, 999]);
@@ -56,7 +51,7 @@ for (const file of files) {
 
   if (!GRADIENT_ALLOWED.includes(file)) {
     for (const m of src.matchAll(/\bbg-gradient-to-\w+|\bbg-clip-text\b|\b(linear|radial|conic)-gradient\(/g)) {
-      push(m.index!, "gradient", `${m[0]} (gradients only where §5.2 allows)`);
+      push(m.index!, "gradient", `${m[0]} (no gradients: use solid colours)`);
     }
   }
 

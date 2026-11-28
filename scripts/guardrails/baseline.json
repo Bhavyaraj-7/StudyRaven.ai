@@ -1,7 +1,6 @@
 {
   "style": {
     "app/forgot-password/page.tsx::off-scale-radius": 1,
-    "app/globals.css::gradient": 1,
     "app/login/page.tsx::off-scale-radius": 1,
     "app/mocks/page.tsx::off-scale-spacing": 1,
     "app/onboarding/page.tsx::off-scale-radius": 1,
