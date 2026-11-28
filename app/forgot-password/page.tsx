@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import AuthPanel from "@/components/auth/AuthPanel";
 import { supabaseBrowser } from "@/lib/supabase";
 
 export default function ForgotPasswordPage() {
@@ -30,24 +31,7 @@ export default function ForgotPasswordPage() {
 
   return (
     <main className="min-h-screen grid grid-cols-1 md:grid-cols-2">
-      <section className="hidden md:flex flex-col justify-between bg-inverse text-on-inverse p-12">
-        <Link
-          href="/"
-          className="flex items-center gap-2 font-semibold text-[19px]"
-        >
-          <span className="w-[26px] h-[26px] rounded-[7px] bg-on-inverse text-inverse inline-flex items-center justify-center font-mono text-[14px]">
-            S
-          </span>
-          StudyRaven<span className="text-on-inverse/70">.ai</span>
-        </Link>
-        <div>
-          <h2 className="text-h2">Forgot your password?</h2>
-          <p className="mt-4 text-on-inverse/70 max-w-md">
-            We&apos;ll email you a link to set a new one.
-          </p>
-        </div>
-        <div className="text-on-inverse/70 text-sm">© StudyRaven.ai</div>
-      </section>
+      <AuthPanel title="Forgot your password?" line="We'll email you a link to set a new one." />
       <section className="flex items-center justify-center p-8">
         <div className="w-full max-w-sm">
           <h1 className="text-3xl font-semibold">Reset your password</h1>
@@ -64,7 +48,7 @@ export default function ForgotPasswordPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="mt-1 w-full rounded-lg border border-grayline bg-paper px-4 py-3 outline-none focus:border-ink"
+                    className="mt-1 w-full rounded-input border border-control-line bg-paper-2 px-4 py-3 focus:border-accent"
                   />
                 </label>
                 {error && (
@@ -75,7 +59,7 @@ export default function ForgotPasswordPage() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full rounded-lg bg-ink text-paper py-3 font-medium hover:opacity-90 disabled:opacity-50"
+                  className="press w-full rounded-pill bg-accent py-3 font-semibold text-on-accent shadow-card hover:bg-accent/90 disabled:opacity-50"
                 >
                   {loading ? "Sending..." : "Send reset link"}
                 </button>

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import AuthPanel from "@/components/auth/AuthPanel";
 import { supabaseBrowser } from "@/lib/supabase";
 import GoogleButton from "@/components/auth/GoogleButton";
 
@@ -38,18 +39,7 @@ export default function SignupPage() {
 
   return (
     <main className="min-h-screen grid grid-cols-1 md:grid-cols-2">
-      <section className="hidden md:flex flex-col justify-between bg-inverse text-on-inverse p-12">
-        <Link href="/" className="font-mono font-bold text-xl">
-          StudyRaven<span className="text-on-inverse/70">.ai</span>
-        </Link>
-        <div>
-          <h2 className="text-h2">Crack your exams with AI.</h2>
-          <p className="mt-4 text-on-inverse/70 max-w-md">
-            Practice papers, mock grading, college guidance — all in one place.
-          </p>
-        </div>
-        <div className="text-on-inverse/70 text-sm">© StudyRaven.ai</div>
-      </section>
+      <AuthPanel title="See where your marks go." line="Study plans, AI-marked mocks and a college guide, in one place." />
       <section className="flex items-center justify-center p-8">
         <div className="w-full max-w-sm">
           <h1 className="text-3xl font-semibold">Create your account</h1>
@@ -97,7 +87,7 @@ export default function SignupPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-lg bg-ink text-paper py-3 font-medium hover:opacity-90 disabled:opacity-50"
+              className="press w-full rounded-pill bg-accent py-3 font-semibold text-on-accent shadow-card hover:bg-accent/90 disabled:opacity-50"
             >
               {loading ? "Creating account..." : "Create account"}
             </button>
@@ -131,7 +121,7 @@ function Field(props: {
         onChange={(e) => props.onChange(e.target.value)}
         placeholder={props.placeholder}
         required={props.required}
-        className="mt-1 w-full rounded-lg border border-grayline bg-paper px-4 py-3 text-base outline-none focus:border-ink"
+        className="mt-1 w-full rounded-input border border-control-line bg-paper-2 px-4 py-3 text-base focus:border-accent"
       />
     </label>
   );

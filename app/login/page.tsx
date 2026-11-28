@@ -3,6 +3,7 @@
 import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import AuthPanel from "@/components/auth/AuthPanel";
 import { supabaseBrowser } from "@/lib/supabase";
 import GoogleButton from "@/components/auth/GoogleButton";
 import { safeRedirectPath } from "@/lib/safe-redirect";
@@ -42,21 +43,7 @@ function LoginInner() {
 
   return (
     <main className="min-h-screen grid grid-cols-1 md:grid-cols-2">
-      <section className="hidden md:flex flex-col justify-between bg-inverse text-on-inverse p-12">
-        <Link href="/" className="flex items-center gap-2 font-semibold text-[19px]">
-          <span className="w-[26px] h-[26px] rounded-[7px] bg-on-inverse text-inverse inline-flex items-center justify-center font-mono text-[14px]">
-            S
-          </span>
-          StudyRaven<span className="text-on-inverse/70">.ai</span>
-        </Link>
-        <div>
-          <h2 className="text-h2">Welcome back.</h2>
-          <p className="mt-4 text-on-inverse/70 max-w-md">
-            Pick up where you left off.
-          </p>
-        </div>
-        <div className="text-on-inverse/70 text-sm">© StudyRaven.ai</div>
-      </section>
+      <AuthPanel title="Welcome back." line="Pick up where you left off." />
       <section className="flex items-center justify-center p-8">
         <div className="w-full max-w-sm">
           <h1 className="text-3xl font-semibold">Log in</h1>
@@ -80,7 +67,7 @@ function LoginInner() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="mt-1 w-full rounded-lg border border-grayline bg-paper px-4 py-3 outline-none focus:border-ink"
+                className="mt-1 w-full rounded-input border border-control-line bg-paper-2 px-4 py-3 focus:border-accent"
               />
             </label>
             <label className="block">
@@ -98,7 +85,7 @@ function LoginInner() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="mt-1 w-full rounded-lg border border-grayline bg-paper px-4 py-3 outline-none focus:border-ink"
+                className="mt-1 w-full rounded-input border border-control-line bg-paper-2 px-4 py-3 focus:border-accent"
               />
             </label>
             {error && (
@@ -109,7 +96,7 @@ function LoginInner() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-lg bg-ink text-paper py-3 font-medium hover:opacity-90 disabled:opacity-50"
+              className="press w-full rounded-pill bg-accent py-3 font-semibold text-on-accent shadow-card hover:bg-accent/90 disabled:opacity-50"
             >
               {loading ? "Logging in..." : "Log in"}
             </button>

@@ -267,6 +267,18 @@
     animation-delay: var(--delay, 0ms);
   }
 
+  /* Underlines that draw when their <Reveal> section scrolls in. Static
+     (fully drawn) without JS or when the section was already on screen. */
+  .draw-on-reveal {
+    stroke-dasharray: 100;
+  }
+  [data-reveal="pending"] .draw-on-reveal {
+    stroke-dashoffset: 100;
+  }
+  [data-reveal="shown"] .draw-on-reveal {
+    animation: stroke-draw var(--dur-large) var(--ease-out) 250ms both;
+  }
+
   /* M19: cards lift on pointer devices only; no hover effects on touch. */
   @media (hover: hover) {
     .lift {
