@@ -271,7 +271,7 @@ export default function SettingsPage() {
                   <p className="mt-1 text-sm text-graytext">
                     {isPro
                       ? `${subscription?.billing_cycle === "yearly" ? "Yearly" : "Monthly"} · ${subscription?.status}`
-                      : "5 AI uses a day. Pro removes the limit and adds the college guide."}
+                      : "5 AI uses a day. Pro removes the limit and adds the AI tutor and the college guide."}
                   </p>
                 </div>
                 {!isPro && <Button onClick={() => setPricingOpen(true)}>Go Pro</Button>}

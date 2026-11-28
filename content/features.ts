@@ -42,7 +42,7 @@ export const FEATURE_GROUPS: FeatureGroup[] = [
         href: "/papers",
         brief:
           "Ask a doubt, paste a question or attach a paper from your library, and get a step-by-step explanation of what the mark scheme is looking for.",
-        access: "Free, 5 AI uses a day",
+        access: "Pro",
       },
       {
         name: "Daily drill",
