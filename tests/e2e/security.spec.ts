@@ -16,3 +16,14 @@ test("AI routes refuse anonymous requests", async ({ request }) => {
     expect(res.status(), path).toBe(401);
   }
 });
+
+test("accuracy tools are hidden from anonymous visitors", async ({ request }) => {
+  expect((await request.get("/api/accuracy/review")).status()).toBe(404);
+  expect((await request.post("/api/accuracy/review", { data: {} })).status()).toBe(404);
+  expect((await request.post("/api/accuracy/ai-mark", { data: {} })).status()).toBe(404);
+});
+
+test("the review desk sends anonymous visitors to log in", async ({ page }) => {
+  await page.goto("/review");
+  await expect(page).toHaveURL(/\/login\?redirect=%2Freview/);
+});
