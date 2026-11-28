@@ -11,7 +11,6 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import StickyNav from "@/components/landing/StickyNav";
-import HeroMesh from "@/components/landing/HeroMesh";
 import HeroPaper from "@/components/landing/HeroPaper";
 import Button from "@/components/ui/Button";
 import Card, { type Area } from "@/components/ui/Card";
@@ -24,8 +23,7 @@ export default function Landing() {
       <StickyNav />
 
       {/* ---------- Hero: the paper that marks itself (§7.1) ---------- */}
-      <header className="relative">
-        <HeroMesh />
+      <header className="relative bg-study-tint">
         <div className="relative mx-auto grid max-w-[1200px] grid-cols-1 items-center gap-12 px-5 pb-16 pt-28 md:pb-24 md:pt-36 lg:grid-cols-12">
           <div className="min-w-0 lg:col-span-6">
             <p className="inline-flex items-center gap-2 rounded-pill bg-paper/80 px-3 py-1.5 text-sm font-medium text-graytext shadow-card">

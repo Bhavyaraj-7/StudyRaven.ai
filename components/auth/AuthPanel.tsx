@@ -1,6 +1,5 @@
 import Link from "next/link";
 import examples from "@/content/hero-examples.json";
-import HeroMesh from "@/components/landing/HeroMesh";
 import MarkedExample, { type Example } from "@/components/landing/MarkedExample";
 import SpectrumRibbon from "@/components/ui/SpectrumRibbon";
 
@@ -11,8 +10,7 @@ import SpectrumRibbon from "@/components/ui/SpectrumRibbon";
  */
 export default function AuthPanel({ title, line }: { title: string; line: string }) {
   return (
-    <section className="relative hidden overflow-hidden bg-paper md:flex md:flex-col md:justify-between md:p-12">
-      <HeroMesh />
+    <section className="relative hidden overflow-hidden bg-study-tint md:flex md:flex-col md:justify-between md:p-12">
       <div className="absolute inset-x-0 top-0">
         <SpectrumRibbon />
       </div>

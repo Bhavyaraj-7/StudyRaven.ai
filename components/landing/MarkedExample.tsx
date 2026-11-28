@@ -32,8 +32,6 @@ export default function MarkedExample({ example: ex, play = false }: { example: 
 
       <div
         className="grid grid-cols-[auto_1fr] gap-x-4 px-5 py-5"
-        // Faint ruled answer lines, every 32px, like exam paper (§5.4).
-        style={{ backgroundImage: "repeating-linear-gradient(to bottom, transparent 0 31px, rgb(var(--grayline) / 0.7) 31px 32px)" }}
       >
         <div className="font-display text-title font-semibold tabular-nums text-graymute">3</div>
         <div className="min-w-0">
@@ -43,9 +41,9 @@ export default function MarkedExample({ example: ex, play = false }: { example: 
           </p>
           <p className="mt-3 rounded-input bg-paper-2 px-4 py-3 text-[15px] text-graytext">{ex.answer}</p>
 
-          <ul className="mt-4 space-y-2.5">
+          <ul className="mt-4 divide-y divide-grayline border-y border-grayline">
             {ex.points.map((p, i) => (
-              <li key={p.label} className="flex items-start gap-3 text-[15px]">
+              <li key={p.label} className="flex items-start gap-3 py-2 text-[15px]">
                 {p.earned ? (
                   <span className="mt-0.5 text-examiner">
                     <Stroke variant="tick" width={22} strokeWidth={3} play={play} delayMs={TICK_START + i * TICK_GAP} />
