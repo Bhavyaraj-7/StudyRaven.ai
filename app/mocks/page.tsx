@@ -1,9 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Loader2, Play, Timer, CheckCircle2, Upload } from "lucide-react";
+import { Play, Timer, Upload } from "lucide-react";
 import AppLayout from "@/components/layout/AppLayout";
 import LibraryTab from "@/components/papers/LibraryTab";
+import MarkedScore from "@/components/mocks/MarkedScore";
+import Button from "@/components/ui/Button";
+import Celebrate from "@/components/ui/Celebrate";
+import PenLoader from "@/components/ui/PenLoader";
+import Progress from "@/components/ui/Progress";
+import Reveal from "@/components/ui/Reveal";
 import { supabaseBrowser } from "@/lib/supabase";
 import { extractPdfText } from "@/lib/pdf";
 
@@ -47,6 +53,8 @@ export default function MocksPage() {
   const [result, setResult] = useState<Result | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [attemptId, setAttemptId] = useState<string | null>(null);
+  // M22: the confetti is kept for the first mock someone ever finishes.
+  const [firstMock, setFirstMock] = useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -202,6 +210,11 @@ export default function MocksPage() {
       if (data.error) throw new Error(data.error);
       setResult(data);
       setPhase("results");
+      window.scrollTo({ top: 0 });
+      const { count } = await supabaseBrowser()
+        .from("mock_tests")
+        .select("id", { count: "exact", head: true });
+      setFirstMock(count === 1);
     } catch (e) {
       setError((e as Error).message);
     } finally {
@@ -214,7 +227,7 @@ export default function MocksPage() {
       {phase === "setup" && (
         <div>
           <p className="text-graytext">
-            Take a timed mock. StudyRaven generates the paper, you type your answers, and Groq grades against the mark scheme.
+            Take a timed mock. StudyRaven writes the paper, you type your answers, and it marks them against the mark scheme.
           </p>
           <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl">
             <label className="block">
@@ -276,18 +289,17 @@ export default function MocksPage() {
             </label>
           </label>
           {error && (
-            <div className="mt-4 text-sm text-danger border border-danger/30 bg-danger/5 rounded-lg p-3 max-w-2xl">
+            <div role="alert" className="mt-4 text-sm text-danger border border-danger/30 bg-danger/5 rounded-lg p-3 max-w-2xl">
               {error}
             </div>
           )}
-          <button
-            onClick={start}
-            disabled={loading}
-            className="mt-6 inline-flex items-center gap-2 rounded-lg bg-ink text-paper px-5 py-3 disabled:opacity-50"
-          >
-            {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Play className="w-4 h-4" />}
-            Start 1-hour mock
-          </button>
+          <div className="mt-6 flex flex-wrap items-center gap-4">
+            <Button onClick={start} loading={loading} size="lg">
+              {!loading && <Play className="h-4 w-4" aria-hidden />}
+              Start 1-hour mock
+            </Button>
+            {loading && <PenLoader label="Writing your paper" />}
+          </div>
 
           {/* My library — your own uploaded papers, taken as mocks */}
           <section className="mt-14 border-t border-grayline pt-8 max-w-3xl">
@@ -304,22 +316,34 @@ export default function MocksPage() {
       {phase === "running" && (
         <div>
           <div className="sticky top-[72px] z-10 bg-paper py-3 mb-4 flex items-center justify-between border-b border-grayline">
-            <div className="inline-flex items-center gap-2 text-lg font-semibold">
-              <Timer className="w-5 h-5" />
+            <div className="inline-flex items-center gap-2 text-lg font-semibold tabular-nums">
+              <Timer className="w-5 h-5" aria-hidden />
               {formatTime(secondsLeft)}
             </div>
-            <button
-              onClick={submit}
-              disabled={loading}
-              className="rounded-lg bg-ink text-paper px-4 py-2 text-sm disabled:opacity-50"
-            >
-              {loading ? "Grading..." : "Submit"}
-            </button>
+            <div className="flex items-center gap-4">
+              {loading && (
+                <span className="hidden sm:inline-flex">
+                  <PenLoader label="Marking your answers" />
+                </span>
+              )}
+              <Button onClick={submit} loading={loading}>
+                {loading ? "Marking" : "Submit"}
+              </Button>
+            </div>
           </div>
+          {error && (
+            <div role="alert" className="mb-4 text-sm text-danger border border-danger/30 bg-danger/5 rounded-lg p-3">
+              {error}
+            </div>
+          )}
 
           <ol className="space-y-6">
-            {questions.map((q) => (
-              <li key={q.q} className="rounded-xl border border-grayline p-5">
+            {questions.map((q, i) => (
+              <li
+                key={q.q}
+                className="rise-in rounded-object border border-grayline p-5"
+                style={{ "--delay": `${Math.min(i, 8) * 50}ms` } as React.CSSProperties}
+              >
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
                     <div className="text-sm text-graymute">Question {q.q} · {q.marks} marks</div>
@@ -341,60 +365,56 @@ export default function MocksPage() {
         </div>
       )}
 
+      <Celebrate fire={phase === "results" && firstMock} />
       {phase === "results" && result && (
-        <div>
-          <div className="rounded-2xl border border-grayline bg-paper p-8">
-            <div className="flex items-center gap-2 text-graymute text-sm">
-              <CheckCircle2 className="w-4 h-4" />
-              Grading complete
-            </div>
-            <div className="mt-3 flex items-end gap-6">
-              <div>
-                <div className="text-5xl font-semibold">
-                  {result.score}
-                  <span className="text-2xl text-graymute">/{result.max_score}</span>
-                </div>
-                <div className="text-sm text-graytext mt-1">Raw score</div>
-              </div>
-              <div>
-                <div className="text-5xl font-semibold">{result.predicted_grade}</div>
-                <div className="text-sm text-graytext mt-1">Predicted grade</div>
-              </div>
-            </div>
-            <p className="mt-6 text-graytext">{result.feedback}</p>
-          </div>
+        <div className="page-in">
+          {firstMock && (
+            <p className="mb-4 font-medium text-accent">Your first marked mock. Well done.</p>
+          )}
+          <MarkedScore
+            score={result.score}
+            maxScore={result.max_score}
+            predictedGrade={result.predicted_grade}
+            feedback={result.feedback}
+          />
 
-          <h3 className="text-lg font-semibold mt-8 mb-3">Topic breakdown</h3>
-          <div className="space-y-2">
-            {result.topic_breakdown?.map((t, i) => {
-              const pct = t.total ? Math.round((t.correct / t.total) * 100) : 0;
-              return (
-                <div key={i} className="rounded-xl border border-grayline p-4">
-                  <div className="flex items-center justify-between">
-                    <div className="font-medium">{t.topic}</div>
-                    <div className="text-sm text-graytext">
-                      {t.correct}/{t.total} · {pct}%
-                    </div>
-                  </div>
-                  <div className="mt-2 h-1.5 bg-graylite rounded">
-                    <div className="h-full bg-ink rounded" style={{ width: `${pct}%` }} />
-                  </div>
-                  <div className="text-sm text-graymute mt-2">{t.comment}</div>
-                </div>
-              );
-            })}
-          </div>
+          {result.topic_breakdown?.length > 0 && (
+            <>
+              <h3 className="mt-12 mb-4 text-title font-semibold">Topic breakdown</h3>
+              <div className="grid gap-3 md:grid-cols-2">
+                {result.topic_breakdown.map((t, i) => {
+                  const pct = t.total ? Math.round((t.correct / t.total) * 100) : 0;
+                  return (
+                    <Reveal key={i} delayMs={Math.min(i, 6) * 60}>
+                      <div className="h-full rounded-object border border-grayline p-4">
+                        <Progress value={pct} label={t.topic} />
+                        <div className="mt-3 flex items-start justify-between gap-4 text-sm">
+                          <span className="text-graytext">{t.comment}</span>
+                          <span className="shrink-0 tabular-nums text-graymute">
+                            {t.correct}/{t.total}
+                          </span>
+                        </div>
+                      </div>
+                    </Reveal>
+                  );
+                })}
+              </div>
+            </>
+          )}
 
-          <button
-            onClick={() => {
-              setPhase("setup");
-              setResult(null);
-              setAttemptId(null);
-            }}
-            className="mt-8 rounded-lg border border-grayline px-4 py-2"
-          >
-            Take another mock
-          </button>
+          <div className="mt-10">
+            <Button
+              variant="secondary"
+              onClick={() => {
+                setPhase("setup");
+                setResult(null);
+                setAttemptId(null);
+                setFirstMock(false);
+              }}
+            >
+              Take another mock
+            </Button>
+          </div>
         </div>
       )}
     </AppLayout>
