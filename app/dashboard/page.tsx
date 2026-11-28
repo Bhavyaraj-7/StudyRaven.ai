@@ -233,7 +233,7 @@ function Card({
     <div className="rounded-xl border border-grayline bg-paper p-5 hover:border-graytext transition h-full">
       <div className="flex items-center justify-between">
         <div className="text-graytext">{icon}</div>
-        {done && <CheckCircle2 className="w-5 h-5 text-green-600" />}
+        {done && <CheckCircle2 className="w-5 h-5 text-accent" />}
       </div>
       <div className="mt-4 font-semibold flex items-center gap-2">
         {title}

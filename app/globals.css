@@ -3,42 +3,194 @@
 @tailwind utilities;
 
 @layer base {
-  /* Design tokens as RGB channels (space-separated) so Tailwind's
-     `/opacity` modifiers work. Light is the default; [data-theme="dark"]
-     swaps the same names. Landing page stays light for logged-out visitors. */
+  /* Design tokens (master prompt §5.2, Appendix A) as RGB channels, so
+     Tailwind opacity modifiers work: bg-ink/40. Light is the default;
+     .dark on <html> (set before paint by the script in app/layout.tsx)
+     swaps the same names. Every pair is checked in tests/unit/contrast. */
   :root {
-    --paper: 255 255 255;
-    --ink: 10 10 10;
-    --graylite: 244 244 245;
-    --grayline: 229 229 229;
-    --graytext: 74 74 74;
-    --graymute: 138 138 138;
-    --accent: 37 99 235; /* restrained blue */
-    --gold: 176 137 43; /* restrained gold */
+    --paper: 252 252 250;
+    --paper-2: 243 243 239;
+    --ink: 11 11 12;
+    --graytext: 61 61 64;
+    --graymute: 107 107 112;
+    --grayline: 226 226 221;
+    --graylite: 243 243 239; /* alias of paper-2 for existing code */
+    --control-line: 128 128 122;
+    --accent: 31 79 216; /* Raven blue: every action */
+    --on-accent: 255 255 255;
+    --examiner: 30 64 175; /* blue pen: graded work only (white/black/blue rule) */
+    --examiner-stroke: 37 99 235; /* strokes >= 2px, text >= 24px */
+    --danger: 30 58 138; /* errors: deep navy, always with icon + words */
+    --gold: 37 99 235; /* Pro badge and medal shapes (blue under the colour rule) */
+    --on-area: 11 11 12; /* text on an area's bright fill, both themes */
+    --inverse: 11 11 12; /* contrast blocks (footer, feature band) */
+    --on-inverse: 252 252 250;
+
+    /* Area colours: deep (text/icons), bright (fills), tint (backgrounds).
+       Founder rule (27 Nov 2026): white, black and blue only, so the seven
+       areas share three blue families (royal, navy, sky). */
+    --area-study-deep: 31 79 216;
+    --area-study-bright: 79 125 255;
+    --area-study-tint: 238 242 255;
+    --area-compete-deep: 30 64 175;
+    --area-compete-bright: 96 165 250;
+    --area-compete-tint: 239 246 255;
+    --area-profile-deep: 3 105 161;
+    --area-profile-bright: 56 189 248;
+    --area-profile-tint: 230 246 254;
+    --area-essays-deep: 30 64 175;
+    --area-essays-bright: 96 165 250;
+    --area-essays-tint: 239 246 255;
+    --area-pitch-deep: 31 79 216;
+    --area-pitch-bright: 79 125 255;
+    --area-pitch-tint: 238 242 255;
+    --area-streak-deep: 3 105 161;
+    --area-streak-bright: 56 189 248;
+    --area-streak-tint: 230 246 254;
+    --area-parents-deep: 3 105 161;
+    --area-parents-bright: 56 189 248;
+    --area-parents-tint: 230 246 254;
+
+    /* Default area = study; layouts override with data-area="…" */
+    --area-deep: var(--area-study-deep);
+    --area-bright: var(--area-study-bright);
+    --area-tint: var(--area-study-tint);
+
+    --radius-pill: 999px;
+    --radius-object: 16px;
+    --radius-input: 10px;
+    --radius-paper: 2px;
+    --shadow-card: 0 0 0 1px rgb(11 11 12 / 0.05), 0 1px 2px rgb(11 11 12 / 0.05),
+      0 8px 24px -14px rgb(11 11 12 / 0.18);
+    --shadow-float: 0 8px 20px rgb(11 11 12 / 0.08), 0 32px 64px -24px rgb(11 11 12 / 0.28);
+
+    /* Motion (§6.2) */
+    --dur-micro: 120ms;
+    --dur-small: 200ms;
+    --dur-medium: 320ms;
+    --dur-large: 520ms;
+    --dur-stamp: 280ms;
+    --dur-signature: 2200ms;
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-in: cubic-bezier(0.4, 0, 1, 1);
+    --ease-spring: linear(0, 0.009, 0.035 2.1%, 0.141 4.4%, 0.723 12.9%, 0.938 16.7%, 1.017 20.4%,
+      1.035 24.2%, 1.025 28.7%, 1.004 37.7%, 0.996 47.4%, 1);
   }
-  [data-theme="dark"] {
-    --paper: 12 12 14;
-    --ink: 245 245 246;
-    --graylite: 26 26 29;
-    --grayline: 42 42 47;
-    --graytext: 197 197 201;
-    --graymute: 138 138 144;
-    --accent: 96 165 250;
-    --gold: 212 167 44;
+
+  /* "Night revision". Dark tints are the bright fill at 12% over night
+     paper, pre-blended so they stay RGB triplets. */
+  .dark {
+    --paper: 14 15 18;
+    --paper-2: 24 25 29;
+    --ink: 237 237 232;
+    --graytext: 190 190 184;
+    --graymute: 163 163 158;
+    --grayline: 42 43 48;
+    --graylite: 24 25 29;
+    --control-line: 112 113 119;
+    --accent: 142 168 255;
+    --on-accent: 11 11 12;
+    --examiner: 147 197 253;
+    --examiner-stroke: 147 197 253;
+    --danger: 191 219 254;
+    --gold: 147 197 253;
+    --inverse: 24 25 29; /* a raised night surface, not a light block */
+    --on-inverse: 237 237 232;
+    --area-study-deep: 142 168 255;
+    --area-study-tint: 22 28 46;
+    --area-compete-deep: 147 197 253;
+    --area-compete-tint: 24 33 46;
+    --area-profile-deep: 125 211 252;
+    --area-profile-tint: 19 36 46;
+    --area-essays-deep: 147 197 253;
+    --area-essays-tint: 24 33 46;
+    --area-pitch-deep: 142 168 255;
+    --area-pitch-tint: 22 28 46;
+    --area-streak-deep: 125 211 252;
+    --area-streak-tint: 19 36 46;
+    --area-parents-deep: 125 211 252;
+    --area-parents-tint: 19 36 46;
+    /* Dark mode uses surface steps, not shadows (§5.4). */
+    --shadow-card: 0 0 0 1px rgb(237 237 232 / 0.08);
+    --shadow-float: 0 0 0 1px rgb(237 237 232 / 0.1), 0 24px 48px -24px rgb(0 0 0 / 0.6);
+    color-scheme: dark;
+  }
+
+  [data-area="study"] {
+    --area-deep: var(--area-study-deep);
+    --area-bright: var(--area-study-bright);
+    --area-tint: var(--area-study-tint);
+  }
+  [data-area="compete"] {
+    --area-deep: var(--area-compete-deep);
+    --area-bright: var(--area-compete-bright);
+    --area-tint: var(--area-compete-tint);
+  }
+  [data-area="profile"] {
+    --area-deep: var(--area-profile-deep);
+    --area-bright: var(--area-profile-bright);
+    --area-tint: var(--area-profile-tint);
+  }
+  [data-area="essays"] {
+    --area-deep: var(--area-essays-deep);
+    --area-bright: var(--area-essays-bright);
+    --area-tint: var(--area-essays-tint);
+  }
+  [data-area="pitch"] {
+    --area-deep: var(--area-pitch-deep);
+    --area-bright: var(--area-pitch-bright);
+    --area-tint: var(--area-pitch-tint);
+  }
+  [data-area="streak"] {
+    --area-deep: var(--area-streak-deep);
+    --area-bright: var(--area-streak-bright);
+    --area-tint: var(--area-streak-tint);
+  }
+  [data-area="parents"] {
+    --area-deep: var(--area-parents-deep);
+    --area-bright: var(--area-parents-bright);
+    --area-tint: var(--area-parents-tint);
   }
 
   html,
   body {
     background: rgb(var(--paper));
     color: rgb(var(--ink));
-    font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
     -webkit-font-smoothing: antialiased;
   }
   * {
     border-color: rgb(var(--grayline));
   }
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+  h4,
+  h5,
+  h6 {
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  :focus-visible {
+    outline: 2px solid rgb(var(--accent));
+    outline-offset: 2px;
+  }
 
   @media (prefers-reduced-motion: reduce) {
+    /* 0.01ms, not 0ms: 0ms transitions never fire transitionend. */
+    :root {
+      --dur-micro: 0.01ms;
+      --dur-small: 0.01ms;
+      --dur-medium: 0.01ms;
+      --dur-large: 0.01ms;
+      --dur-stamp: 0.01ms;
+      --dur-signature: 0.01ms;
+    }
     *,
     *::before,
     *::after {
@@ -47,20 +199,18 @@
       transition-duration: 0.01ms !important;
     }
   }
+
+  @media (forced-colors: active) {
+    .stroke-mark {
+      stroke: CanvasText;
+    }
+    :focus-visible {
+      outline-color: Highlight;
+    }
+  }
 }
 
 @layer utilities {
-  .shimmer-pro {
-    background-image: linear-gradient(
-      90deg,
-      #0a0a0a 0%,
-      #0a0a0a 40%,
-      #2a2a2a 50%,
-      #0a0a0a 60%,
-      #0a0a0a 100%
-    );
-    background-size: 200% 100%;
-  }
 
   /* Reveal-on-load utility */
   @keyframes reveal-up {

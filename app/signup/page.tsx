@@ -38,17 +38,17 @@ export default function SignupPage() {
 
   return (
     <main className="min-h-screen grid grid-cols-1 md:grid-cols-2">
-      <section className="hidden md:flex flex-col justify-between bg-ink text-paper p-12">
+      <section className="hidden md:flex flex-col justify-between bg-inverse text-on-inverse p-12">
         <Link href="/" className="font-mono font-bold text-xl">
-          StudyRaven<span className="text-graymute">.ai</span>
+          StudyRaven<span className="text-on-inverse/70">.ai</span>
         </Link>
         <div>
           <h2 className="text-h2">Crack your exams with AI.</h2>
-          <p className="mt-4 text-graymute max-w-md">
+          <p className="mt-4 text-on-inverse/70 max-w-md">
             Practice papers, mock grading, college guidance — all in one place.
           </p>
         </div>
-        <div className="text-graymute text-sm">© StudyRaven.ai</div>
+        <div className="text-on-inverse/70 text-sm">© StudyRaven.ai</div>
       </section>
       <section className="flex items-center justify-center p-8">
         <div className="w-full max-w-sm">
@@ -90,7 +90,7 @@ export default function SignupPage() {
               required
             />
             {error && (
-              <div className="text-sm text-red-600 border border-red-200 bg-red-50 rounded-lg p-3">
+              <div className="text-sm text-danger border border-danger/30 bg-danger/5 rounded-lg p-3">
                 {error}
               </div>
             )}

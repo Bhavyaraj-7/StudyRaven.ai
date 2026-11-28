@@ -1,7 +1,6 @@
 import Sidebar from "./Sidebar";
 import Header from "./Header";
 import BottomNav from "./BottomNav";
-import ThemeScope from "./ThemeScope";
 import CommandPalette from "@/components/shared/CommandPalette";
 
 export default function AppLayout({
@@ -12,7 +11,7 @@ export default function AppLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ThemeScope className="flex min-h-screen bg-paper text-ink">
+    <div className="flex min-h-screen bg-paper text-ink">
       <Sidebar />
       <div className="flex-1 flex flex-col min-w-0">
         <Header title={title} />
@@ -23,6 +22,6 @@ export default function AppLayout({
       </div>
       <BottomNav />
       <CommandPalette />
-    </ThemeScope>
+    </div>
   );
 }

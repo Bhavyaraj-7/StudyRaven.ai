@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Sun, Moon } from "lucide-react";
+import { Sun, Moon, Monitor } from "lucide-react";
 import AppLayout from "@/components/layout/AppLayout";
 import { supabaseBrowser } from "@/lib/supabase";
 import { useProfile } from "@/hooks/useProfile";
@@ -132,7 +132,7 @@ export default function SettingsPage() {
       <section className="max-w-xl mt-12">
         <h2 className="text-xl font-semibold">Appearance</h2>
         <p className="text-sm text-graymute mt-1">
-          Choose how the app looks. Your landing page stays unchanged.
+          Choose how StudyRaven looks. System follows your device.
         </p>
         <div
           role="radiogroup"
@@ -142,6 +142,7 @@ export default function SettingsPage() {
           {([
             { value: "light" as Theme, label: "Light", icon: Sun },
             { value: "dark" as Theme, label: "Dark", icon: Moon },
+            { value: "system" as Theme, label: "System", icon: Monitor },
           ]).map(({ value, label, icon: Icon }) => (
             <button
               key={value}

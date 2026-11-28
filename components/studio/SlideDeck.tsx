@@ -9,16 +9,16 @@ interface Slide {
   bullets: string[];
 }
 
-// Soft pastel palette that reads well on white and rotates so each slide
-// gets a distinct tint. Ink text stays black for readability.
+// Blue, black and white only (founder rule). Rotates so each slide gets a
+// distinct tint. Ink text stays black for readability.
 const PALETTE = [
-  { bg: "#FEF3E7", accent: "#B45309", stripe: "#F59E0B" }, // amber
-  { bg: "#EDF7F1", accent: "#047857", stripe: "#10B981" }, // emerald
-  { bg: "#F0EFFA", accent: "#4338CA", stripe: "#6366F1" }, // indigo
-  { bg: "#FCEEF1", accent: "#BE185D", stripe: "#EC4899" }, // rose
-  { bg: "#E9F5FA", accent: "#0369A1", stripe: "#0EA5E9" }, // sky
-  { bg: "#F5F0EA", accent: "#78350F", stripe: "#A16207" }, // ochre
-];
+  { bg: "#EEF2FF", accent: "#1F4FD8", stripe: "#4F7DFF" }, // royal blue
+  { bg: "#E6F6FE", accent: "#0369A1", stripe: "#38BDF8" }, // sky blue
+  { bg: "#EFF6FF", accent: "#1E40AF", stripe: "#60A5FA" }, // navy blue
+  { bg: "#F3F3EF", accent: "#0B0B0C", stripe: "#6B6B70" }, // ink
+  { bg: "#E0EAFF", accent: "#1E3A8A", stripe: "#3B82F6" }, // deep blue
+  { bg: "#F4F8FF", accent: "#0C4A6E", stripe: "#0EA5E9" }, // ocean blue
+]
 
 export default function SlideDeck({ slides }: { slides: Slide[] }) {
   const [i, setI] = useState(0);

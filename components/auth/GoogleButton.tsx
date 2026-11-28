@@ -34,7 +34,7 @@ export default function GoogleButton({ next = "/dashboard" }: { next?: string })
         {loading ? "Redirecting..." : "Continue with Google"}
       </button>
       {error && (
-        <div className="mt-2 text-xs text-red-600">{error}</div>
+        <div className="mt-2 text-xs text-danger">{error}</div>
       )}
     </div>
   );
