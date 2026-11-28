@@ -77,6 +77,8 @@ export const config = {
     "/college/:path*",
     "/schedule/:path*",
     "/settings/:path*",
+    "/review/:path*",
+    "/admin/:path*",
     "/login",
     "/signup",
     "/forgot-password",
