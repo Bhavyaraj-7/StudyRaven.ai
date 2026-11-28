@@ -1,6 +1,6 @@
 "use client";
 
-import { Sparkles, CalendarClock, Command } from "lucide-react";
+import { CalendarClock, Command } from "lucide-react";
 import { useProfile } from "@/hooks/useProfile";
 import { useEffect, useState } from "react";
 import { supabaseBrowser } from "@/lib/supabase";
@@ -65,10 +65,9 @@ export default function Header({ title }: { title: string }) {
         {!isPro && (
           <button
             onClick={() => setOpen(true)}
-            className="relative overflow-hidden shimmer-pro text-paper rounded-lg px-4 py-2 text-sm font-medium animate-shimmer inline-flex items-center gap-2"
+            className="press inline-flex items-center gap-2 rounded-pill bg-accent px-4 py-2 text-sm font-semibold text-on-accent hover:bg-accent/90"
           >
-            <Sparkles className="w-4 h-4" />
-            Unlock Pro
+            Go Pro
           </button>
         )}
         {isPro && (
