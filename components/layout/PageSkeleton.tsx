@@ -2,7 +2,7 @@ import Sidebar from "./Sidebar";
 
 /**
  * Shared skeleton shown during route transitions. Renders the sidebar shell
- * so the user sees the app frame instantly, with a shimmering placeholder for
+ * so the user sees the app frame instantly, with a static placeholder for
  * the content area.
  */
 export default function PageSkeleton() {
