@@ -105,7 +105,7 @@ export default function CommandPalette() {
 
   return (
     <div
-      className="fixed inset-0 z-50 bg-ink/40 flex items-start justify-center pt-[15vh] px-4"
+      className="fade-in fixed inset-0 z-50 bg-ink/40 flex items-start justify-center pt-[15vh] px-4"
       onClick={close}
       role="presentation"
     >
@@ -113,7 +113,7 @@ export default function CommandPalette() {
         role="dialog"
         aria-modal="true"
         aria-label="Command palette"
-        className="w-full max-w-lg rounded-2xl border border-grayline bg-paper shadow-xl overflow-hidden"
+        className="rise-in w-full max-w-lg rounded-object border border-grayline bg-paper shadow-xl overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center gap-3 px-4 border-b border-grayline">
@@ -151,7 +151,12 @@ export default function CommandPalette() {
             </li>
           )}
           {filtered.map(({ href, label, icon: Icon }, i) => (
-            <li key={href} role="presentation">
+            <li
+              key={href}
+              role="presentation"
+              className="rise-in"
+              style={{ "--delay": `${Math.min(i, 8) * 25}ms` } as React.CSSProperties}
+            >
               <button
                 id={`cp-item-${i}`}
                 data-index={i}
@@ -161,11 +166,11 @@ export default function CommandPalette() {
                 onClick={() => go(href)}
                 onMouseEnter={() => setActive(i)}
                 className={cn(
-                  "w-full flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-left transition",
-                  i === active ? "bg-ink text-paper" : "text-graytext",
+                  "w-full flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-left transition-colors duration-micro",
+                  i === active ? "bg-paper-2 text-ink" : "text-graytext",
                 )}
               >
-                <Icon className="w-4 h-4 shrink-0" />
+                <Icon className={cn("w-4 h-4 shrink-0", i === active && "text-accent")} />
                 <span className="flex-1">{label}</span>
                 {i === active && (
                   <CornerDownLeft className="w-3.5 h-3.5 opacity-60" />

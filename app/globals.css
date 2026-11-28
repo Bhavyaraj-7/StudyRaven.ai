@@ -197,6 +197,9 @@
       animation-duration: 0.01ms !important;
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
+      /* Staggers wait for nothing when motion is off. */
+      animation-delay: 0ms !important;
+      transition-delay: 0ms !important;
     }
   }
 
@@ -277,6 +280,85 @@
   }
   [data-reveal="shown"] .draw-on-reveal {
     animation: stroke-draw var(--dur-large) var(--ease-out) 250ms both;
+  }
+
+  /* M27: each page settles in (fade + 8px rise). */
+  @keyframes page-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  .page-in {
+    animation: page-in var(--dur-medium) var(--ease-out) both;
+  }
+
+  /* M3: overlays and lists rise in; items stagger via --delay. */
+  .rise-in {
+    animation: page-in var(--dur-small) var(--ease-out) both;
+    animation-delay: var(--delay, 0ms);
+  }
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  .fade-in {
+    animation: fade-in var(--dur-small) var(--ease-out) both;
+  }
+
+  /* M24: an error message shakes gently once when it appears (the message
+     only, never the page). */
+  @keyframes shake {
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+    20% {
+      transform: translateX(-4px);
+    }
+    40% {
+      transform: translateX(4px);
+    }
+    60% {
+      transform: translateX(-3px);
+    }
+    80% {
+      transform: translateX(2px);
+    }
+  }
+  [role="alert"]:not(#__next-route-announcer__) {
+    animation: shake var(--dur-medium) var(--ease-out) 1;
+  }
+
+  /* M23: the pen scribbles while the AI works (a real loading state). */
+  @keyframes pen-scribble {
+    0% {
+      stroke-dashoffset: 100;
+    }
+    55% {
+      stroke-dashoffset: 0;
+    }
+    100% {
+      stroke-dashoffset: -100;
+    }
+  }
+  .pen-scribble {
+    stroke-dasharray: 100;
+    animation: pen-scribble 1.4s var(--ease-out) infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pen-scribble {
+      animation: none;
+      stroke-dashoffset: 0;
+    }
   }
 
   /* M19: cards lift on pointer devices only; no hover effects on touch. */

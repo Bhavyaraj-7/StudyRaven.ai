@@ -37,7 +37,7 @@ export default function LegalPage({ slug }: { slug: LegalSlug }) {
           </Link>
         </div>
       </header>
-      <article className="legal prose max-w-[720px] mx-auto px-5 py-10 text-[16px] leading-relaxed text-graytext">
+      <article className="page-in legal prose max-w-[720px] mx-auto px-5 py-10 text-[16px] leading-relaxed text-graytext">
         <Markdown remarkPlugins={[remarkGfm]}>{loadLegal(slug)}</Markdown>
       </article>
       <footer className="border-t border-grayline">

@@ -5,6 +5,9 @@ import Segmented from "@/components/ui/Segmented";
 import Progress from "@/components/ui/Progress";
 import Stroke from "@/components/ui/Stroke";
 import Button from "@/components/ui/Button";
+import Celebrate from "@/components/ui/Celebrate";
+import PenLoader from "@/components/ui/PenLoader";
+import MarkedScore from "@/components/mocks/MarkedScore";
 
 const SUBJECTS = ["Physics", "Chemistry", "Maths", "Biology", "Economics"].map((s) => ({ value: s, label: s }));
 
@@ -42,6 +45,49 @@ export function StrokeDemo() {
       <Button variant="quiet" onClick={() => setRun((r) => r + 1)}>
         Replay
       </Button>
+    </div>
+  );
+}
+
+export function MarkedDemo() {
+  const [run, setRun] = useState(0);
+  const [party, setParty] = useState(0);
+  return (
+    <div className="space-y-4">
+      <div key={`marked-${run}`}>
+        <MarkedScore
+          score={31}
+          maxScore={40}
+          predictedGrade="A"
+          feedback="Strong on forces and energy. Two method marks dropped on units in question 4."
+        />
+      </div>
+      <div className="flex flex-wrap items-center gap-6">
+        <Button variant="secondary" onClick={() => setRun((r) => r + 1)}>
+          Replay marking
+        </Button>
+        <Button variant="secondary" onClick={() => setParty((p) => p + 1)}>
+          Celebrate
+        </Button>
+        <PenLoader label="Marking your answers" />
+      </div>
+      <Celebrate key={`party-${party}`} fire={party > 0} />
+    </div>
+  );
+}
+
+export function AlertDemo() {
+  const [n, setN] = useState(0);
+  return (
+    <div className="space-y-4">
+      <Button variant="secondary" onClick={() => setN((x) => x + 1)}>
+        Show an error
+      </Button>
+      {n > 0 && (
+        <div key={n} role="alert" className="max-w-md rounded-lg border border-danger/30 bg-danger/5 p-3 text-sm text-danger">
+          That file is over 10 MB. Try a smaller PDF.
+        </div>
+      )}
     </div>
   );
 }
