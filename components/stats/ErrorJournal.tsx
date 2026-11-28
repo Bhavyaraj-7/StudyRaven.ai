@@ -114,7 +114,7 @@ export default function ErrorJournal() {
         <p className="text-sm text-graymute mt-3">
           {showFixed
             ? "Nothing fixed yet."
-            : "Nothing left to fix. Every mistake is cleared. 🎉"}
+            : "Nothing left to fix. Every mistake is cleared."}
         </p>
       ) : (
         <ul className="mt-4 space-y-2" aria-live="polite">

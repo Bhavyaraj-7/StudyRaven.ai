@@ -37,7 +37,7 @@ const WORDS: CommandWord[] = [
   {
     word: "Describe",
     marks: "2–4 marks",
-    wants: "Say WHAT happens. No reasons.",
+    wants: "Say what happens. No reasons.",
     earns: "One mark per distinct correct point.",
     loses: "Giving causes. That's Explain — it earns nothing here.",
     starter: "The … increases as …",
@@ -102,7 +102,7 @@ const WORDS: CommandWord[] = [
     word: "Evaluate",
     marks: "6–8 marks",
     wants: "Weigh evidence both ways, then judge.",
-    earns: "Balanced argument PLUS a supported conclusion. The conclusion is a mark.",
+    earns: "A balanced argument and a supported conclusion. The conclusion is a mark.",
     loses: "Listing pros and cons and stopping. No judgement = capped marks.",
     starter: "Overall, … is more significant because …",
   },

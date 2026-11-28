@@ -8,7 +8,10 @@
     "start": "next start",
     "lint": "next lint",
     "test": "vitest run",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "lint:copy": "node --experimental-strip-types --no-warnings scripts/guardrails/lint-copy.mts",
+    "lint:style": "node --experimental-strip-types --no-warnings scripts/guardrails/lint-style.mts",
+    "guardrails": "npm run lint:copy && npm run lint:style"
   },
   "dependencies": {
     "@supabase/ssr": "^0.5.2",
