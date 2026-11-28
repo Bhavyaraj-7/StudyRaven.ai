@@ -5,7 +5,7 @@ import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { SITE, TRADEMARK_NOTE } from "@/lib/site";
 
-export type LegalSlug = "privacy" | "terms" | "refunds" | "contact";
+export type LegalSlug = "privacy" | "terms" | "refunds";
 
 const MISSING = "**[to be confirmed]**";
 
@@ -47,7 +47,14 @@ export default function LegalPage({ slug }: { slug: LegalSlug }) {
             <Link href="/terms" className="underline">Terms</Link>
             <Link href="/refunds" className="underline">Refunds</Link>
             <Link href="/contact" className="underline">Contact</Link>
+            <Link href="/about" className="underline">About</Link>
           </nav>
+          <p>
+            Support:{" "}
+            <a href={`mailto:${SITE.contactEmail}`} className="underline">
+              {SITE.contactEmail}
+            </a>
+          </p>
           <p>{TRADEMARK_NOTE}</p>
         </div>
       </footer>

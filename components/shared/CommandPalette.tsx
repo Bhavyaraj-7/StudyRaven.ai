@@ -11,6 +11,8 @@ import {
   BarChart3,
   Compass,
   Settings,
+  Info,
+  Mail,
   Layers,
   Timer,
   BookOpen,
@@ -33,6 +35,8 @@ const ITEMS = [
   { href: "/college", label: "College guide", hint: "pro readiness roadmap essay scholarships", icon: Compass },
   { href: "/schedule", label: "Schedule", hint: "study plan reminders email", icon: CalendarDays },
   { href: "/settings", label: "Settings", hint: "profile subscription account", icon: Settings },
+  { href: "/about", label: "About StudyRaven", hint: "what every feature does help", icon: Info },
+  { href: "/contact", label: "Contact support", hint: "help email support bug billing refund data", icon: Mail },
 ];
 
 export default function CommandPalette() {

@@ -47,7 +47,7 @@ test("area tokens resolve per data-area", async ({ page }) => {
   expect(deep).toBe("30 64 175");
 });
 
-for (const path of ["/", "/privacy"]) {
+for (const path of ["/", "/privacy", "/about", "/contact"]) {
   for (const scheme of ["light", "dark"] as const) {
     test(`${path} has no horizontal scroll (${scheme})`, async ({ page }) => {
       await page.emulateMedia({ colorScheme: scheme });

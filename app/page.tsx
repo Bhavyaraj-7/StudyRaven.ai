@@ -18,7 +18,7 @@ import StickyNav from "@/components/landing/StickyNav";
 import HeroPaper from "@/components/landing/HeroPaper";
 import Button from "@/components/ui/Button";
 import Reveal from "@/components/ui/Reveal";
-import { TRADEMARK_NOTE } from "@/lib/site";
+import SiteFooter from "@/components/site/SiteFooter";
 
 // Premium, minimal, trustworthy: mostly white and black, blue only for
 // actions, the examiner's pen and small accents. Hairlines, not tinted boxes.
@@ -250,25 +250,7 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ---------- Footer ---------- */}
-      <footer className="bg-inverse px-5 py-12 text-on-inverse md:py-16">
-        <div className="mx-auto grid max-w-[1200px] grid-cols-2 gap-10 md:grid-cols-4">
-          <div className="col-span-2 md:col-span-1">
-            <Link href="/" className="flex items-center gap-2 text-lg font-semibold">
-              <span className="grid h-7 w-7 place-items-center rounded-input bg-on-inverse font-mono text-sm text-inverse">S</span>
-              StudyRaven<span className="text-on-inverse/70">.ai</span>
-            </Link>
-            <p className="mt-4 max-w-[28ch] text-sm text-on-inverse/70">Study plans and marked mocks for IGCSE and IB.</p>
-          </div>
-          <FooterCol title="Product" items={[{ label: "Features", href: "#features" }, { label: "Pricing", href: "#pricing" }, { label: "College guide", href: "#college" }]} />
-          <FooterCol title="Account" items={[{ label: "Log in", href: "/login" }, { label: "Start free", href: "/signup" }]} />
-          <FooterCol title="Legal" items={[{ label: "Privacy", href: "/privacy" }, { label: "Terms", href: "/terms" }, { label: "Refunds", href: "/refunds" }, { label: "Contact", href: "/contact" }]} />
-        </div>
-        <div className="mx-auto mt-12 max-w-[1200px] space-y-3 border-t border-on-inverse/10 pt-6 text-sm text-on-inverse/70">
-          <p className="max-w-[760px] leading-relaxed">{TRADEMARK_NOTE}</p>
-          <p>Built by students, for students. © 2026 StudyRaven.ai</p>
-        </div>
-      </footer>
+      <SiteFooter />
     </main>
   );
 }
@@ -367,19 +349,3 @@ function PriceCard({
   );
 }
 
-function FooterCol({ title, items }: { title: string; items: { label: string; href: string }[] }) {
-  return (
-    <div>
-      <div className="mb-4 text-sm font-medium text-on-inverse">{title}</div>
-      <ul className="space-y-2.5 text-sm">
-        {items.map((it) => (
-          <li key={it.label}>
-            <a href={it.href} className="text-on-inverse/80 transition hover:text-on-inverse">
-              {it.label}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-}
