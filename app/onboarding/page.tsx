@@ -89,7 +89,8 @@ export default function OnboardingPage() {
     // Fire-and-forget — must never block the redirect the student is waiting on.
     fetch("/api/welcome-email", { method: "POST" }).catch(() => {});
 
-    router.push("/studio");
+    // ?welcome=1 plays the welcome film once (components/welcome/WelcomeGate).
+    router.push("/studio?welcome=1");
     router.refresh();
   }
 

@@ -14,6 +14,7 @@
     "guardrails": "npm run lint:copy && npm run lint:style"
   },
   "dependencies": {
+    "@remotion/player": "4.0.543",
     "@supabase/ssr": "^0.5.2",
     "@supabase/supabase-js": "^2.45.4",
     "@types/node": "^20.16.5",
@@ -31,6 +32,7 @@
     "reactflow": "^11.11.4",
     "recharts": "^2.12.7",
     "remark-gfm": "^4.0.1",
+    "remotion": "4.0.543",
     "resend": "^4.0.0",
     "tailwind-merge": "^2.5.2",
     "typescript": "^5.5.4"

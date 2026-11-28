@@ -8,6 +8,7 @@ import Button from "@/components/ui/Button";
 import Celebrate from "@/components/ui/Celebrate";
 import PenLoader from "@/components/ui/PenLoader";
 import MarkedScore from "@/components/mocks/MarkedScore";
+import WelcomeOverlay, { type WelcomeMode } from "@/components/welcome/WelcomeOverlay";
 
 const SUBJECTS = ["Physics", "Chemistry", "Maths", "Biology", "Economics"].map((s) => ({ value: s, label: s }));
 
@@ -87,6 +88,28 @@ export function AlertDemo() {
         <div key={n} role="alert" className="max-w-md rounded-lg border border-danger/30 bg-danger/5 p-3 text-sm text-danger">
           That file is over 10 MB. Try a smaller PDF.
         </div>
+      )}
+    </div>
+  );
+}
+
+export function WelcomeDemo() {
+  const [mode, setMode] = useState<WelcomeMode | null>(null);
+  return (
+    <div className="flex flex-wrap gap-4">
+      <Button variant="secondary" onClick={() => setMode("film")}>
+        Play welcome film
+      </Button>
+      <Button variant="secondary" onClick={() => setMode("still")}>
+        Show still version
+      </Button>
+      {mode && (
+        <WelcomeOverlay
+          name="Aarav Mehta"
+          subjects={["Physics", "Chemistry", "Economics", "Additional Maths"]}
+          mode={mode}
+          onClose={() => setMode(null)}
+        />
       )}
     </div>
   );

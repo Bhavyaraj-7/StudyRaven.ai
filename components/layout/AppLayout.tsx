@@ -2,6 +2,7 @@ import Sidebar from "./Sidebar";
 import Header from "./Header";
 import BottomNav from "./BottomNav";
 import CommandPalette from "@/components/shared/CommandPalette";
+import WelcomeGate from "@/components/welcome/WelcomeGate";
 
 export default function AppLayout({
   title,
@@ -22,6 +23,7 @@ export default function AppLayout({
       </div>
       <BottomNav />
       <CommandPalette />
+      <WelcomeGate />
     </div>
   );
 }
