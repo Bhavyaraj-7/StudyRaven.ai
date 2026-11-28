@@ -5,11 +5,13 @@ import { useEffect, useRef, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+// Absolute (/#…) so the same nav works on About and Contact too.
 const LINKS = [
-  { label: "Features", href: "#features" },
-  { label: "How it works", href: "#how" },
-  { label: "College guide", href: "#college" },
-  { label: "Pricing", href: "#pricing" },
+  { label: "Features", href: "/#features" },
+  { label: "How it works", href: "/#how" },
+  { label: "Pricing", href: "/#pricing" },
+  { label: "About", href: "/about" },
+  { label: "Contact", href: "/contact" },
 ];
 
 export default function StickyNav() {
