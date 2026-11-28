@@ -228,6 +228,76 @@
     animation: reveal-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
 
+  /* ---- Motion system (§6.3) ---- */
+  /* M1: every press answers. */
+  .press {
+    transition-property: transform, background-color, color, box-shadow;
+    transition-duration: var(--dur-micro);
+    transition-timing-function: var(--ease-out);
+  }
+  .press:active {
+    transform: scale(0.97);
+  }
+
+  /* M17: set by <Reveal>. Content is never hidden without JS. */
+  [data-reveal="pending"] {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  [data-reveal="shown"] {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity var(--dur-large) var(--ease-out),
+      transform var(--dur-large) var(--ease-spring);
+  }
+
+  /* Ticks, circles and underlines draw themselves (<Stroke play>). */
+  @keyframes stroke-draw {
+    from {
+      stroke-dashoffset: 100;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  .stroke-draw {
+    stroke-dasharray: 100;
+    animation: stroke-draw var(--dur-stamp) var(--ease-out) both;
+    animation-delay: var(--delay, 0ms);
+  }
+
+  /* M19: cards lift on pointer devices only; no hover effects on touch. */
+  @media (hover: hover) {
+    .lift {
+      transition:
+        transform var(--dur-small) var(--ease-out),
+        box-shadow var(--dur-small) var(--ease-out);
+    }
+    .lift:hover {
+      transform: translateY(-2px);
+      box-shadow:
+        var(--shadow-float),
+        0 0 0 2px rgb(var(--area-bright) / 0.35);
+    }
+  }
+
+  /* One-time pop for badges and stamps. */
+  @keyframes pop-in {
+    from {
+      opacity: 0;
+      transform: scale(0.6);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  .pop-in {
+    animation: pop-in var(--dur-medium) var(--ease-spring) both;
+    animation-delay: var(--delay, 0ms);
+  }
+
   /* Magnetic CTA helper */
   .magnet {
     transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),

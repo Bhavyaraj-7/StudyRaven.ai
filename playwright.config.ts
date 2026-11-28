@@ -27,6 +27,7 @@ export default defineConfig({
       NEXT_PUBLIC_SUPABASE_ANON_KEY: "placeholder",
       SUPABASE_SERVICE_ROLE_KEY: "placeholder",
       RESEND_API_KEY: "re_placeholder",
+      SHOW_DEV_PAGES: "1",
     },
   },
 });
