@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { consumeQuota, quotaResponse } from "@/lib/rate-limit";
 import { aiErrorResponse } from "@/lib/ai/errors";
 import { supabaseServer } from "@/lib/supabase-server";
 import { isProUser } from "@/lib/subscription";
@@ -41,6 +42,8 @@ export async function POST(req: Request) {
       { status: 403 },
     );
   }
+  const quota = await consumeQuota(user.id, "college", true);
+  if (!quota.ok) return quotaResponse(quota);
 
   const body = await req.json().catch(() => null);
   const essay = typeof body?.essay === "string" ? body.essay.trim() : "";

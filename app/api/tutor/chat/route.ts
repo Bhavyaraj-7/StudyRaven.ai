@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { consumeQuota, quotaResponse } from "@/lib/rate-limit";
 import { aiErrorResponse } from "@/lib/ai/errors";
 import { supabaseServer } from "@/lib/supabase-server";
 import { groqChat } from "@/lib/groq";
@@ -39,6 +40,8 @@ export async function POST(req: Request) {
       { status: 403 },
     );
   }
+  const quota = await consumeQuota(user.id, "tutor", true);
+  if (!quota.ok) return quotaResponse(quota);
 
   const {
     question,

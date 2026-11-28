@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { consumeQuota, quotaResponse } from "@/lib/rate-limit";
 import { supabaseServer } from "@/lib/supabase-server";
 import { isProUser } from "@/lib/subscription";
 import { tavilySearch } from "@/lib/tavily";
@@ -39,6 +40,8 @@ export async function POST(req: Request) {
   if (message.length > 2_000) {
     return NextResponse.json({ error: "Keep your question under 2,000 characters." }, { status: 400 });
   }
+  const quota = await consumeQuota(user.id, "college", true);
+  if (!quota.ok) return quotaResponse(quota);
 
   // Pull the student's context: college profile, subjects, recent chat turns.
   const [{ data: profile }, { data: subjects }, { data: history }] =

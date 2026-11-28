@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { consumeQuota, quotaResponse, recordTokens } from "@/lib/rate-limit";
 import { supabaseServer } from "@/lib/supabase-server";
 import { z } from "zod";
 import { chatJson } from "@/lib/ai/client";
@@ -89,6 +90,9 @@ export async function POST(req: Request) {
   // The paper decides the total, not the AI.
   const paperTotal = questions.reduce((sum, q) => sum + q.marks, 0);
 
+  const quota = await consumeQuota(user.id, "marking");
+  if (!quota.ok) return quotaResponse(quota);
+
   const userMsg = `Subject: ${subject}
 
 QUESTIONS:
@@ -103,7 +107,8 @@ ${JSON.stringify(answers, null, 2)}
 Grade now.`;
 
   try {
-    const { data: graded } = await chatJson(Grade, SYSTEM, userMsg, { task: "marking" });
+    const { data: graded, usage } = await chatJson(Grade, SYSTEM, userMsg, { task: "marking" });
+    recordTokens(user.id, "marking", usage);
     const max_score = paperTotal > 0 ? paperTotal : graded.max_score;
     const result = {
       ...graded,
