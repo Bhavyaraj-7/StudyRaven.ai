@@ -1,19 +1,15 @@
 import Link from "next/link";
 import examples from "@/content/hero-examples.json";
 import MarkedExample, { type Example } from "@/components/landing/MarkedExample";
-import SpectrumRibbon from "@/components/ui/SpectrumRibbon";
 
 /**
  * Left half of the sign-in pages on desktop (§9.1): never an empty panel.
- * A colourful paper scene with one example question in its finished,
+ * A calm pale-blue panel with one example question in its finished,
  * marked state (no looping animation) and one true line.
  */
 export default function AuthPanel({ title, line }: { title: string; line: string }) {
   return (
     <section className="relative hidden overflow-hidden bg-study-tint md:flex md:flex-col md:justify-between md:p-12">
-      <div className="absolute inset-x-0 top-0">
-        <SpectrumRibbon />
-      </div>
       <Link href="/" className="relative flex items-center gap-2 text-lg font-semibold">
         <span className="grid h-7 w-7 place-items-center rounded-input bg-ink font-mono text-sm text-paper">S</span>
         StudyRaven<span className="text-graymute">.ai</span>
