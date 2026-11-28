@@ -3,7 +3,7 @@ import { devPagesEnabled } from "@/lib/dev";
 import Button from "@/components/ui/Button";
 import Card, { type Area } from "@/components/ui/Card";
 import SpectrumRibbon from "@/components/ui/SpectrumRibbon";
-import { ProgressDemo, SegmentedDemo, StrokeDemo } from "./Demos";
+import { AlertDemo, MarkedDemo, ProgressDemo, SegmentedDemo, StrokeDemo } from "./Demos";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Components (dev)", robots: { index: false } };
@@ -87,6 +87,14 @@ export default function ComponentsPage() {
 
         <Section title="Examiner strokes">
           <StrokeDemo />
+        </Section>
+
+        <Section title="Marked score (M21, M22, M23)">
+          <MarkedDemo />
+        </Section>
+
+        <Section title="Error message (M24)">
+          <AlertDemo />
         </Section>
       </div>
     </main>
